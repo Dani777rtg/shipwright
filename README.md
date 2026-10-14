@@ -4,7 +4,7 @@ Plugin de Claude Code para construir software con IA **siguiendo un método**, n
 
 > Claude Code plugin: a spec-driven method that takes a brief to production — requirements, architecture, build, QA, security and deployment — with every task traced to an objective.
 
-**Estado:** v0.7 — funcionan `mission` e `intake`; el resto de fases está diseñado y en construcción ([hoja de ruta](docs/METODO.md#hoja-de-ruta)).
+**Estado:** v0.8 — funcionan `mission`, `intake` y `status`; el resto de fases está diseñado y en construcción ([hoja de ruta](docs/METODO.md#hoja-de-ruta)).
 
 ## Instalar
 
@@ -30,18 +30,18 @@ Sirve igual para crear algo **desde cero** que para cambiar un **sistema existen
 |---|---|
 | 1. Mission | Clasifica el encargo, explica el plan y pide confirmación |
 | 2. Intake | Entrevista completa → objetivos medibles y requisitos verificables |
-| 3. Architect | Arquitectura, decisiones, modelo de amenazas, estrategia de pruebas y de despliegue |
+| 3. Architect | Arquitectura, decisiones, modelo de amenazas, estrategias de pruebas, despliegue y documentación, prototipo de interfaz |
 | 4. Plan | Tareas pequeñas; QA escribe y bloquea los tests de aceptación |
 | 5. Build | Un subagente por tarea, tests primero |
 | 6. QA | Todas las pruebas pertinentes (funcionales, carga, seguridad, accesibilidad, IA) → SHIP / NO SHIP |
-| 7. Ship | Despliegue a producción en tu plataforma, verificado y con rollback |
+| 7. Ship | Despliegue a producción en tu plataforma, verificado y con rollback; repo documentado y documento de entrega |
 | 8. Retro | Lecciones → nueva versión del framework |
 
 Reglas que no se negocian:
 - **Todo tiene un para qué:** cada tarea y test cita el objetivo al que sirve; lo que no sirve se rechaza.
 - **Tú apruebas cada fase.**
-- **QA y seguridad independientes** de quien programa; los tests de aceptación no se pueden alterar.
-- **Listo = funcionando en producción**, no "compila en mi máquina".
+- **QA, seguridad, producción, documentación y UX** a cargo de agentes independientes de quien programa; los tests de aceptación no se pueden alterar.
+- **Listo = funcionando en producción y documentado**, no "compila en mi máquina".
 
 ## Documentación
 

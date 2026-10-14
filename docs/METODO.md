@@ -1,6 +1,6 @@
 # Método Shipwright
 
-Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.7.0**.
+Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.8.0**.
 
 ## 1. Principios
 
@@ -9,8 +9,8 @@ Cómo Shipwright lleva un encargo hasta software funcionando en producción. Ver
 3. **Todo tiene un para qué.** Cada decisión, tarea y test cita el objetivo al que sirve (§3).
 4. **Spec antes que código.**
 5. **El humano aprueba cada fase.**
-6. **QA, seguridad y operación independientes** de quien programa (§5).
-7. **Listo = funcionando en producción**, observable y reversible.
+6. **QA, seguridad, operación, documentación y UX independientes** de quien programa (§5).
+7. **Listo = funcionando en producción**, observable, reversible y documentado.
 8. **Lo no negociable es determinista:** hooks y scripts, no ruegos en un prompt.
 9. **Nunca el mismo error dos veces:** cada misión mejora el framework (§9).
 10. **Rigor en el proceso, simplicidad en el código** (YAGNI).
@@ -42,47 +42,47 @@ Misión → **O** objetivos de usuario → **KR** métricas → **QG** 3 objetiv
 | # | Fase | Comando | Produce | Revisan | Gate |
 |---|---|---|---|---|---|
 | 1 | Mission | `/shipwright:mission` | `mission.md` borrador, plan explicado | — | Usuario confirma |
-| 2 | Intake | `/shipwright:intake` | Objetivos, `requirements.md` (EARS), glosario, inventario de datos | analyst, qa-lead, security-lead | Usuario aprueba |
-| 3 | Architect | `/shipwright:architect` | `ARCHITECTURE.md` (arc42, C4), ADRs, QS, modelo de amenazas, estrategia de pruebas, plan de despliegue | architect-reviewer, security-lead, qa-lead, devops-lead | Usuario aprueba |
+| 2 | Intake | `/shipwright:intake` | Objetivos, `requirements.md` (EARS), glosario, inventario de datos, tareas clave de usuario | analyst, qa-lead, security-lead, ux-lead | Usuario aprueba |
+| 3 | Architect | `/shipwright:architect` | `ARCHITECTURE.md` (arc42, C4), ADRs, QS, modelo de amenazas, estrategia de pruebas, plan de despliegue, prototipo UX, plan de documentación | architect-reviewer y los 5 agentes de §5 | Usuario aprueba (y recorre el prototipo) |
 | 4 | Plan | `/shipwright:plan` | Tareas `T001`, tests de aceptación bloqueados, plan de pruebas | qa-lead | Usuario aprueba |
-| 5 | Build | `/shipwright:build` | Código + tests, un subagente por tarea | reviewer, qa-lead, security-lead | Automático |
-| 6 | QA | `/shipwright:qa` | Informe de pruebas e informe de seguridad → SHIP / NO SHIP | qa-lead, security-lead | Usuario aprueba |
-| 7 | Ship | `/shipwright:ship` | Producción verificada, runbook, SBOM | devops-lead, security-lead | Usuario confirma cada despliegue |
+| 5 | Build | `/shipwright:build` | Código + tests + docs, un subagente por tarea, un PR por tarea | reviewer, qa-lead, security-lead, ux-lead | Automático |
+| 6 | QA | `/shipwright:qa` | Informes de pruebas, seguridad, documentación y UX → SHIP / NO SHIP | qa-lead, security-lead, docs-lead, ux-lead | Usuario aprueba |
+| 7 | Ship | `/shipwright:ship` | Producción verificada, release con CHANGELOG, runbook, SBOM, documento de entrega | devops-lead, security-lead, docs-lead | Usuario confirma cada despliegue |
 | 8 | Retro | `/shipwright:retro` | Lecciones → nueva versión del framework | — | Usuario aprueba |
 | — | Cambio | `/shipwright:change` | Delta sobre spec, arquitectura, plan y amenazas | — | Usuario aprueba |
+| — | Estado | `/shipwright:status` | Reporte de una pantalla para quien pidió el trabajo | — | — |
 
 **Mission.** Clasifica el encargo, pregunta lo de §2, comprueba herramientas (git, Node, graphify), crea la tarjeta y explica el plan.
 
 **Intake.** Si hay sistema existente: graphify + convenciones + comportamiento actual (`existing-system.md`). graphify sobre el material del cliente: sus ambigüedades se vuelven preguntas. Entrevista con la [checklist completa](../skills/intake/checklist.md) en bloques de 4 preguntas con opciones; ante "no sé", el agente investiga y vuelve con opciones y fuentes. Salida: O, KR, QG, historias y criterios EARS (incluidos los de seguridad y privacidad), nivel ASVS propuesto. La spec aprobada queda protegida.
 
-**Architect.** QS por cada QG; stack (catálogo + ADR; en sistemas existentes, el actual); arc42 con C4 L1–L2, datos, contratos, flujos, decisiones transversales, despliegue y riesgos. En paralelo: modelo de amenazas, estrategia de pruebas (todos los tipos evaluados) y plan de despliegue para la plataforma del usuario. Al aprobar se instalan los packs del stack.
+**Architect.** QS por cada QG; stack (catálogo + ADR; en sistemas existentes, el actual); arc42 con C4 L1–L2, datos, contratos, flujos, decisiones transversales, despliegue y riesgos. En paralelo: modelo de amenazas, estrategia de pruebas (todos los tipos evaluados), plan de despliegue para la plataforma del usuario, plan de documentación y, si hay interfaz, flujos + prototipo navegable + sistema de diseño. Al aprobar se instalan los packs del stack.
 
 **Plan.** Tareas de 2–15 min con `serves:`, rutas, verificación y complejidad (> 6 se divide). qa-lead escribe los tests de aceptación desde los EARS; quedan bloqueados (hook + huellas SHA-256) y ~1 de cada 5 queda oculto hasta QA.
 
-**Build.** Subagente nuevo por tarea con su objetivo en la primera línea. TDD para tests internos; los de aceptación no se tocan. Tras cada tarea: revisión de código, del diff de tests (qa-lead), de dependencias nuevas y diffs sensibles (security-lead), commit y `graphify update`. Desviación de la arquitectura → `/shipwright:change`.
+**Build.** Subagente nuevo por tarea con su objetivo en la primera línea. TDD para tests internos; los de aceptación no se tocan. La documentación se actualiza en la misma tarea que el código. Tras cada tarea: revisión de código, del diff de tests (qa-lead), de dependencias nuevas y diffs sensibles (security-lead), de la interfaz contra el prototipo (ux-lead), PR con Conventional Commits y `graphify update`. Desviación de la arquitectura → `/shipwright:change`.
 
-**QA.** Huellas intactas, tests ocultos incorporados, todos los tipos de prueba pertinentes, verificación de amenazas y nivel ASVS, exploración con IA, bugs con severidad. Criterios de salida en [`reference/qa-catalog.md`](../reference/qa-catalog.md).
+**QA.** Huellas intactas, tests ocultos incorporados, todos los tipos de prueba pertinentes, verificación de amenazas y nivel ASVS, exploración con IA, bugs con severidad, documentación verificada (quick start en máquina limpia, ejemplos, enlaces) y revisión UX. Criterios de salida en [`reference/qa-catalog.md`](../reference/qa-catalog.md).
 
-**Ship.** Staging → smoke → rollback ensayado → **aprobación del usuario** → producción → canario ≥ 15 min. Checklist de producción de 14 puntos con evidencia, runbook, SBOM y firma.
+**Ship.** Staging → smoke → rollback ensayado → **aprobación del usuario** → producción → canario ≥ 15 min. Checklist de producción de 14 puntos con evidencia, runbook, SBOM y firma, tag de versión con CHANGELOG, documentación final y documento de entrega.
 
 **Retro.** §9.
 
 ## 5. Disciplinas transversales
 
-Tres agentes independientes de quien programa. Cada uno tiene su referencia con tipos, reglas de pertinencia, herramientas y criterios de salida.
+Cinco agentes independientes de quien programa. Cada referencia detalla qué hace el agente en cada fase, sus herramientas y sus criterios de salida.
 
-| Fase | QA — [`qa-catalog`](../reference/qa-catalog.md) | Seguridad — [`security-baseline`](../reference/security-baseline.md) | Producción — [`deploy-catalog`](../reference/deploy-catalog.md) |
+| Disciplina | Agente | Garantiza | Referencia |
 |---|---|---|---|
-| Mission | — | Clase de datos, jurisdicciones, higiene de secretos | Plataforma del usuario |
-| Intake | Testabilidad de cada criterio | Requisitos de seguridad y privacidad en EARS, nivel ASVS | — |
-| Architect | Estrategia de pruebas (40+ tipos, cada uno pertinente o "No aplica") | Modelo de amenazas STRIDE + LLM/agentes, ADRs de seguridad | Plan de despliegue: entornos, CI/CD con OIDC, IaC, SLOs, observabilidad, costes |
-| Plan | Tests de aceptación bloqueados, plan de pruebas | Una tarea por mitigación | Tareas de infraestructura |
-| Build | Revisión del diff de tests | Verificación de dependencias (paquetes inventados por IA), revisión de diffs sensibles | — |
-| QA | Ejecución completa → SHIP / NO SHIP | ASVS, amenazas cerradas, escaneos | Rendimiento y carga contra los SLOs |
-| Ship | Smoke y canario | SBOM, firma, hardening, respuesta a incidentes | Despliegue verificado, rollback, backups, alertas, runbook |
-| Retro | Bugs escapados | Vulnerabilidades escapadas | Incidentes |
+| QA | `qa-lead` | Todas las pruebas pertinentes (40+ tipos); tests de aceptación inalterables; veredicto SHIP / NO SHIP | [`qa-catalog`](../reference/qa-catalog.md) |
+| Seguridad | `security-lead` | Clase de datos y leyes aplicables, nivel ASVS, modelo de amenazas, dependencias verificadas, SBOM y firma | [`security-baseline`](../reference/security-baseline.md) |
+| Producción | `devops-lead` | Despliegue en la plataforma del usuario, checklist de 14 puntos, rollback ensayado, runbook | [`deploy-catalog`](../reference/deploy-catalog.md) |
+| Documentación | `docs-lead` | Repositorio que se explica solo (Diátaxis), documentación verificada, documento de entrega | [`docs-standard`](../reference/docs-standard.md) |
+| UX/UI | `ux-lead` | Flujos, prototipo navegable aprobado por el usuario, sistema de diseño, accesibilidad | [`ux-standard`](../reference/ux-standard.md) |
 
-Plataformas cubiertas: Azure, AWS, GCP, Render, Railway, Fly.io, Vercel, Netlify, Cloudflare, DigitalOcean, servidor propio/Docker, Kubernetes y tiendas móviles. **Ningún despliegue a producción, cambio de DNS o recurso de pago sin aprobación explícita del usuario.**
+Git del repositorio entregado: ramas cortas, Conventional Commits con `serves:`, PR con checklist, semver y CHANGELOG automático ([`git-workflow`](../reference/git-workflow.md)).
+
+Plataformas de despliegue cubiertas: Azure, AWS, GCP, Render, Railway, Fly.io, Vercel, Netlify, Cloudflare, DigitalOcean, servidor propio/Docker, Kubernetes y tiendas móviles. **Ningún despliegue a producción, cambio de DNS o recurso de pago sin aprobación explícita del usuario.**
 
 ## 6. Gates
 
@@ -99,8 +99,11 @@ docs/
   architecture/ARCHITECTURE.md
   adr/
   security/                   threat-model, data-inventory, report
+  ux/                         ux-spec, prototype/, design-tokens.json
   qa/                         test-strategy, test-plan, report, bugs/
   ops/                        deploy-plan, runbook
+  handover.md                 documento de entrega
+  status/                     reportes de estado
   plan/tasks.md
   changes/                    deltas aprobados
   metrics.md                  generado automáticamente
@@ -141,8 +144,8 @@ Nada aprende ni se inyecta solo.
 | Qué | Dónde |
 |---|---|
 | Fases | `skills/<fase>/SKILL.md` |
-| Agentes | `agents/analyst.md`, `qa-lead.md`, `security-lead.md`, `devops-lead.md` |
-| Referencias | `reference/qa-catalog.md`, `security-baseline.md`, `deploy-catalog.md`, `using-ecc.md` |
+| Agentes | `agents/analyst.md`, `qa-lead.md`, `security-lead.md`, `devops-lead.md`, `docs-lead.md`, `ux-lead.md` |
+| Referencias | `reference/qa-catalog.md`, `security-baseline.md`, `deploy-catalog.md`, `docs-standard.md`, `ux-standard.md`, `git-workflow.md`, `using-ecc.md` |
 | Plantillas | `templates/` |
 | Scripts | `scripts/trace.mjs` (trazabilidad), `lock.mjs` (huellas), `metrics.mjs`, `ecc-sync.mjs` |
 | Hooks | Protección de specs aprobadas y tests bloqueados (edición y consola); inicio de fase en métricas |
@@ -154,10 +157,11 @@ Nada aprende ni se inyecta solo.
 |---|---|
 | v0.5 | Plugin, `mission`, `intake`, trazabilidad, ECC |
 | v0.6 | Disciplina QA |
-| **v0.7** | Seguridad obligatoria, producción en cualquier plataforma, documentación concisa *(actual)* |
-| v0.8 | `architect` |
-| v0.9 | `plan` + `build` + `change` |
-| v0.10 | `qa` + `ship` + `status` |
-| v0.11 | `retro`, evals de skills, banco de misiones |
+| v0.7 | Seguridad obligatoria, producción en cualquier plataforma, documentación concisa |
+| **v0.8** | Documentación de los repos entregados, UX/UI, flujo git, `status` *(actual)* |
+| v0.9 | `architect` |
+| v0.10 | `plan` + `build` + `change` |
+| v0.11 | `qa` + `ship` |
+| v0.12 | `retro`, evals de skills, banco de misiones |
 | v1.0 | Probado en ≥ 3 misiones reales |
 | v2.0 | Orquestador autónomo con Claude Agent SDK |

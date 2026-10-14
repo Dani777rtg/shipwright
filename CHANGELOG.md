@@ -3,6 +3,15 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
+## [0.8.0] - 2026-10-14
+### Añadido
+- **Documentación de los repositorios entregados** con agente `docs-lead`: estándar Diátaxis por tipo de proyecto, documentación verificada en QA (quick start en máquina limpia, ejemplos ejecutables, enlaces, desfase con el código), sitio de docs solo con usuarios externos, documento de entrega.
+- **UX/UI** con agente `ux-lead`: tareas clave, flujos, estados de cada pantalla, prototipo navegable aprobado por el usuario, sistema de diseño, revisión heurística.
+- **Flujo git** de los repos entregados: ramas cortas, Conventional Commits con `serves:`, plantilla de PR, semver, CHANGELOG automático.
+- `/shipwright:status`: reporte de una pantalla para quien pidió el trabajo.
+### Cambiado
+- §5 de `METODO.md` resumido en una tabla de cinco disciplinas; el detalle por fase vive en cada referencia.
+
 ## [0.7.0] - 2026-10-14
 ### Añadido
 - **Seguridad obligatoria** con agente independiente `security-lead`: clase de datos y jurisdicciones (Mission), requisitos EARS y nivel ASVS (Intake), modelo de amenazas STRIDE + LLM/agentes (Architect), verificación de dependencias contra paquetes inventados por IA (Build), informe ASVS (QA), SBOM y firma (Ship). Referencia `reference/security-baseline.md`; plantillas de modelo de amenazas e informe de seguridad.

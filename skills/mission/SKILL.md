@@ -32,11 +32,11 @@ Mission brief: $ARGUMENTS
    - "No o no sé" → stop. Explain the options: get internal approval, restrict to allowed parts, or local-only analysis (`graphify update .` builds an AST graph locally without sending code). Continue only with one of those choices.
 
 4. **Mission folder.**
-   - desde cero → docs at `docs/` of the project folder; run `git init` if it is not a repo.
+   - desde cero → docs at `docs/` of the project folder; set up git per `${CLAUDE_PLUGIN_ROOT}/reference/git-workflow.md`: `git init -b main` if it is not a repo, a `.gitignore` for the stack including `.env*`, and `.github/pull_request_template.md` from `${CLAUDE_PLUGIN_ROOT}/templates/pull-request.md`.
    - sobre lo existente → docs at `docs/shipwright/<mission-slug>/` (ask if the team prefers another location).
    Create `.shipwright/state.json` at the project root:
    ```json
-   { "docsDir": "<docs path>", "phase": "mission", "startingPoint": "desde-cero|existente", "deliverable": "<type>", "language": "<lang>", "mission": "<one line>", "confidentiality": "si|parcial|local", "allowedPaths": [], "shipwright": "0.7.0" }
+   { "docsDir": "<docs path>", "phase": "mission", "startingPoint": "desde-cero|existente", "deliverable": "<type>", "language": "<lang>", "mission": "<one line>", "confidentiality": "si|parcial|local", "allowedPaths": [], "shipwright": "0.8.0" }
    ```
    Then log the start: `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log mission start`.
    Run this and every later Shipwright script from the project root (the folder that holds `.shipwright/`).
@@ -51,7 +51,7 @@ Mission brief: $ARGUMENTS
    Leave objectives (O), metrics (KR) and DoD details as placeholders for Intake.
    Also create `<docsDir>/client/` and tell the user to drop the brief's source material there (PDFs, notes, images, audio).
 
-7. **Project CLAUDE.md.** desde cero → create a minimal `CLAUDE.md` linking to the mission card and stating the current phase. sobre lo existente → ask before touching the team's `CLAUDE.md`; if refused, record `No aplica: el equipo no permite modificar CLAUDE.md`.
+7. **Project CLAUDE.md.** desde cero → create a minimal `CLAUDE.md` linking to the mission card, stating the current phase and the commit convention (Conventional Commits with a `serves:` footer). sobre lo existente → ask before touching the team's `CLAUDE.md`; if refused, record `No aplica: el equipo no permite modificar CLAUDE.md`.
 
 8. **Explain and confirm.** Show the user this summary, filled in, in the deliverable language:
    ```
