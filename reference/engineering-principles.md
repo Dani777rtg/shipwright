@@ -31,11 +31,14 @@ No "done", "fixed" or "passing" without running the command now and reading its 
 ## 5. Debugging (superpowers `systematic-debugging`)
 Root cause before any fix: read the error, reproduce, check recent changes, trace the data back to its source, one hypothesis at a time, a failing test before the fix. After three failed fixes, stop and question the design (report it; it may need `/shipwright:change`). Full method: `${CLAUDE_PLUGIN_ROOT}/vendor/superpowers/systematic-debugging/SKILL.md`.
 
-## 6. Reports between agents (caveman style)
+## 6. Language
+Every message the user reads — questions, progress notes, gate summaries, the closing message of a phase — is written in the user's language (the language they write in; Spanish if they write Spanish), as are all deliverables. Only agent instructions and agent-to-agent reports may be in English. Never guess people's names from emails or usernames: ask, or use what they wrote.
+
+## 7. Reports between agents (caveman style)
 Subagent reports and orchestrator progress notes are terse: no pleasantries, no filler, no restating the task; fragments allowed; technical terms, paths, numbers, IDs and error strings exact; negations never dropped. Pattern: `[thing] [result] [reason]. [next].`
 
 **Not** terse: questions to the user, gate summaries, explanations of decisions, and every persisted artifact (requirements, architecture, ADRs, docs, commits, PRs, handover) — those are written in clear, complete prose in the deliverable language.
 
-## 7. Models and sessions
+## 8. Models and sessions
 - Agents carry a default model for their role: judgment-heavy work on Opus (analyst, architecture-reviewer, security-lead, qa-lead), building and writing on Sonnet (builder, devops-lead, docs-lead, ux-lead), mechanical reporting on Haiku (status). Users override with `CLAUDE_CODE_SUBAGENT_MODEL` (+ `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` to ignore these defaults).
 - Everything a phase needs lives in files (`.shipwright/`, `docs/`), so each phase starts cleanly: at the end of a phase recommend `/clear` before the next command. Within a long phase (build, QA), recommend `/compact` when the conversation grows; the session-start hook restores the mission context after `/clear` or `/compact`. Only the user can run these commands.

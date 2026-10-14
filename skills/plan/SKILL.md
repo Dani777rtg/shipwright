@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 # Shipwright — Phase 4: PLAN
 
+**Language:** every message to the user (questions, progress, gate summary, closing message) and every artifact is in the user's language — Spanish if the user writes in Spanish. Instructions in this file are in English; your output is not.
+
 Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3–§5. State changes only through `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" …` run from the project root.
 
 ## Preconditions

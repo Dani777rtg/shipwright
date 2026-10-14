@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 # Shipwright — Phase 3: ARCHITECT
 
+**Language:** every message to the user (questions, progress, gate summary, closing message) and every artifact is in the user's language — Spanish if the user writes in Spanish. Instructions in this file are in English; your output is not.
+
 Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3–§5. Every step runs; what does not apply becomes `No aplica: <reason>`. The architecture's only objective is to meet the ordered quality goals (QG) with the fewest pieces — no component, dependency or pattern without a scenario, story or decision that needs it.
 
 ## Preconditions

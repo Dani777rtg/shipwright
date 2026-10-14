@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 # Shipwright — Phase 5: BUILD
 
+**Language:** every message to the user (questions, progress, gate summary, closing message) and every artifact is in the user's language — Spanish if the user writes in Spanish. Instructions in this file are in English; your output is not.
+
 Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §4–§5; git rules: `${CLAUDE_PLUGIN_ROOT}/reference/git-workflow.md` (existing systems: the team's conventions). State only through `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" …` from the project root. You orchestrate; builders write the code.
 
 ## Preconditions

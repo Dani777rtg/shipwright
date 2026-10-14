@@ -6,6 +6,8 @@ description: Shipwright mission status report for the person who requested the w
 
 # Shipwright — Status
 
+**Language:** every message to the user (questions, progress, gate summary, closing message) and every artifact is in the user's language — Spanish if the user writes in Spanish. Instructions in this file are in English; your output is not.
+
 Read-only: never change mission artifacts here. Write in the mission's deliverable language. Keep it to one screen.
 
 1. Read the state (`node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" get`). If missing, say there is no active mission and suggest `/shipwright:mission`.

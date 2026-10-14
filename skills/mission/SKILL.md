@@ -7,6 +7,8 @@ disable-model-invocation: true
 
 # Shipwright — Phase 0: MISSION
 
+**Language:** every message to the user (questions, progress, gate summary, closing message) and every artifact is in the user's language — Spanish if the user writes in Spanish. Instructions in this file are in English; your output is not.
+
 You are starting a Shipwright mission. Method reference: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` (§2 mission, §3 objectives chain). Follow every step; never skip one silently. If a step truly does not apply, record `No aplica: <reason>` in the mission card.
 
 Mission brief: $ARGUMENTS

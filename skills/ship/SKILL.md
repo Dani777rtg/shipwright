@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 # Shipwright — Phase 7: SHIP
 
+**Language:** every message to the user (questions, progress, gate summary, closing message) and every artifact is in the user's language — Spanish if the user writes in Spanish. Instructions in this file are in English; your output is not.
+
 Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §4–§5; readiness checklist: `${CLAUDE_PLUGIN_ROOT}/reference/deploy-catalog.md`. State only through `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" …`.
 
 **Never deploy to production, change DNS, create paid resources, push to a shared remote or open a PR without the user's explicit approval in this session.**
