@@ -34,9 +34,9 @@ Mission brief: $ARGUMENTS
 4. **Mission folder.**
    - desde cero → docs at `docs/` of the project folder; set up git per `${CLAUDE_PLUGIN_ROOT}/reference/git-workflow.md`: `git init -b main` if it is not a repo, a `.gitignore` for the stack including `.env*`, and `.github/pull_request_template.md` from `${CLAUDE_PLUGIN_ROOT}/templates/pull-request.md`.
    - sobre lo existente → docs at `docs/shipwright/<mission-slug>/` (ask if the team prefers another location).
-   Create `.shipwright/state.json` at the project root:
-   ```json
-   { "docsDir": "<docs path>", "phase": "mission", "startingPoint": "desde-cero|existente", "deliverable": "<type>", "language": "<lang>", "mission": "<one line>", "confidentiality": "si|parcial|local", "allowedPaths": [], "shipwright": "0.9.0" }
+   Create the state at the project root (`.shipwright/` is written only by Shipwright scripts; the hook blocks direct edits):
+   ```
+   node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" init '{ "docsDir": "<docs path>", "phase": "mission", "startingPoint": "desde-cero|existente", "deliverable": "<type>", "language": "<lang>", "mission": "<one line>", "confidentiality": "si|parcial|local", "allowedPaths": [], "shipwright": "0.10.0" }'
    ```
    Then log the start: `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log mission start`.
    Run this and every later Shipwright script from the project root (the folder that holds `.shipwright/`).
@@ -77,5 +77,5 @@ Mission brief: $ARGUMENTS
 
 9. **Close the phase.** On confirmation:
    - `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log mission gate-approved`
-   - set `"phase": "intake"` in `.shipwright/state.json`
+   - `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set phase intake`
    - tell the user the next step: put source material in `<docsDir>/client/` (optional) and run `/shipwright:intake`.

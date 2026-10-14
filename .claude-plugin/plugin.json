@@ -1,7 +1,7 @@
 {
   "name": "shipwright",
   "displayName": "Shipwright",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Spec-driven mission method for Claude Code: mission, intake, architecture, plan, build, verify, ship, retro. Every task traced to an explicit objective. Built on ECC.",
   "author": { "name": "Daniel Fajardo", "url": "https://github.com/Dani777rtg" },
   "homepage": "https://github.com/Dani777rtg/shipwright",

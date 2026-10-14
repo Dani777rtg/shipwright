@@ -1,6 +1,6 @@
 # Método Shipwright
 
-Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.9.0**.
+Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.10.0**.
 
 ## 1. Principios
 
@@ -144,11 +144,11 @@ Nada aprende ni se inyecta solo.
 | Qué | Dónde |
 |---|---|
 | Fases | `skills/<fase>/SKILL.md` |
-| Agentes | `agents/analyst.md`, `architecture-reviewer.md`, `qa-lead.md`, `security-lead.md`, `devops-lead.md`, `docs-lead.md`, `ux-lead.md` |
+| Agentes | `agents/analyst.md`, `architecture-reviewer.md`, `builder.md`, `qa-lead.md`, `security-lead.md`, `devops-lead.md`, `docs-lead.md`, `ux-lead.md` |
 | Referencias | `reference/qa-catalog.md`, `security-baseline.md`, `deploy-catalog.md`, `docs-standard.md`, `ux-standard.md`, `git-workflow.md`, `using-ecc.md` |
 | Plantillas | `templates/` |
-| Scripts | `scripts/trace.mjs` (trazabilidad), `lock.mjs` (huellas), `install-packs.mjs` (packs del stack), `metrics.mjs`, `ecc-sync.mjs` |
-| Hooks | Protección de specs aprobadas y tests bloqueados (edición y consola); inicio de fase en métricas |
+| Scripts | `scripts/state.mjs` (único que escribe el estado), `trace.mjs` (trazabilidad), `lock.mjs` (huellas), `change.mjs` (abre/cierra un cambio aprobado), `install-packs.mjs` (packs del stack), `metrics.mjs`, `ecc-sync.mjs` |
+| Hooks | Protección de `.shipwright/`, artefactos aprobados y tests bloqueados (edición y consola), salvo archivos abiertos por un cambio aprobado; inicio de fase en métricas |
 | Tests | `node --test "scripts/**/*.test.mjs"` — CI en Windows, macOS y Linux |
 
 ## Hoja de ruta
@@ -159,8 +159,8 @@ Nada aprende ni se inyecta solo.
 | v0.6 | Disciplina QA |
 | v0.7 | Seguridad obligatoria, producción en cualquier plataforma, documentación concisa |
 | v0.8 | Documentación de los repos entregados, UX/UI, flujo git, `status` |
-| **v0.9** | `architect` *(actual)* |
-| v0.10 | `plan` + `build` + `change` |
+| v0.9 | `architect` |
+| **v0.10** | `plan` + `build` + `change` *(actual)* |
 | v0.11 | `qa` + `ship` |
 | v0.12 | `retro`, evals de skills, banco de misiones |
 | v1.0 | Probado en ≥ 3 misiones reales |

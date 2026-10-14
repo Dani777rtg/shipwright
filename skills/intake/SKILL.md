@@ -53,7 +53,7 @@ Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs" <docsDir> --phase intake`. F
 ### 6. Independent reviews
 Spawn in parallel:
 - `shipwright:analyst` with the paths of mission.md, requirements.md, glossary.md, existing-system.md (if any) and `${CLAUDE_SKILL_DIR}/checklist.md`.
-- `shipwright:qa-lead` with task **A (testability review)** and the same paths. Store the project profile it proposes in `.shipwright/state.json` under `"qaProfile"`; Architect uses it for the Test Strategy.
+- `shipwright:qa-lead` with task **A (testability review)** and the same paths. Store the project profile it proposes with `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set qaProfile '<json>'`; Architect uses it for the Test Strategy.
 - `shipwright:ux-lead` with task **A (key tasks)** when the mission has a user interface; otherwise record `No aplica: sin interfaz de usuario` for UX.
 - `shipwright:security-lead` with task **A (requirements)** and the same paths. Add the security and privacy criteria it lists (or their `No aplica`) to requirements.md, record the ASVS level it proposes for the user to approve at the gate, and write `docs/security/data-inventory.md` when there is personal data.
 
@@ -70,5 +70,5 @@ Present:
 Ask with AskUserQuestion: Aprobar (Recomendado) / Pedir cambios / Volver a la misión.
 - Log the outcome: `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log intake gate-approved|gate-changes|gate-back "<short note>"`.
 - Pedir cambios → apply them, repeat steps 5–7.
-- Volver a la misión → set `phase` to `mission` in state.json and tell the user to run `/shipwright:mission`.
-- Aprobar → set `status: approved` in the frontmatter of mission.md and requirements.md (from now on they change only through `/shipwright:change`), set `"phase": "architect"` in state.json, and tell the user the next step is `/shipwright:architect`.
+- Volver a la misión → `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set phase mission` and tell the user to run `/shipwright:mission`.
+- Aprobar → set `status: approved` in the frontmatter of mission.md and requirements.md (from now on they change only through `/shipwright:change`), run `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set phase architect`, and tell the user the next step is `/shipwright:architect`.

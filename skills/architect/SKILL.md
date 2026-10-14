@@ -9,7 +9,7 @@ disable-model-invocation: true
 Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3–§5. Every step runs; what does not apply becomes `No aplica: <reason>`. The architecture's only objective is to meet the ordered quality goals (QG) with the fewest pieces — no component, dependency or pattern without a scenario, story or decision that needs it.
 
 ## Preconditions
-Read `.shipwright/state.json`. Continue only if `phase` is `architect` and `<docsDir>/mission.md` and `<docsDir>/spec/requirements.md` have `status: approved`; otherwise say which phase to run and stop. Read the mission card, requirements, glossary and `existing-system.md` (if any).
+Read the state (`node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" get`). Continue only if `phase` is `architect` and `<docsDir>/mission.md` and `<docsDir>/spec/requirements.md` have `status: approved`; otherwise say which phase to run and stop. Read the mission card, requirements, glossary and `existing-system.md` (if any).
 
 ## Rules
 - Ask only through AskUserQuestion (≤ 4 questions per call, recommended option first).
@@ -52,8 +52,8 @@ Present: the design in 5 lines; stack and platform with estimated monthly cost; 
 
 AskUserQuestion: Aprobar (Recomendado) / Pedir cambios / Volver a intake. Log with `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log architect gate-approved|gate-changes|gate-back "<note>"`.
 - Pedir cambios → apply, repeat steps 6–7.
-- Volver a intake → requirements change only through `/shipwright:change`; set `phase` accordingly and explain.
+- Volver a intake → approved requirements change only through `/shipwright:change`; explain and stop.
 - Aprobar →
   1. Set `status: approved` in ARCHITECTURE.md, threat-model.md, test-strategy.md, deploy-plan.md and ux-spec.md, and `status: accepted` in each ADR.
   2. Stack packs: search `${CLAUDE_PLUGIN_ROOT}/vendor/ecc.index.md` under `## stack` (and `## ai` for AI missions) for the chosen languages and frameworks — rules (`rules/<lang>`, `rules/web` for web UIs, `rules/common`), framework skills, testing skills and language reviewer agents. Show the list, then run `node "${CLAUDE_PLUGIN_ROOT}/scripts/install-packs.mjs" <paths...>` from the project root.
-  3. Set `"phase": "plan"` in state.json and tell the user the next step is `/shipwright:plan` (available in a later Shipwright version).
+  3. `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set phase plan` and tell the user the next step is `/shipwright:plan`.

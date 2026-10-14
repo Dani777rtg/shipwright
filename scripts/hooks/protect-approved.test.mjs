@@ -5,7 +5,7 @@ import { mkdtempSync, writeFileSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { isApproved, lockedBy, shellWritesLocked } from './protect-approved.mjs';
+import { isApproved, lockedBy, shellWritesLocked, decide } from './protect-approved.mjs';
 
 const hook = fileURLToPath(new URL('./protect-approved.mjs', import.meta.url));
 const run = (input) => spawnSync(process.execPath, [hook], { input: JSON.stringify(input), encoding: 'utf8' });
@@ -23,6 +23,9 @@ test('hook blocks approved file and allows draft / missing / malformed input', (
   const dir = mkdtempSync(join(tmpdir(), 'sw-'));
   writeFileSync(join(dir, 'a.md'), '---\nstatus: approved\n---\n');
   writeFileSync(join(dir, 'd.md'), '---\nstatus: draft\n---\n');
+  assert.equal(run({ cwd: dir, tool_name: 'Edit', tool_input: { file_path: 'a.md' } }).status, 0, 'no mission: never blocks');
+  mkdirSync(join(dir, '.shipwright'));
+  writeFileSync(join(dir, '.shipwright', 'state.json'), '{}');
   const blocked = run({ cwd: dir, tool_name: 'Edit', tool_input: { file_path: 'a.md' } });
   assert.equal(blocked.status, 2);
   assert.match(blocked.stderr, /shipwright:change/);
@@ -81,4 +84,24 @@ test('hook blocks shell writes to locked paths', () => {
   writeFileSync(join(dir, '.shipwright', 'state.json'), JSON.stringify({ lockedPaths: ['tests/acceptance/**'] }));
   assert.equal(run({ cwd: dir, tool_name: 'Bash', tool_input: { command: 'echo x > tests/acceptance/a.py' } }).status, 2);
   assert.equal(run({ cwd: dir, tool_name: 'Bash', tool_input: { command: 'pytest tests/acceptance' } }).status, 0);
+});
+
+test('decide: .shipwright always locked; an approved change opens only its files', () => {
+  const root = mkdtempSync(join(tmpdir(), 'sw-'));
+  mkdirSync(join(root, '.shipwright'));
+  mkdirSync(join(root, 'docs'));
+  writeFileSync(join(root, 'docs', 'req.md'), '---\nstatus: approved\n---\n');
+  const state = (extra) => writeFileSync(join(root, '.shipwright', 'state.json'), JSON.stringify({ lockedPaths: ['tests/acceptance/**'], ...extra }));
+  const edit = (file_path) => decide({ cwd: root, tool_input: { file_path } }, root);
+  state({});
+  assert.match(edit('.shipwright/state.json'), /Shipwright scripts/);
+  assert.match(decide({ cwd: root, tool_input: { command: 'echo {} > .shipwright/state.json' } }, root), /locked path/);
+  assert.equal(decide({ cwd: root, tool_input: { command: 'node scripts/state.mjs set phase build' } }, root), null);
+  assert.match(edit('docs/req.md'), /approved/);
+  assert.match(edit('tests/acceptance/a.test.ts'), /QA agent/);
+  state({ change: { id: '001', files: ['docs/req.md', 'tests/acceptance/a.test.ts', '.shipwright/state.json'] } });
+  assert.equal(edit('docs/req.md'), null);
+  assert.equal(edit('tests/acceptance/a.test.ts'), null);
+  assert.match(edit('.shipwright/state.json'), /Shipwright scripts/);
+  assert.match(edit('tests/acceptance/b.test.ts'), /QA agent/);
 });

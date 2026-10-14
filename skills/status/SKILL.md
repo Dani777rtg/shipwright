@@ -7,13 +7,13 @@ description: Shipwright mission status report for the person who requested the w
 
 Read-only: never change mission artifacts here. Write in the mission's deliverable language. Keep it to one screen.
 
-1. Read `.shipwright/state.json`. If missing, say there is no active mission and suggest `/shipwright:mission`.
+1. Read the state (`node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" get`). If missing, say there is no active mission and suggest `/shipwright:mission`.
 2. Gather, from the project root:
    - `<docsDir>/mission.md`: mission, deadline, objectives (O) and metrics (KR).
    - `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" summary`: hours and gate rounds per phase.
    - `node "${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs" <docsDir> --phase <current phase if intake|architect|plan|qa, else plan>`: traceability problems.
    - Open assumptions and open questions (mission.md, requirements.md).
-   - Open bugs by severity (`<docsDir>/qa/bugs/`), open threats (`<docsDir>/security/threat-model.md`), tasks done / total (`<docsDir>/plan/tasks.md`), if they exist.
+   - Open bugs by severity (`<docsDir>/qa/bugs/`), open threats (`<docsDir>/security/threat-model.md`), tasks done (`tasksDone` in the state) / total (`<docsDir>/plan/tasks.md`), if they exist.
 3. Report:
    ```
    Misión: <frase> — plazo <fecha> (<tiempo restante>)

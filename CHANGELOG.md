@@ -3,6 +3,16 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
+## [0.10.0] - 2026-10-14
+### Añadido
+- `/shipwright:plan`: tareas pequeñas trazadas (incluidas mitigaciones de amenazas, infraestructura, documentación e interfaz), tests de aceptación escritos por qa-lead, bloqueados y con huella, conjunto oculto (holdout) fuera del repo, plan de pruebas.
+- `/shipwright:build`: un subagente `builder` por tarea (en paralelo con worktrees aislados), revisiones de código, integridad de tests, seguridad e interfaz antes de integrar; reanudable; las desviaciones se detienen y pasan por `change`.
+- `/shipwright:change`: delta, análisis de impacto, aprobación y apertura controlada de exactamente los archivos afectados (`scripts/change.mjs`).
+- `scripts/state.mjs`: único escritor de `.shipwright/state.json`.
+### Cambiado
+- El hook bloquea siempre `.shipwright/` (estado y huellas), para que nadie pueda quitar el bloqueo de los tests editando el estado.
+- El hook solo actúa en proyectos con misión activa (`.shipwright/state.json`); nunca interfiere en otros repos.
+
 ## [0.9.0] - 2026-10-14
 ### Añadido
 - `/shipwright:architect`: escenarios de calidad medibles confirmados con el usuario, stack y ADRs, `ARCHITECTURE.md` (arc42 + C4), y en paralelo modelo de amenazas, estrategia de pruebas, plan de despliegue, plan de documentación y prototipo navegable. Gate con recorrido del prototipo; al aprobar instala los packs del stack.

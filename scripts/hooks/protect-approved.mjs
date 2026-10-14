@@ -1,8 +1,10 @@
 #!/usr/bin/env node
-// PreToolUse hook (Write|Edit|MultiEdit): block edits to
-//  - artifacts whose frontmatter says `status: approved` or `accepted` (they change only via /shipwright:change), and
-//  - paths listed in `lockedPaths` of .shipwright/state.json (e.g. acceptance tests written by the QA agent,
-//    so the builder cannot weaken them to make them pass).
+// PreToolUse hook (Write|Edit|MultiEdit|Bash|PowerShell): block edits to
+//  - .shipwright/ (state, lock fingerprints): only Shipwright scripts write there;
+//  - paths listed in `lockedPaths` of the state (acceptance tests written by the QA agent,
+//    so the builder cannot weaken them to make them pass);
+//  - artifacts whose frontmatter says `status: approved` or `accepted`.
+// Files listed in state.change.files (opened by an approved /shipwright:change) may be edited.
 // Shell commands (Bash|PowerShell) that write to a locked path are blocked by a heuristic; this is a guardrail
 // against drift, not a security boundary.
 import { readFileSync, existsSync } from 'node:fs';
@@ -62,41 +64,49 @@ export function shellWritesLocked(command, root, cwd, patterns = []) {
   return null;
 }
 
+// Shipwright's own state is written only by its scripts (state.mjs, lock.mjs, change.mjs, install-packs.mjs).
+export const ALWAYS_LOCKED = ['.shipwright/**'];
+
+const MSG = {
+  state: 'Shipwright state is changed only through Shipwright scripts (node .../scripts/state.mjs).',
+  locked: 'Acceptance tests are owned by the QA agent; change the code, not the test. If the test itself is wrong, use /shipwright:change so the user approves it.',
+  approved: 'Approved artifacts change only through /shipwright:change, which records a delta and asks the user for approval.',
+};
+
+// Decide for one tool call. Returns null (allow) or the reason to block.
+export function decide(input, root) {
+  if (!existsSync(join(root, '.shipwright', 'state.json'))) return null; // not a Shipwright project
+  const state = readState(root);
+  const cwd = input?.cwd ?? root;
+  const locks = [...ALWAYS_LOCKED, ...(state.lockedPaths ?? [])];
+  const opened = new Set((state.change?.files ?? []).map((f) => f.replace(/\\/g, '/')));
+  const why = (rule) => rule === ALWAYS_LOCKED[0] ? MSG.state : MSG.locked;
+
+  const command = input?.tool_input?.command;
+  if (typeof command === 'string') {
+    const rule = shellWritesLocked(command, root, cwd, locks);
+    return rule ? `this command writes to a locked path (${rule}). ${why(rule)}` : null;
+  }
+  const file = input?.tool_input?.file_path;
+  if (!file) return null;
+  const path = resolve(cwd, file);
+  const rel = relative(root, path).replace(/\\/g, '/');
+  const rule = lockedBy(rel, locks);
+  if (rule === ALWAYS_LOCKED[0]) return `${file} is locked. ${MSG.state}`;
+  if (opened.has(rel)) return null; // opened by an approved /shipwright:change
+  if (rule) return `${file} is locked (${rule}). ${MSG.locked}`;
+  if (existsSync(path) && isApproved(readFileSync(path, 'utf8'))) return `${file} is approved. ${MSG.approved}`;
+  return null;
+}
+
 function main() {
   let input;
   try { input = JSON.parse(readFileSync(0, 'utf8')); } catch { return 0; }
   const root = process.env.CLAUDE_PROJECT_DIR ?? input?.cwd ?? process.cwd();
-  const command = input?.tool_input?.command;
-  if (typeof command === 'string') {
-    const state = readState(root);
-    const rule = shellWritesLocked(command, root, input.cwd ?? root, state.lockedPaths);
-    if (!rule) return 0;
-    process.stderr.write(`Shipwright: this command writes to a locked path (${rule}). Acceptance tests are owned by the QA agent; change the code, or use /shipwright:change if the test itself is wrong.\n`);
-    return 2;
-  }
-  const file = input?.tool_input?.file_path;
-  if (!file) return 0;
-  const path = resolve(input.cwd ?? root, file);
-
-  {
-    const rule = lockedBy(relative(root, path), readState(root).lockedPaths);
-    if (rule) {
-      process.stderr.write(
-        `Shipwright: ${file} is locked (${rule}). Acceptance tests are owned by the QA agent; the builder must change the code, not the test. ` +
-        'If the test itself is wrong, use /shipwright:change so the user approves the change.\n'
-      );
-      return 2;
-    }
-  }
-
-  if (existsSync(path) && isApproved(readFileSync(path, 'utf8'))) {
-    process.stderr.write(
-      `Shipwright: ${file} is approved (status: approved). ` +
-      'Approved artifacts change only through /shipwright:change, which records a delta and asks the user for approval.\n'
-    );
-    return 2;
-  }
-  return 0;
+  const reason = decide(input, root);
+  if (!reason) return 0;
+  process.stderr.write(`Shipwright: ${reason}\n`);
+  return 2;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) process.exit(main());
