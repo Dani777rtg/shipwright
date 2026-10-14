@@ -1,0 +1,13 @@
+{
+  "name": "shipwright",
+  "owner": { "name": "Daniel Fajardo", "url": "https://github.com/Dani777rtg" },
+  "description": "Shipwright: spec-driven mission method for Claude Code.",
+  "plugins": [
+    {
+      "name": "shipwright",
+      "source": "./",
+      "description": "Spec-driven mission method for Claude Code, built on ECC.",
+      "category": "development"
+    }
+  ]
+}

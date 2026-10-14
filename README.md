@@ -6,7 +6,7 @@ Una misión puede partir desde cero (una app en una hackatón) o sobre un sistem
 
 > Spec-driven AI development method for Claude Code. Every mission (greenfield or brownfield) goes mission → intake → architecture → plan → build → verify → ship → retro, with every task traced to an explicit objective. Self-improving through retrospectives, evals and versioned releases.
 
-**Estado:** v0.4.0 — documentación del método. El plugin se construye fase por fase (ver hoja de ruta).
+**Estado:** v0.5.0 — instalable. Funcionan `/shipwright:mission` e `/shipwright:intake`; las demás fases llegan en las siguientes versiones (ver hoja de ruta).
 
 Construido sobre [ECC](https://github.com/affaan-m/ecc) (MIT): incluye todo su catálogo de desarrollo sin modificarlo, cargado bajo demanda mediante un índice y sincronizado con cada release (vía pull request revisado), y añade encima el método, las fases, los gates y la trazabilidad. Ver [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES.md).
 
@@ -27,6 +27,28 @@ MISSION → INTAKE → ARCHITECT → PLAN → BUILD → VERIFY → SHIP → RETR
 - Puertas de aprobación humana entre fases.
 - [graphify](https://github.com/Graphify-Labs/graphify) como memoria en todas las fases.
 
+## Instalación
+
+En Claude Code:
+
+```
+/plugin marketplace add Dani777rtg/shipwright
+/plugin install shipwright@shipwright
+```
+
+(En Claude Code 2.1.275 o posterior también: `/plugin install shipwright --marketplace Dani777rtg/shipwright`.)
+
+Requisitos: git, Node 18+, Python 3.10+ con `pip install graphifyy`.
+
+## Uso
+
+```
+/shipwright:mission "app de IA que resume reuniones, hackatón de 24 h"
+/shipwright:intake
+```
+
+`mission` detecta si partes desde cero o sobre un sistema existente, te explica el plan completo y espera tu confirmación. `intake` analiza el material (y tu código, si aplica) con graphify, te entrevista con la checklist completa y escribe los objetivos y requisitos trazados.
+
 ## Documentación
 
 - [Método completo](docs/METODO.md)
@@ -34,12 +56,6 @@ MISSION → INTAKE → ARCHITECT → PLAN → BUILD → VERIFY → SHIP → RETR
 - [Investigación](docs/investigacion/)
 - [Lecciones aprendidas](lessons/LESSONS.md)
 - [Changelog](CHANGELOG.md)
-
-## Requisitos
-
-- [Claude Code](https://claude.com/claude-code)
-- Python 3.10+ y `pip install graphifyy`
-- git
 
 ## Licencia
 

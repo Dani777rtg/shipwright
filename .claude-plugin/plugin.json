@@ -1,0 +1,11 @@
+{
+  "name": "shipwright",
+  "displayName": "Shipwright",
+  "version": "0.5.0",
+  "description": "Spec-driven mission method for Claude Code: mission, intake, architecture, plan, build, verify, ship, retro. Every task traced to an explicit objective. Built on ECC.",
+  "author": { "name": "Daniel Fajardo", "url": "https://github.com/Dani777rtg" },
+  "homepage": "https://github.com/Dani777rtg/shipwright",
+  "repository": "https://github.com/Dani777rtg/shipwright",
+  "license": "MIT",
+  "keywords": ["spec-driven-development", "requirements", "architecture", "tdd", "traceability", "ecc"]
+}

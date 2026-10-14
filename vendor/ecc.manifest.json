@@ -1,0 +1,3614 @@
+{
+  "source": "https://github.com/affaan-m/ecc",
+  "release": "v2.2.3",
+  "commit": "c05b2d6614f62f6db0047669aa4eefb223d478f9",
+  "synced": "2026-10-14",
+  "notes": "Edit include/exclude by hand; scripts/ecc-sync.mjs vendors include into vendor/ecc/ and regenerates vendor/ecc.index.md.",
+  "excludeFiles": [
+    "rules/*/hooks.md"
+  ],
+  "include": [
+    {
+      "path": "agents/a11y-architect.md",
+      "kind": "agent",
+      "phases": [
+        "architect",
+        "build",
+        "verify"
+      ],
+      "summary": "WCAG 2.2 accessibility architecture and audits for web and native UI"
+    },
+    {
+      "path": "agents/agent-evaluator.md",
+      "kind": "agent",
+      "phases": [
+        "verify",
+        "retro"
+      ],
+      "summary": "Scores agent output on a 5-axis quality rubric"
+    },
+    {
+      "path": "agents/architect.md",
+      "kind": "agent",
+      "phases": [
+        "architect"
+      ],
+      "summary": "System design, scalability and architectural decision specialist"
+    },
+    {
+      "path": "agents/bengali-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Reviews Bengali text handling: Unicode, normalization, i18n correctness",
+      "pending": true
+    },
+    {
+      "path": "agents/build-error-resolver.md",
+      "kind": "agent",
+      "phases": [
+        "build",
+        "verify"
+      ],
+      "summary": "Fixes build and TypeScript errors with minimal diffs"
+    },
+    {
+      "path": "agents/code-architect.md",
+      "kind": "agent",
+      "phases": [
+        "architect",
+        "plan"
+      ],
+      "summary": "Designs feature blueprints from existing codebase patterns"
+    },
+    {
+      "path": "agents/code-explorer.md",
+      "kind": "agent",
+      "phases": [
+        "intake",
+        "architect"
+      ],
+      "summary": "Traces execution paths and maps architecture of existing features"
+    },
+    {
+      "path": "agents/code-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "verify"
+      ],
+      "summary": "General code review for quality, security and maintainability"
+    },
+    {
+      "path": "agents/code-simplifier.md",
+      "kind": "agent",
+      "phases": [
+        "build",
+        "verify"
+      ],
+      "summary": "Simplifies recently changed code while preserving behavior"
+    },
+    {
+      "path": "agents/comment-analyzer.md",
+      "kind": "agent",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Checks code comments for accuracy and comment rot"
+    },
+    {
+      "path": "agents/commit-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Reviews staged diff and drafts Conventional Commits message",
+      "pending": true
+    },
+    {
+      "path": "agents/cpp-build-resolver.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fixes C++/CMake build, linker and template errors"
+    },
+    {
+      "path": "agents/cpp-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "C++ review: memory safety, modern idioms, concurrency"
+    },
+    {
+      "path": "agents/csharp-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "C#/.NET review: async, nullable types, security, performance"
+    },
+    {
+      "path": "agents/dart-build-resolver.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fixes Dart analyzer, Flutter build and pub dependency errors"
+    },
+    {
+      "path": "agents/database-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "architect",
+        "verify",
+        "stack"
+      ],
+      "summary": "PostgreSQL schema, query, migration and performance review"
+    },
+    {
+      "path": "agents/django-build-resolver.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fixes Django migration, dependency and configuration failures"
+    },
+    {
+      "path": "agents/django-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Django review: ORM, DRF, migrations, security"
+    },
+    {
+      "path": "agents/doc-updater.md",
+      "kind": "agent",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Updates codemaps, READMEs and guides from source"
+    },
+    {
+      "path": "agents/docs-lookup.md",
+      "kind": "agent",
+      "phases": [
+        "build"
+      ],
+      "summary": "Fetches current library docs via Context7 MCP"
+    },
+    {
+      "path": "agents/e2e-runner.md",
+      "kind": "agent",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Generates and runs E2E tests with Agent Browser/Playwright"
+    },
+    {
+      "path": "agents/fastapi-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "FastAPI review: async, DI, Pydantic, security, OpenAPI"
+    },
+    {
+      "path": "agents/flutter-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Flutter/Dart review: widgets, state management, performance"
+    },
+    {
+      "path": "agents/fsharp-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "F# review: functional idioms, types, performance"
+    },
+    {
+      "path": "agents/gan-evaluator.md",
+      "kind": "agent",
+      "phases": [
+        "verify"
+      ],
+      "summary": "GAN harness evaluator testing the live app with Playwright"
+    },
+    {
+      "path": "agents/gan-generator.md",
+      "kind": "agent",
+      "phases": [
+        "build"
+      ],
+      "summary": "GAN harness generator implementing spec and iterating on feedback"
+    },
+    {
+      "path": "agents/gan-planner.md",
+      "kind": "agent",
+      "phases": [
+        "plan"
+      ],
+      "summary": "GAN harness planner expanding a prompt into product spec"
+    },
+    {
+      "path": "agents/go-build-resolver.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fixes Go build, vet and lint errors"
+    },
+    {
+      "path": "agents/go-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Go review: idioms, concurrency, error handling"
+    },
+    {
+      "path": "agents/harmonyos-app-resolver.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "HarmonyOS ArkTS/ArkUI review and fixes"
+    },
+    {
+      "path": "agents/healthcare-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "verify",
+        "stack"
+      ],
+      "summary": "Reviews healthcare software for safety and PHI compliance"
+    },
+    {
+      "path": "agents/java-build-resolver.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fixes Maven/Gradle and Java compile errors, Spring/Quarkus aware"
+    },
+    {
+      "path": "agents/java-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Java Spring Boot/Quarkus review: layering, JPA, security"
+    },
+    {
+      "path": "agents/kotlin-build-resolver.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fixes Kotlin compiler and Gradle errors"
+    },
+    {
+      "path": "agents/kotlin-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Kotlin/Android/KMP review: coroutines, Compose, architecture"
+    },
+    {
+      "path": "agents/mle-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "ai",
+        "verify"
+      ],
+      "summary": "Production ML review: data contracts, training, serving, monitoring"
+    },
+    {
+      "path": "agents/opensource-forker.md",
+      "kind": "agent",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Forks a project for open-sourcing, stripping secrets"
+    },
+    {
+      "path": "agents/opensource-packager.md",
+      "kind": "agent",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Generates README, LICENSE, CONTRIBUTING for open-source release"
+    },
+    {
+      "path": "agents/opensource-sanitizer.md",
+      "kind": "agent",
+      "phases": [
+        "ship",
+        "verify"
+      ],
+      "summary": "Verifies a fork is free of secrets and PII"
+    },
+    {
+      "path": "agents/performance-optimizer.md",
+      "kind": "agent",
+      "phases": [
+        "verify",
+        "build"
+      ],
+      "summary": "Profiles bottlenecks, bundle size, memory and render performance"
+    },
+    {
+      "path": "agents/php-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "PHP review: PSR-12, types, Eloquent, security"
+    },
+    {
+      "path": "agents/planner.md",
+      "kind": "agent",
+      "phases": [
+        "plan"
+      ],
+      "summary": "Plans complex features and refactors step by step"
+    },
+    {
+      "path": "agents/pr-test-analyzer.md",
+      "kind": "agent",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Reviews PR test coverage quality and behavioral coverage"
+    },
+    {
+      "path": "agents/python-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Python review: PEP 8, type hints, security"
+    },
+    {
+      "path": "agents/pytorch-build-resolver.md",
+      "kind": "agent",
+      "phases": [
+        "ai",
+        "stack",
+        "build"
+      ],
+      "summary": "Fixes PyTorch/CUDA training and tensor errors"
+    },
+    {
+      "path": "agents/rag-pipeline-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "ai",
+        "verify"
+      ],
+      "summary": "Reviews RAG retrieval, chunking, embeddings and eval coverage"
+    },
+    {
+      "path": "agents/react-build-resolver.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fixes React builds across Vite, webpack, Next.js, etc."
+    },
+    {
+      "path": "agents/react-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "React review: hooks, render perf, RSC boundaries, a11y"
+    },
+    {
+      "path": "agents/refactor-cleaner.md",
+      "kind": "agent",
+      "phases": [
+        "build",
+        "verify"
+      ],
+      "summary": "Removes dead code and duplicates with knip/depcheck/ts-prune"
+    },
+    {
+      "path": "agents/ruby-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Ruby/Rails review: Active Record safety, security, tests",
+      "pending": true
+    },
+    {
+      "path": "agents/rust-build-resolver.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fixes cargo, borrow checker and dependency errors"
+    },
+    {
+      "path": "agents/rust-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Rust review: ownership, lifetimes, unsafe, idioms"
+    },
+    {
+      "path": "agents/security-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Detects and remediates vulnerabilities, secrets, injection, SSRF"
+    },
+    {
+      "path": "agents/seo-specialist.md",
+      "kind": "agent",
+      "phases": [
+        "verify",
+        "ship"
+      ],
+      "summary": "Technical SEO audits: meta, structured data, Core Web Vitals"
+    },
+    {
+      "path": "agents/silent-failure-hunter.md",
+      "kind": "agent",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Finds swallowed errors and silent failure paths"
+    },
+    {
+      "path": "agents/spec-miner.md",
+      "kind": "agent",
+      "phases": [
+        "intake",
+        "architect"
+      ],
+      "summary": "Extracts behavioral specs from existing code into OpenSpec"
+    },
+    {
+      "path": "agents/swift-build-resolver.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fixes Swift/Xcode/SPM build and signing errors"
+    },
+    {
+      "path": "agents/swift-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Swift review: concurrency, ARC, protocol-oriented design"
+    },
+    {
+      "path": "agents/tdd-guide.md",
+      "kind": "agent",
+      "phases": [
+        "build"
+      ],
+      "summary": "Enforces write-tests-first TDD with coverage targets"
+    },
+    {
+      "path": "agents/type-design-analyzer.md",
+      "kind": "agent",
+      "phases": [
+        "verify",
+        "architect"
+      ],
+      "summary": "Analyzes type design for invariants and encapsulation"
+    },
+    {
+      "path": "agents/typescript-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "TS/JS review: type safety, async, Node/web security"
+    },
+    {
+      "path": "agents/vue-reviewer.md",
+      "kind": "agent",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Vue review: Composition API, reactivity, template security"
+    },
+    {
+      "path": "commands/build-fix.md",
+      "kind": "command",
+      "phases": [
+        "build",
+        "verify"
+      ],
+      "summary": "Detects build system and incrementally fixes build/type errors"
+    },
+    {
+      "path": "commands/checkpoint.md",
+      "kind": "command",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Create/verify/list workflow checkpoints after checks"
+    },
+    {
+      "path": "commands/code-review.md",
+      "kind": "command",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Checklist review of local changes or GitHub PR"
+    },
+    {
+      "path": "commands/cpp-build.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fix C++ build errors via cpp-build-resolver"
+    },
+    {
+      "path": "commands/cpp-review.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "C++ review workflow via cpp-reviewer"
+    },
+    {
+      "path": "commands/cpp-test.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "TDD workflow for C++ with GoogleTest"
+    },
+    {
+      "path": "commands/fastapi-review.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "FastAPI review via fastapi-reviewer"
+    },
+    {
+      "path": "commands/feature-dev.md",
+      "kind": "command",
+      "phases": [
+        "plan",
+        "build"
+      ],
+      "summary": "Guided feature development with codebase exploration"
+    },
+    {
+      "path": "commands/flutter-build.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fix Dart/Flutter build failures"
+    },
+    {
+      "path": "commands/flutter-review.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Flutter/Dart review via flutter-reviewer"
+    },
+    {
+      "path": "commands/flutter-test.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Run and fix Flutter tests"
+    },
+    {
+      "path": "commands/gan-build.md",
+      "kind": "command",
+      "phases": [
+        "build",
+        "verify"
+      ],
+      "summary": "Generator/evaluator build loop with scoring"
+    },
+    {
+      "path": "commands/gan-design.md",
+      "kind": "command",
+      "phases": [
+        "build",
+        "verify"
+      ],
+      "summary": "Generator/evaluator frontend design loop"
+    },
+    {
+      "path": "commands/go-build.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fix Go build/vet/lint errors"
+    },
+    {
+      "path": "commands/go-review.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Go review via go-reviewer"
+    },
+    {
+      "path": "commands/go-test.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "TDD workflow for Go"
+    },
+    {
+      "path": "commands/gradle-build.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fix Gradle builds for Android/KMP"
+    },
+    {
+      "path": "commands/jira.md",
+      "kind": "command",
+      "phases": [
+        "intake"
+      ],
+      "summary": "Retrieve/analyze/update Jira tickets"
+    },
+    {
+      "path": "commands/kotlin-build.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fix Kotlin/Gradle build errors"
+    },
+    {
+      "path": "commands/kotlin-review.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Kotlin review via kotlin-reviewer"
+    },
+    {
+      "path": "commands/kotlin-test.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "TDD workflow for Kotlin with Kotest"
+    },
+    {
+      "path": "commands/learn-eval.md",
+      "kind": "command",
+      "phases": [
+        "retro"
+      ],
+      "summary": "Extract, self-evaluate and save patterns with confirmation"
+    },
+    {
+      "path": "commands/learn.md",
+      "kind": "command",
+      "phases": [
+        "retro"
+      ],
+      "summary": "Extract session patterns into approved skill files"
+    },
+    {
+      "path": "commands/model-route.md",
+      "kind": "command",
+      "phases": [
+        "plan"
+      ],
+      "summary": "Recommend model tier by complexity and budget"
+    },
+    {
+      "path": "commands/orch-review.md",
+      "kind": "command",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Run orch-review workflow over diff; blocking vs advisory"
+    },
+    {
+      "path": "commands/plan-prd.md",
+      "kind": "command",
+      "phases": [
+        "intake"
+      ],
+      "summary": "Lean problem-first PRD handing off to /plan"
+    },
+    {
+      "path": "commands/plan.md",
+      "kind": "command",
+      "phases": [
+        "plan"
+      ],
+      "summary": "Restate requirements, assess risks, plan; wait for confirm"
+    },
+    {
+      "path": "commands/pm2.md",
+      "kind": "command",
+      "phases": [
+        "build",
+        "ship"
+      ],
+      "summary": "Generate PM2 service commands for detected services"
+    },
+    {
+      "path": "commands/pr.md",
+      "kind": "command",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Create GitHub PR from current branch with templates"
+    },
+    {
+      "path": "commands/prp-commit.md",
+      "kind": "command",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Commit with natural-language file targeting"
+    },
+    {
+      "path": "commands/prp-implement.md",
+      "kind": "command",
+      "phases": [
+        "build",
+        "verify"
+      ],
+      "summary": "Execute implementation plan with validation loops"
+    },
+    {
+      "path": "commands/prp-plan.md",
+      "kind": "command",
+      "phases": [
+        "plan"
+      ],
+      "summary": "Comprehensive feature plan with codebase pattern extraction"
+    },
+    {
+      "path": "commands/prp-prd.md",
+      "kind": "command",
+      "phases": [
+        "intake"
+      ],
+      "summary": "Interactive hypothesis-driven PRD generator"
+    },
+    {
+      "path": "commands/python-review.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Python review via python-reviewer"
+    },
+    {
+      "path": "commands/react-build.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fix React build failures"
+    },
+    {
+      "path": "commands/react-review.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "React review via react-reviewer"
+    },
+    {
+      "path": "commands/react-test.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "TDD workflow for React with RTL"
+    },
+    {
+      "path": "commands/refactor-clean.md",
+      "kind": "command",
+      "phases": [
+        "build",
+        "verify"
+      ],
+      "summary": "Remove dead code with verification per change"
+    },
+    {
+      "path": "commands/resume-session.md",
+      "kind": "command",
+      "phases": [
+        "build"
+      ],
+      "summary": "Load latest saved session file and resume"
+    },
+    {
+      "path": "commands/review-pr.md",
+      "kind": "command",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Multi-agent PR review with specialized reviewers"
+    },
+    {
+      "path": "commands/rust-build.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Fix Rust build and borrow checker errors"
+    },
+    {
+      "path": "commands/rust-review.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Rust review via rust-reviewer"
+    },
+    {
+      "path": "commands/rust-test.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "TDD workflow for Rust"
+    },
+    {
+      "path": "commands/save-session.md",
+      "kind": "command",
+      "phases": [
+        "build",
+        "retro"
+      ],
+      "summary": "Save session state to dated file for resumption"
+    },
+    {
+      "path": "commands/test-coverage.md",
+      "kind": "command",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Analyze coverage gaps and generate missing tests"
+    },
+    {
+      "path": "commands/update-codemaps.md",
+      "kind": "command",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Generate token-lean architecture codemaps"
+    },
+    {
+      "path": "commands/update-docs.md",
+      "kind": "command",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Sync docs from source-of-truth files"
+    },
+    {
+      "path": "commands/vue-review.md",
+      "kind": "command",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Vue review via vue-reviewer"
+    },
+    {
+      "path": "rules/angular",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "angular coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/arkts",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "arkts coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/common",
+      "kind": "rule",
+      "phases": [
+        "build",
+        "verify",
+        "ship"
+      ],
+      "summary": "Cross-language coding style, testing, security, git, review rules"
+    },
+    {
+      "path": "rules/cpp",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "cpp coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/csharp",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "csharp coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/dart",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "dart coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/fsharp",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "fsharp coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/golang",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "golang coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/java",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "java coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/kotlin",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "kotlin coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/nuxt",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "nuxt coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/perl",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "perl coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/php",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "php coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/python",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "python coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/react",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "react coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/react-native",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "react-native coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/ruby",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "ruby coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/rust",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "rust coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/swift",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "swift coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/typescript",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "typescript coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/vue",
+      "kind": "rule",
+      "phases": [
+        "stack"
+      ],
+      "summary": "vue coding style, patterns, security and testing rules"
+    },
+    {
+      "path": "rules/web",
+      "kind": "rule",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Web coding style, design quality, performance, security rules"
+    },
+    {
+      "path": "skills/accessibility",
+      "kind": "skill",
+      "phases": [
+        "build",
+        "verify"
+      ],
+      "summary": "Accessible UI to WCAG 2.2 AA across web, iOS, Android"
+    },
+    {
+      "path": "skills/agent-architecture-audit",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "verify"
+      ],
+      "summary": "Audits 12-layer agent/LLM app stack for failure modes"
+    },
+    {
+      "path": "skills/agent-eval",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "verify"
+      ],
+      "summary": "Head-to-head coding-agent comparison on custom tasks"
+    },
+    {
+      "path": "skills/agent-harness-construction",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "architect"
+      ],
+      "summary": "Designs agent action spaces, tools and observation formats"
+    },
+    {
+      "path": "skills/agent-introspection-debugging",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "verify"
+      ],
+      "summary": "Structured diagnosis workflow for failed agent runs"
+    },
+    {
+      "path": "skills/agent-payment-x402",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Web3/blockchain development patterns and security"
+    },
+    {
+      "path": "skills/agent-security-hardening",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "verify"
+      ],
+      "summary": "Hardening agents that handle untrusted content and tools",
+      "pending": true
+    },
+    {
+      "path": "skills/agent-self-evaluation",
+      "kind": "skill",
+      "phases": [
+        "verify",
+        "retro"
+      ],
+      "summary": "Agent self-rates output on 5 quality axes"
+    },
+    {
+      "path": "skills/agentic-engineering",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "plan"
+      ],
+      "summary": "Eval-first, decomposed, cost-aware agentic engineering practice"
+    },
+    {
+      "path": "skills/ai-first-engineering",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "mission"
+      ],
+      "summary": "Team operating model when AI generates most code"
+    },
+    {
+      "path": "skills/ai-regression-testing",
+      "kind": "skill",
+      "phases": [
+        "verify",
+        "ai"
+      ],
+      "summary": "Regression testing strategies for AI-assisted development"
+    },
+    {
+      "path": "skills/android-clean-architecture",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "architect"
+      ],
+      "summary": "Clean Architecture for Android/KMP modules and layers"
+    },
+    {
+      "path": "skills/angular-developer",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Angular code generation and architecture guidance"
+    },
+    {
+      "path": "skills/api-connector-builder",
+      "kind": "skill",
+      "phases": [
+        "build"
+      ],
+      "summary": "Adds API connectors matching repo's existing integration pattern"
+    },
+    {
+      "path": "skills/api-design",
+      "kind": "skill",
+      "phases": [
+        "architect"
+      ],
+      "summary": "REST API design: naming, status codes, pagination, versioning"
+    },
+    {
+      "path": "skills/architecture-decision-records",
+      "kind": "skill",
+      "phases": [
+        "architect"
+      ],
+      "summary": "Captures decisions as numbered ADRs in docs/adr"
+    },
+    {
+      "path": "skills/backend-patterns",
+      "kind": "skill",
+      "phases": [
+        "build",
+        "stack"
+      ],
+      "summary": "Node/Express/Next.js backend architecture and DB patterns"
+    },
+    {
+      "path": "skills/benchmark",
+      "kind": "skill",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Performance baselines and regressions: Web Vitals, API latency, build"
+    },
+    {
+      "path": "skills/benchmark-optimization-loop",
+      "kind": "skill",
+      "phases": [
+        "verify",
+        "build"
+      ],
+      "summary": "Bounded measured optimization loop with baselines"
+    },
+    {
+      "path": "skills/bengali-nlp",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Bengali text processing: Unicode, tokenization, NLP",
+      "pending": true
+    },
+    {
+      "path": "skills/blueprint",
+      "kind": "skill",
+      "phases": [
+        "plan"
+      ],
+      "summary": "Turns objective into PR-sized multi-session construction plan"
+    },
+    {
+      "path": "skills/brownfield-retrospective",
+      "kind": "skill",
+      "phases": [
+        "retro",
+        "intake"
+      ],
+      "summary": "Retroactive process audit and gap report on existing project",
+      "pending": true
+    },
+    {
+      "path": "skills/browser-qa",
+      "kind": "skill",
+      "phases": [
+        "verify",
+        "ship"
+      ],
+      "summary": "Post-deploy browser UI verification and smoke checks"
+    },
+    {
+      "path": "skills/bun-runtime",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Bun as runtime, package manager, bundler and test runner"
+    },
+    {
+      "path": "skills/canary-watch",
+      "kind": "skill",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Monitors deployed URL after release for regressions"
+    },
+    {
+      "path": "skills/change-impact",
+      "kind": "skill",
+      "phases": [
+        "plan",
+        "verify"
+      ],
+      "summary": "Evidence-backed impact analysis before and after changes",
+      "pending": true
+    },
+    {
+      "path": "skills/click-path-audit",
+      "kind": "skill",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Traces UI touchpoints through state changes to find bugs"
+    },
+    {
+      "path": "skills/clickhouse-io",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "ClickHouse schema, query and analytics patterns"
+    },
+    {
+      "path": "skills/code-tour",
+      "kind": "skill",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Creates CodeTour walkthroughs for onboarding and PRs"
+    },
+    {
+      "path": "skills/codebase-onboarding",
+      "kind": "skill",
+      "phases": [
+        "intake"
+      ],
+      "summary": "Generates onboarding guide and architecture map for unfamiliar code"
+    },
+    {
+      "path": "skills/coding-standards",
+      "kind": "skill",
+      "phases": [
+        "build"
+      ],
+      "summary": "Cross-project naming, readability, immutability conventions"
+    },
+    {
+      "path": "skills/compose-multiplatform-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Compose Multiplatform/Jetpack Compose UI patterns"
+    },
+    {
+      "path": "skills/content-hash-cache-pattern",
+      "kind": "skill",
+      "phases": [
+        "build"
+      ],
+      "summary": "SHA-256 content-hash caching for expensive file processing"
+    },
+    {
+      "path": "skills/context-and-decisions",
+      "kind": "skill",
+      "phases": [
+        "architect"
+      ],
+      "summary": "Governs domain CONTEXT.md and routes decisions to ADRs",
+      "pending": true
+    },
+    {
+      "path": "skills/contract-first",
+      "kind": "skill",
+      "phases": [
+        "architect",
+        "plan"
+      ],
+      "summary": "Coordinates work via one machine-checkable API contract"
+    },
+    {
+      "path": "skills/conventional-commit-review",
+      "kind": "skill",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Drafts Conventional Commits message from staged changes",
+      "pending": true
+    },
+    {
+      "path": "skills/cost-aware-llm-pipeline",
+      "kind": "skill",
+      "phases": [
+        "ai"
+      ],
+      "summary": "LLM cost optimization: routing, budgets, retries, caching"
+    },
+    {
+      "path": "skills/council",
+      "kind": "skill",
+      "phases": [
+        "plan",
+        "architect"
+      ],
+      "summary": "Four-voice council for ambiguous decisions and tradeoffs"
+    },
+    {
+      "path": "skills/cpp-coding-standards",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "C++ Core Guidelines coding standards"
+    },
+    {
+      "path": "skills/cpp-testing",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "C++ tests with GoogleTest/CTest, coverage, sanitizers"
+    },
+    {
+      "path": "skills/csharp-testing",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "C#/.NET testing with xUnit and mocking"
+    },
+    {
+      "path": "skills/dart-flutter-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Production Dart/Flutter patterns and state management"
+    },
+    {
+      "path": "skills/dashboard-builder",
+      "kind": "skill",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Builds Grafana/SigNoz monitoring dashboards"
+    },
+    {
+      "path": "skills/data-scraper-agent",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "build"
+      ],
+      "summary": "Builds scheduled AI-powered data collection agents"
+    },
+    {
+      "path": "skills/data-throughput-accelerator",
+      "kind": "skill",
+      "phases": [
+        "build",
+        "verify"
+      ],
+      "summary": "Diagnoses and accelerates large data movement/ETL"
+    },
+    {
+      "path": "skills/database-migrations",
+      "kind": "skill",
+      "phases": [
+        "build",
+        "ship"
+      ],
+      "summary": "Safe reversible zero-downtime database migrations"
+    },
+    {
+      "path": "skills/deep-research",
+      "kind": "skill",
+      "phases": [
+        "intake",
+        "architect"
+      ],
+      "summary": "Cited multi-source research reports via firecrawl/exa MCP"
+    },
+    {
+      "path": "skills/defi-amm-security",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Web3/blockchain development patterns and security"
+    },
+    {
+      "path": "skills/deployment-patterns",
+      "kind": "skill",
+      "phases": [
+        "ship"
+      ],
+      "summary": "CI/CD, Docker, health checks, rollback, production readiness"
+    },
+    {
+      "path": "skills/design-system",
+      "kind": "skill",
+      "phases": [
+        "build"
+      ],
+      "summary": "Extracts or audits design tokens and visual consistency"
+    },
+    {
+      "path": "skills/dev-team",
+      "kind": "skill",
+      "phases": [
+        "plan"
+      ],
+      "summary": "Simulated PM/Architect/Dev/QA persona team session"
+    },
+    {
+      "path": "skills/django-celery",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Django + Celery background task patterns"
+    },
+    {
+      "path": "skills/django-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Django/DRF architecture, ORM, caching, middleware"
+    },
+    {
+      "path": "skills/django-security",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Django security: auth, CSRF, injection, deployment"
+    },
+    {
+      "path": "skills/django-tdd",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Django TDD with pytest-django and factory_boy"
+    },
+    {
+      "path": "skills/django-verification",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Django verification loop: lint, migrations, tests, audits"
+    },
+    {
+      "path": "skills/docker-patterns",
+      "kind": "skill",
+      "phases": [
+        "ship",
+        "stack"
+      ],
+      "summary": "Docker/Compose patterns, container security, networking"
+    },
+    {
+      "path": "skills/docs-governance",
+      "kind": "skill",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Read-only documentation governance audit and routing",
+      "pending": true
+    },
+    {
+      "path": "skills/documentation-lookup",
+      "kind": "skill",
+      "phases": [
+        "build"
+      ],
+      "summary": "Uses Context7 MCP for current library docs"
+    },
+    {
+      "path": "skills/dotnet-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Idiomatic C#/.NET patterns, DI, async"
+    },
+    {
+      "path": "skills/dynamic-workflow-mode",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "plan"
+      ],
+      "summary": "Designs task-local harnesses and eval gates for agent workflows"
+    },
+    {
+      "path": "skills/e2e-testing",
+      "kind": "skill",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Playwright E2E patterns, POM, CI, flaky tests"
+    },
+    {
+      "path": "skills/enterprise-agent-ops",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "ship"
+      ],
+      "summary": "Operational controls for long-lived hosted agent systems"
+    },
+    {
+      "path": "skills/error-handling",
+      "kind": "skill",
+      "phases": [
+        "build"
+      ],
+      "summary": "Typed errors, boundaries, retries, circuit breakers"
+    },
+    {
+      "path": "skills/eval-harness",
+      "kind": "skill",
+      "phases": [
+        "verify",
+        "ai"
+      ],
+      "summary": "Eval-driven development: capability and regression evals"
+    },
+    {
+      "path": "skills/evm-token-decimals",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Web3/blockchain development patterns and security"
+    },
+    {
+      "path": "skills/exa-search",
+      "kind": "skill",
+      "phases": [
+        "intake"
+      ],
+      "summary": "Neural web/code research via Exa MCP"
+    },
+    {
+      "path": "skills/fastapi-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "FastAPI structure, Pydantic v2, DI, async, auth"
+    },
+    {
+      "path": "skills/flox-environments",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Reproducible dev environments with Flox/Nix"
+    },
+    {
+      "path": "skills/flutter-dart-code-review",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Flutter/Dart code review checklist"
+    },
+    {
+      "path": "skills/foundation-models-on-device",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "ai"
+      ],
+      "summary": "Apple FoundationModels on-device LLM usage"
+    },
+    {
+      "path": "skills/frontend-a11y",
+      "kind": "skill",
+      "phases": [
+        "build",
+        "verify"
+      ],
+      "summary": "React/Next.js accessibility patterns"
+    },
+    {
+      "path": "skills/frontend-design-direction",
+      "kind": "skill",
+      "phases": [
+        "build"
+      ],
+      "summary": "Sets frontend design direction for production UI"
+    },
+    {
+      "path": "skills/frontend-patterns",
+      "kind": "skill",
+      "phases": [
+        "build",
+        "stack"
+      ],
+      "summary": "React/Next.js frontend patterns, state, performance"
+    },
+    {
+      "path": "skills/fsharp-testing",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "F# testing with xUnit, FsUnit, FsCheck"
+    },
+    {
+      "path": "skills/gan-style-harness",
+      "kind": "skill",
+      "phases": [
+        "build",
+        "verify"
+      ],
+      "summary": "Generator-Evaluator agent harness for building apps"
+    },
+    {
+      "path": "skills/generating-python-installer",
+      "kind": "skill",
+      "phases": [
+        "ship",
+        "stack"
+      ],
+      "summary": "Windows Python installers with Nuitka and Inno Setup"
+    },
+    {
+      "path": "skills/git-workflow",
+      "kind": "skill",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Branching, commit conventions, clean history"
+    },
+    {
+      "path": "skills/github-ops",
+      "kind": "skill",
+      "phases": [
+        "ship"
+      ],
+      "summary": "GitHub issues, PRs, CI/CD and release operations"
+    },
+    {
+      "path": "skills/golang-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Idiomatic Go patterns and conventions"
+    },
+    {
+      "path": "skills/golang-testing",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Go table-driven tests, benchmarks, fuzzing, TDD"
+    },
+    {
+      "path": "skills/growth-log",
+      "kind": "skill",
+      "phases": [
+        "retro"
+      ],
+      "summary": "Extracts reusable patterns and rules from completed work"
+    },
+    {
+      "path": "skills/healthcare-cdss-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "architect"
+      ],
+      "summary": "Healthcare software patterns and compliance"
+    },
+    {
+      "path": "skills/healthcare-emr-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "architect"
+      ],
+      "summary": "Healthcare software patterns and compliance"
+    },
+    {
+      "path": "skills/healthcare-eval-harness",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "architect"
+      ],
+      "summary": "Healthcare software patterns and compliance"
+    },
+    {
+      "path": "skills/healthcare-phi-compliance",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "architect"
+      ],
+      "summary": "Healthcare software patterns and compliance"
+    },
+    {
+      "path": "skills/hexagonal-architecture",
+      "kind": "skill",
+      "phases": [
+        "architect"
+      ],
+      "summary": "Ports and Adapters design and refactoring"
+    },
+    {
+      "path": "skills/i18n-sync",
+      "kind": "skill",
+      "phases": [
+        "build"
+      ],
+      "summary": "Translates and syncs JSON locale files"
+    },
+    {
+      "path": "skills/inherit-legacy-style",
+      "kind": "skill",
+      "phases": [
+        "intake",
+        "build"
+      ],
+      "summary": "Detects implicit codebase conventions to prevent style drift"
+    },
+    {
+      "path": "skills/intent-driven-development",
+      "kind": "skill",
+      "phases": [
+        "intake",
+        "plan"
+      ],
+      "summary": "Turns ambiguous changes into verifiable acceptance criteria"
+    },
+    {
+      "path": "skills/ios-icon-gen",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Generates iOS app icon imagesets from SF Symbols/Iconify"
+    },
+    {
+      "path": "skills/iterative-retrieval",
+      "kind": "skill",
+      "phases": [
+        "ai"
+      ],
+      "summary": "Progressive context retrieval for subagents"
+    },
+    {
+      "path": "skills/java-coding-standards",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Java Spring Boot/Quarkus coding standards"
+    },
+    {
+      "path": "skills/jira-integration",
+      "kind": "skill",
+      "phases": [
+        "intake"
+      ],
+      "summary": "Retrieves and updates Jira tickets and requirements"
+    },
+    {
+      "path": "skills/jpa-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "JPA/Hibernate entity, query and transaction patterns"
+    },
+    {
+      "path": "skills/kotlin-coroutines-flows",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Kotlin coroutines and Flow patterns"
+    },
+    {
+      "path": "skills/kotlin-exposed-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "JetBrains Exposed ORM patterns"
+    },
+    {
+      "path": "skills/kotlin-ktor-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Ktor server routing, plugins, auth, testing"
+    },
+    {
+      "path": "skills/kotlin-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Idiomatic Kotlin patterns"
+    },
+    {
+      "path": "skills/kotlin-testing",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Kotest, MockK, coroutine testing, Kover coverage"
+    },
+    {
+      "path": "skills/kubernetes-patterns",
+      "kind": "skill",
+      "phases": [
+        "ship",
+        "stack"
+      ],
+      "summary": "Kubernetes workloads, RBAC, probes, autoscaling"
+    },
+    {
+      "path": "skills/laravel-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Laravel architecture, Eloquent, queues, caching"
+    },
+    {
+      "path": "skills/laravel-plugin-discovery",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Evaluates Laravel packages via LaraPlugins MCP"
+    },
+    {
+      "path": "skills/laravel-security",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Laravel security best practices"
+    },
+    {
+      "path": "skills/laravel-tdd",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Laravel TDD with PHPUnit/Pest"
+    },
+    {
+      "path": "skills/laravel-verification",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Laravel verification loop: lint, analysis, tests, scans"
+    },
+    {
+      "path": "skills/latency-critical-systems",
+      "kind": "skill",
+      "phases": [
+        "verify",
+        "architect"
+      ],
+      "summary": "Optimizes and verifies latency-sensitive systems"
+    },
+    {
+      "path": "skills/liquid-glass-design",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "iOS 26 Liquid Glass design for SwiftUI/UIKit"
+    },
+    {
+      "path": "skills/living-docs-governance",
+      "kind": "skill",
+      "phases": [
+        "ship",
+        "retro"
+      ],
+      "summary": "Keeps long-lived project docs from rotting"
+    },
+    {
+      "path": "skills/loop-design-check",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "plan"
+      ],
+      "summary": "Designs or reviews agent loops for failure modes"
+    },
+    {
+      "path": "skills/mailtrap-email-integration",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Transactional email integration via Mailtrap API"
+    },
+    {
+      "path": "skills/make-interfaces-feel-better",
+      "kind": "skill",
+      "phases": [
+        "build"
+      ],
+      "summary": "Design-engineering polish for UI spacing and typography"
+    },
+    {
+      "path": "skills/mcp-dependency-review",
+      "kind": "skill",
+      "phases": [
+        "verify",
+        "ai"
+      ],
+      "summary": "Static review of MCP configs for mutable package refs",
+      "pending": true
+    },
+    {
+      "path": "skills/mcp-server-patterns",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "build"
+      ],
+      "summary": "Building MCP servers with Node/TS SDK"
+    },
+    {
+      "path": "skills/ml-adoption-playbook",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "plan"
+      ],
+      "summary": "Adding ML to existing non-ML codebases"
+    },
+    {
+      "path": "skills/mle-workflow",
+      "kind": "skill",
+      "phases": [
+        "ai"
+      ],
+      "summary": "Production ML workflow: data, training, eval, deploy, rollback"
+    },
+    {
+      "path": "skills/module-regression",
+      "kind": "skill",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Cross-module regression ledger with downstream acceptance commands",
+      "pending": true
+    },
+    {
+      "path": "skills/motion-advanced",
+      "kind": "skill",
+      "phases": [
+        "build",
+        "stack"
+      ],
+      "summary": "Advanced React motion: gestures, drag, SVG, sequences"
+    },
+    {
+      "path": "skills/motion-foundations",
+      "kind": "skill",
+      "phases": [
+        "build",
+        "stack"
+      ],
+      "summary": "Motion tokens, springs, a11y and SSR safety for React"
+    },
+    {
+      "path": "skills/motion-patterns",
+      "kind": "skill",
+      "phases": [
+        "build",
+        "stack"
+      ],
+      "summary": "Production React animation patterns"
+    },
+    {
+      "path": "skills/mybatis-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "MyBatis mapper, SQL and transaction patterns",
+      "pending": true
+    },
+    {
+      "path": "skills/mysql-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "MySQL/MariaDB schema, indexing, replication patterns"
+    },
+    {
+      "path": "skills/nestjs-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "NestJS modules, DTOs, guards, interceptors"
+    },
+    {
+      "path": "skills/nextjs-turbopack",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Next.js 16+ and Turbopack guidance"
+    },
+    {
+      "path": "skills/nodejs-keccak256",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Web3/blockchain development patterns and security"
+    },
+    {
+      "path": "skills/nuxt4-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Nuxt 4 hydration, performance and SSR data fetching"
+    },
+    {
+      "path": "skills/opensource-pipeline",
+      "kind": "skill",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Fork, sanitize and package projects for public release"
+    },
+    {
+      "path": "skills/orch-add-feature",
+      "kind": "skill",
+      "phases": [
+        "plan",
+        "build",
+        "verify",
+        "ship"
+      ],
+      "summary": "Gated pipeline to add a new feature end to end"
+    },
+    {
+      "path": "skills/orch-build-mvp",
+      "kind": "skill",
+      "phases": [
+        "plan",
+        "build",
+        "verify",
+        "ship"
+      ],
+      "summary": "Gated pipeline bootstrapping an MVP from a spec"
+    },
+    {
+      "path": "skills/orch-change-feature",
+      "kind": "skill",
+      "phases": [
+        "plan",
+        "build",
+        "verify",
+        "ship"
+      ],
+      "summary": "Gated pipeline altering existing feature behavior"
+    },
+    {
+      "path": "skills/orch-fix-defect",
+      "kind": "skill",
+      "phases": [
+        "build",
+        "verify",
+        "ship"
+      ],
+      "summary": "Gated bug-fix pipeline with failing regression test first"
+    },
+    {
+      "path": "skills/orch-pipeline",
+      "kind": "skill",
+      "phases": [
+        "plan",
+        "build",
+        "verify",
+        "ship"
+      ],
+      "summary": "Shared Research-Plan-TDD-Review-Commit orchestration engine"
+    },
+    {
+      "path": "skills/orch-refine-code",
+      "kind": "skill",
+      "phases": [
+        "build",
+        "verify",
+        "ship"
+      ],
+      "summary": "Gated behavior-preserving refactor pipeline"
+    },
+    {
+      "path": "skills/parallel-execution-optimizer",
+      "kind": "skill",
+      "phases": [
+        "plan",
+        "build"
+      ],
+      "summary": "Splits tasks into parallel dependency-graph lanes"
+    },
+    {
+      "path": "skills/perl-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Modern Perl 5.36+ idioms"
+    },
+    {
+      "path": "skills/perl-security",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Perl security: taint mode, DBI, web security"
+    },
+    {
+      "path": "skills/perl-testing",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Perl testing with Test2, prove, Devel::Cover"
+    },
+    {
+      "path": "skills/plan-orchestrate",
+      "kind": "skill",
+      "phases": [
+        "plan"
+      ],
+      "summary": "Decomposes a plan doc into steps with slash commands"
+    },
+    {
+      "path": "skills/postgres-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "PostgreSQL query, schema, index and security patterns"
+    },
+    {
+      "path": "skills/prisma-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Prisma ORM schema, queries, transactions, traps"
+    },
+    {
+      "path": "skills/product-capability",
+      "kind": "skill",
+      "phases": [
+        "intake",
+        "plan"
+      ],
+      "summary": "Turns PRD intent into implementation-ready capability plan"
+    },
+    {
+      "path": "skills/product-lens",
+      "kind": "skill",
+      "phases": [
+        "mission",
+        "intake"
+      ],
+      "summary": "Validates the why; produces PRODUCT-BRIEF with go/no-go"
+    },
+    {
+      "path": "skills/production-audit",
+      "kind": "skill",
+      "phases": [
+        "ship",
+        "verify"
+      ],
+      "summary": "Local-evidence production readiness audit"
+    },
+    {
+      "path": "skills/project-flow-ops",
+      "kind": "skill",
+      "phases": [
+        "plan",
+        "ship"
+      ],
+      "summary": "Triage and link GitHub/Linear issues and PRs"
+    },
+    {
+      "path": "skills/prompt-caching-strategy",
+      "kind": "skill",
+      "phases": [
+        "ai"
+      ],
+      "summary": "Optimizes LLM prompt cache hit rate",
+      "pending": true
+    },
+    {
+      "path": "skills/python-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Pythonic idioms, PEP 8, type hints"
+    },
+    {
+      "path": "skills/python-testing",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "pytest, TDD, fixtures, mocking, coverage"
+    },
+    {
+      "path": "skills/pytorch-patterns",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "stack"
+      ],
+      "summary": "PyTorch training pipelines and model patterns"
+    },
+    {
+      "path": "skills/quarkus-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Quarkus 3 architecture, Panache, Camel messaging"
+    },
+    {
+      "path": "skills/quarkus-security",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Quarkus JWT/OIDC, RBAC and validation"
+    },
+    {
+      "path": "skills/quarkus-tdd",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Quarkus TDD with JUnit 5, REST Assured, JaCoCo"
+    },
+    {
+      "path": "skills/quarkus-verification",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Quarkus verification loop: build, analysis, tests, OWASP"
+    },
+    {
+      "path": "skills/rails-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Rails 7.1+/8 patterns: services, form objects"
+    },
+    {
+      "path": "skills/ralphinho-rfc-pipeline",
+      "kind": "skill",
+      "phases": [
+        "plan",
+        "build"
+      ],
+      "summary": "Splits an RFC into a multi-agent execution DAG"
+    },
+    {
+      "path": "skills/react-native-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "React Native/Expo navigation, state, data fetching"
+    },
+    {
+      "path": "skills/react-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "React 18/19 hooks, RSC boundaries, Suspense"
+    },
+    {
+      "path": "skills/react-performance",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "React/Next.js performance optimization patterns"
+    },
+    {
+      "path": "skills/react-testing",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "React Testing Library, Vitest/Jest, MSW, axe"
+    },
+    {
+      "path": "skills/redis-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Redis caching, locks, rate limiting, pub/sub"
+    },
+    {
+      "path": "skills/regex-vs-llm-structured-text",
+      "kind": "skill",
+      "phases": [
+        "ai"
+      ],
+      "summary": "Hybrid regex-first vs LLM parsing of structured text"
+    },
+    {
+      "path": "skills/research-ops",
+      "kind": "skill",
+      "phases": [
+        "intake"
+      ],
+      "summary": "Evidence-first current-state research and recommendations"
+    },
+    {
+      "path": "skills/rules-distill",
+      "kind": "skill",
+      "phases": [
+        "retro"
+      ],
+      "summary": "Distills cross-cutting principles from skills into rules"
+    },
+    {
+      "path": "skills/rust-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Idiomatic Rust ownership, errors, traits, concurrency"
+    },
+    {
+      "path": "skills/rust-testing",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Rust unit/integration/property tests and coverage"
+    },
+    {
+      "path": "skills/santa-method",
+      "kind": "skill",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Dual independent reviewers must both pass before shipping"
+    },
+    {
+      "path": "skills/search-first",
+      "kind": "skill",
+      "phases": [
+        "plan",
+        "architect"
+      ],
+      "summary": "Search existing libraries/tools before writing custom code"
+    },
+    {
+      "path": "skills/security-bounty-hunter",
+      "kind": "skill",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Hunts remotely reachable exploitable vulnerabilities"
+    },
+    {
+      "path": "skills/security-review",
+      "kind": "skill",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Security checklist for auth, input, secrets, APIs, payments"
+    },
+    {
+      "path": "skills/seo",
+      "kind": "skill",
+      "phases": [
+        "ship",
+        "verify"
+      ],
+      "summary": "Technical and on-page SEO audits and fixes"
+    },
+    {
+      "path": "skills/skill-comply",
+      "kind": "skill",
+      "phases": [
+        "retro"
+      ],
+      "summary": "Measures whether a skill or rule is actually followed (explicit claude -p runs)"
+    },
+    {
+      "path": "skills/springboot-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Spring Boot layered services, REST, data access"
+    },
+    {
+      "path": "skills/springboot-security",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Spring Security authn/authz, CSRF, headers"
+    },
+    {
+      "path": "skills/springboot-tdd",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Spring Boot TDD with JUnit 5, Testcontainers"
+    },
+    {
+      "path": "skills/springboot-verification",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Spring Boot verification loop: build, analysis, tests"
+    },
+    {
+      "path": "skills/story-lifecycle",
+      "kind": "skill",
+      "phases": [
+        "plan"
+      ],
+      "summary": "File-based epic, story, sprint development loop",
+      "pending": true
+    },
+    {
+      "path": "skills/swift-actor-persistence",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Thread-safe Swift persistence with actors"
+    },
+    {
+      "path": "skills/swift-concurrency-6-2",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Swift 6.2 approachable concurrency"
+    },
+    {
+      "path": "skills/swift-protocol-di-testing",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "verify"
+      ],
+      "summary": "Protocol-based DI for testable Swift"
+    },
+    {
+      "path": "skills/swiftui-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "SwiftUI architecture, @Observable state, navigation"
+    },
+    {
+      "path": "skills/tdd-workflow",
+      "kind": "skill",
+      "phases": [
+        "build"
+      ],
+      "summary": "Red-green-refactor TDD workflow with coverage"
+    },
+    {
+      "path": "skills/team-agent-orchestration",
+      "kind": "skill",
+      "phases": [
+        "ai",
+        "plan"
+      ],
+      "summary": "Team-based orchestration of agent squads with branch isolation"
+    },
+    {
+      "path": "skills/terminal-ops",
+      "kind": "skill",
+      "phases": [
+        "build",
+        "verify"
+      ],
+      "summary": "Evidence-first repo command execution and CI debugging"
+    },
+    {
+      "path": "skills/test-collaboration",
+      "kind": "skill",
+      "phases": [
+        "verify",
+        "plan"
+      ],
+      "summary": "Inventories and governs test assets linked to requirements",
+      "pending": true
+    },
+    {
+      "path": "skills/tinystruct-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "tinystruct Java framework guidance"
+    },
+    {
+      "path": "skills/ui-demo",
+      "kind": "skill",
+      "phases": [
+        "ship"
+      ],
+      "summary": "Records polished UI demo videos with Playwright"
+    },
+    {
+      "path": "skills/ui-to-vue",
+      "kind": "skill",
+      "phases": [
+        "stack",
+        "build"
+      ],
+      "summary": "Converts UI screenshots into Vue 3 components"
+    },
+    {
+      "path": "skills/uncloud",
+      "kind": "skill",
+      "phases": [
+        "ship",
+        "stack"
+      ],
+      "summary": "Deploys services on Uncloud clusters with Caddy ingress"
+    },
+    {
+      "path": "skills/verification-loop",
+      "kind": "skill",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Six-phase verification: build, types, lint, tests, security, diff"
+    },
+    {
+      "path": "skills/vite-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Vite config, plugins, HMR, SSR, build optimization"
+    },
+    {
+      "path": "skills/vue-patterns",
+      "kind": "skill",
+      "phases": [
+        "stack"
+      ],
+      "summary": "Vue 3 Composition API, Pinia, Router, Nuxt SSR"
+    },
+    {
+      "path": "skills/windows-desktop-e2e",
+      "kind": "skill",
+      "phases": [
+        "verify",
+        "stack"
+      ],
+      "summary": "E2E testing for Windows desktop apps with pywinauto"
+    },
+    {
+      "path": "workflows/orch-review.workflow.js",
+      "kind": "workflow",
+      "phases": [
+        "verify"
+      ],
+      "summary": "Parallel multi-dimension review plus adversarial verification of CRITICAL/HIGH findings"
+    }
+  ],
+  "exclude": [
+    {
+      "path": "agents/chief-of-staff.md",
+      "reason": "Personal communication triage (email/Slack); personal productivity"
+    },
+    {
+      "path": "agents/conversation-analyzer.md",
+      "reason": "Hookify transcript analysis to generate harness hooks; harness-config meta"
+    },
+    {
+      "path": "agents/harness-optimizer.md",
+      "reason": "ECC agent-harness config tuning; harness meta, not app development"
+    },
+    {
+      "path": "agents/homelab-architect.md",
+      "reason": "Homelab networking (non-software ops)"
+    },
+    {
+      "path": "agents/loop-operator.md",
+      "reason": "Operates ECC autonomous loops (loop-start runtime); thin and runtime-specific"
+    },
+    {
+      "path": "agents/marketing-agent.md",
+      "reason": "Marketing domain"
+    },
+    {
+      "path": "agents/network-architect.md",
+      "reason": "Network ops, not software"
+    },
+    {
+      "path": "agents/network-config-reviewer.md",
+      "reason": "Network device config ops, not software"
+    },
+    {
+      "path": "agents/network-troubleshooter.md",
+      "reason": "Network ops, not software"
+    },
+    {
+      "path": "commands/aside.md",
+      "reason": "Harness side-question utility, not dev workflow"
+    },
+    {
+      "path": "commands/astra-review.md",
+      "reason": "Requires Codex CLI / GPT (multi-harness)"
+    },
+    {
+      "path": "commands/auto-update.md",
+      "reason": "ECC self-update"
+    },
+    {
+      "path": "commands/cost-report.md",
+      "reason": "ECC cost tracker; shim over cost-tracking"
+    },
+    {
+      "path": "commands/ecc-guide.md",
+      "reason": "Shim over ecc-guide skill (ECC meta)"
+    },
+    {
+      "path": "commands/epic-claim.md",
+      "reason": "Requires ECC scripts/github-coordination.js"
+    },
+    {
+      "path": "commands/epic-decompose.md",
+      "reason": "Requires ECC scripts/github-coordination.js"
+    },
+    {
+      "path": "commands/epic-publish.md",
+      "reason": "Requires ECC scripts/github-coordination.js"
+    },
+    {
+      "path": "commands/epic-review.md",
+      "reason": "Requires ECC scripts/github-coordination.js"
+    },
+    {
+      "path": "commands/epic-sync.md",
+      "reason": "Requires ECC scripts/github-coordination.js"
+    },
+    {
+      "path": "commands/epic-unblock.md",
+      "reason": "Requires ECC scripts/github-coordination.js"
+    },
+    {
+      "path": "commands/epic-validate.md",
+      "reason": "Requires ECC scripts/github-coordination.js"
+    },
+    {
+      "path": "commands/evolve.md",
+      "reason": "Instinct auto-learning (continuous-learning-v2)"
+    },
+    {
+      "path": "commands/harness-audit.md",
+      "reason": "ECC harness audit script"
+    },
+    {
+      "path": "commands/hookify-configure.md",
+      "reason": "Harness hooks; stub"
+    },
+    {
+      "path": "commands/hookify-help.md",
+      "reason": "Harness hooks"
+    },
+    {
+      "path": "commands/hookify-list.md",
+      "reason": "Harness hooks; stub"
+    },
+    {
+      "path": "commands/hookify.md",
+      "reason": "Harness hook generation"
+    },
+    {
+      "path": "commands/instinct-export.md",
+      "reason": "Instinct auto-learning"
+    },
+    {
+      "path": "commands/instinct-import.md",
+      "reason": "Instinct auto-learning; imports from URL"
+    },
+    {
+      "path": "commands/instinct-status.md",
+      "reason": "Instinct auto-learning"
+    },
+    {
+      "path": "commands/loop-start.md",
+      "reason": "ECC loop runtime"
+    },
+    {
+      "path": "commands/loop-status.md",
+      "reason": "ECC loop runtime script"
+    },
+    {
+      "path": "commands/marketing-campaign.md",
+      "reason": "Marketing"
+    },
+    {
+      "path": "commands/multi-backend.md",
+      "reason": "Requires external ccg-workflow runtime"
+    },
+    {
+      "path": "commands/multi-execute.md",
+      "reason": "Requires external ccg-workflow runtime"
+    },
+    {
+      "path": "commands/multi-frontend.md",
+      "reason": "Requires external ccg-workflow runtime"
+    },
+    {
+      "path": "commands/multi-plan.md",
+      "reason": "Requires external ccg-workflow runtime"
+    },
+    {
+      "path": "commands/multi-workflow.md",
+      "reason": "Requires external ccg-workflow runtime"
+    },
+    {
+      "path": "commands/orch-add-feature.md",
+      "reason": "Shim: wrapper for orch-add-feature skill (included)"
+    },
+    {
+      "path": "commands/orch-build-mvp.md",
+      "reason": "Shim: wrapper for orch-build-mvp skill (included)"
+    },
+    {
+      "path": "commands/orch-change-feature.md",
+      "reason": "Shim: wrapper for orch-change-feature skill (included)"
+    },
+    {
+      "path": "commands/orch-fix-defect.md",
+      "reason": "Shim: wrapper for orch-fix-defect skill (included)"
+    },
+    {
+      "path": "commands/orch-refine-code.md",
+      "reason": "Shim: wrapper for orch-refine-code skill (included)"
+    },
+    {
+      "path": "commands/plan-canvas.md",
+      "reason": "Shim over plan-canvas skill (ECC runtime script)"
+    },
+    {
+      "path": "commands/project-init.md",
+      "reason": "ECC install-manifest onboarding"
+    },
+    {
+      "path": "commands/projects.md",
+      "reason": "Instinct stats (ECC script)"
+    },
+    {
+      "path": "commands/promote.md",
+      "reason": "Instinct auto-learning"
+    },
+    {
+      "path": "commands/prp-pr.md",
+      "reason": "Shim: alias of /pr"
+    },
+    {
+      "path": "commands/prune.md",
+      "reason": "Instinct CLI wrapper"
+    },
+    {
+      "path": "commands/quality-gate.md",
+      "reason": "ECC formatter script"
+    },
+    {
+      "path": "commands/santa-loop.md",
+      "reason": "Requires Codex/Gemini CLI reviewers; santa-method skill included instead"
+    },
+    {
+      "path": "commands/security-scan.md",
+      "reason": "Shim over AgentShield (unpinned npx ecc-agentshield)"
+    },
+    {
+      "path": "commands/sessions.md",
+      "reason": "Requires ECC session-manager scripts"
+    },
+    {
+      "path": "commands/setup-pm.md",
+      "reason": "ECC script"
+    },
+    {
+      "path": "commands/skill-create.md",
+      "reason": "Skill-generation meta; instinct option; promotes GitHub App"
+    },
+    {
+      "path": "commands/skill-health.md",
+      "reason": "Skill portfolio dashboard (harness meta)"
+    },
+    {
+      "path": "commands/skill-host-compat.md",
+      "reason": "Shim; Codex/Cursor skill lint"
+    },
+    {
+      "path": "commands/token-card.md",
+      "reason": "Shim over token-card skill"
+    },
+    {
+      "path": "skills/agent-runtime-gateway-smoke-test",
+      "reason": "Runtime-specific: gateway tunnel and remote sandbox callback"
+    },
+    {
+      "path": "skills/agent-sort",
+      "reason": "ECC install-plan meta"
+    },
+    {
+      "path": "skills/agentic-os",
+      "reason": "Personal multi-agent OS on Claude Code with scheduled automation; harness meta"
+    },
+    {
+      "path": "skills/article-writing",
+      "reason": "Content writing (non-software)"
+    },
+    {
+      "path": "skills/automation-audit-ops",
+      "reason": "ECC automation inventory ops"
+    },
+    {
+      "path": "skills/autonomous-agent-harness",
+      "reason": "Requires claude -p and npx -y; autonomous harness/runtime"
+    },
+    {
+      "path": "skills/autonomous-loops",
+      "reason": "Legacy (superseded by continuous-agent-loop); uses claude -p"
+    },
+    {
+      "path": "skills/benchmark-methodology",
+      "reason": "Competitor/brand benchmarking (marketing)"
+    },
+    {
+      "path": "skills/blender-motion-state-inspection",
+      "reason": "3D animation content"
+    },
+    {
+      "path": "skills/brand-discovery",
+      "reason": "Branding/marketing"
+    },
+    {
+      "path": "skills/brand-voice",
+      "reason": "Content/social writing"
+    },
+    {
+      "path": "skills/carrier-relationship-management",
+      "reason": "Logistics"
+    },
+    {
+      "path": "skills/cisco-ios-patterns",
+      "reason": "Network ops"
+    },
+    {
+      "path": "skills/ck",
+      "reason": "ECC Node runtime per-project memory (scripts)"
+    },
+    {
+      "path": "skills/claude-devfleet",
+      "reason": "External DevFleet runtime"
+    },
+    {
+      "path": "skills/codehealth-mcp",
+      "reason": "Requires commercial CodeScene MCP"
+    },
+    {
+      "path": "skills/competitive-platform-analysis",
+      "reason": "Business/marketing analysis"
+    },
+    {
+      "path": "skills/competitive-report-structure",
+      "reason": "Business/marketing analysis"
+    },
+    {
+      "path": "skills/config-gc",
+      "reason": "Claude config housekeeping (harness meta)"
+    },
+    {
+      "path": "skills/configure-ecc",
+      "reason": "ECC setup wizard; npx -y"
+    },
+    {
+      "path": "skills/connections-optimizer",
+      "reason": "Social media networking"
+    },
+    {
+      "path": "skills/content-engine",
+      "reason": "Social media content"
+    },
+    {
+      "path": "skills/context-budget",
+      "reason": "Harness context meta"
+    },
+    {
+      "path": "skills/continuous-agent-loop",
+      "reason": "Near-stub pointing to legacy loops and nanoclaw"
+    },
+    {
+      "path": "skills/continuous-learning",
+      "reason": "Deprecated v1 hook-based auto-learning"
+    },
+    {
+      "path": "skills/continuous-learning-v2",
+      "reason": "Hook-based instinct auto-learning (security/cost exclusion)"
+    },
+    {
+      "path": "skills/cost-tracking",
+      "reason": "ECC cost-tracker runtime"
+    },
+    {
+      "path": "skills/council-multi-model",
+      "reason": "Requires external Codex"
+    },
+    {
+      "path": "skills/counterparty-channel-discipline",
+      "reason": "Agents in shared external comms channels (comms ops)"
+    },
+    {
+      "path": "skills/crosspost",
+      "reason": "Social media"
+    },
+    {
+      "path": "skills/customer-billing-ops",
+      "reason": "Billing ops (non-software)"
+    },
+    {
+      "path": "skills/customs-trade-compliance",
+      "reason": "Customs domain"
+    },
+    {
+      "path": "skills/deepseek-harness-setup",
+      "reason": "Other harness (DeepSeek)"
+    },
+    {
+      "path": "skills/delivery-gate",
+      "reason": "Stop hook requiring settings.json edits and learning logs"
+    },
+    {
+      "path": "skills/dmux-workflows",
+      "reason": "Multi-harness tmux runtime"
+    },
+    {
+      "path": "skills/ecc-guide",
+      "reason": "ECC self-navigation"
+    },
+    {
+      "path": "skills/ecc-recipes",
+      "reason": "ECC self-navigation"
+    },
+    {
+      "path": "skills/ecc-tools-cost-audit",
+      "reason": "ECC Tools billing audit"
+    },
+    {
+      "path": "skills/email-ops",
+      "reason": "Personal productivity"
+    },
+    {
+      "path": "skills/energy-procurement",
+      "reason": "Energy domain"
+    },
+    {
+      "path": "skills/esign-field-placement",
+      "reason": "E-signature browser automation (non-software)"
+    },
+    {
+      "path": "skills/fal-ai-media",
+      "reason": "Media generation"
+    },
+    {
+      "path": "skills/finance-billing-ops",
+      "reason": "Finance ops"
+    },
+    {
+      "path": "skills/frontend-slides",
+      "reason": "Presentation content, not app dev"
+    },
+    {
+      "path": "skills/gateguard",
+      "reason": "Security/cost exclusion (PreToolUse gate)"
+    },
+    {
+      "path": "skills/google-workspace-ops",
+      "reason": "Personal productivity"
+    },
+    {
+      "path": "skills/hermes-imports",
+      "reason": "Hermes runtime"
+    },
+    {
+      "path": "skills/hipaa-compliance",
+      "reason": "Healthcare domain"
+    },
+    {
+      "path": "skills/homelab-network-readiness",
+      "reason": "Homelab"
+    },
+    {
+      "path": "skills/homelab-network-setup",
+      "reason": "Homelab"
+    },
+    {
+      "path": "skills/homelab-pihole-dns",
+      "reason": "Homelab"
+    },
+    {
+      "path": "skills/homelab-vlan-segmentation",
+      "reason": "Homelab"
+    },
+    {
+      "path": "skills/homelab-wireguard-vpn",
+      "reason": "Homelab"
+    },
+    {
+      "path": "skills/hookify-rules",
+      "reason": "Harness hook configuration"
+    },
+    {
+      "path": "skills/inventory-demand-planning",
+      "reason": "Retail/logistics"
+    },
+    {
+      "path": "skills/investor-materials",
+      "reason": "Investor"
+    },
+    {
+      "path": "skills/investor-outreach",
+      "reason": "Investor"
+    },
+    {
+      "path": "skills/ito-baskets",
+      "reason": "Sponsor (Ito) / prediction markets"
+    },
+    {
+      "path": "skills/ito-compute",
+      "reason": "Sponsor (Ito)"
+    },
+    {
+      "path": "skills/ito-inference",
+      "reason": "Sponsor (Ito)"
+    },
+    {
+      "path": "skills/ito-training",
+      "reason": "Sponsor (Ito)"
+    },
+    {
+      "path": "skills/knowledge-ops",
+      "reason": "Personal knowledge-base ops"
+    },
+    {
+      "path": "skills/lead-intelligence",
+      "reason": "Sales/marketing"
+    },
+    {
+      "path": "skills/llm-trading-agent-security",
+      "reason": "Trading domain"
+    },
+    {
+      "path": "skills/logistics-exception-management",
+      "reason": "Logistics"
+    },
+    {
+      "path": "skills/manim-video",
+      "reason": "Video content"
+    },
+    {
+      "path": "skills/market-research",
+      "reason": "Market/investor research"
+    },
+    {
+      "path": "skills/marketing-campaign",
+      "reason": "Marketing"
+    },
+    {
+      "path": "skills/master-agreement-generator",
+      "reason": "Legal contracts (non-software)"
+    },
+    {
+      "path": "skills/messages-ops",
+      "reason": "Personal productivity"
+    },
+    {
+      "path": "skills/nanoclaw-repl",
+      "reason": "NanoClaw runtime"
+    },
+    {
+      "path": "skills/nasiko-control-plane",
+      "reason": "Experimental external runtime"
+    },
+    {
+      "path": "skills/netmiko-ssh-automation",
+      "reason": "Network ops"
+    },
+    {
+      "path": "skills/network-bgp-diagnostics",
+      "reason": "Network ops"
+    },
+    {
+      "path": "skills/network-config-validation",
+      "reason": "Network ops"
+    },
+    {
+      "path": "skills/network-interface-health",
+      "reason": "Network ops"
+    },
+    {
+      "path": "skills/nutrient-document-processing",
+      "reason": "Vendor document-processing API, not core dev"
+    },
+    {
+      "path": "skills/openclaw-persona-forge",
+      "reason": "OpenClaw runtime"
+    },
+    {
+      "path": "skills/operator-approval-loop",
+      "reason": "Outbound messaging approvals (comms ops)"
+    },
+    {
+      "path": "skills/osint-investigation",
+      "reason": "OSINT, non-software"
+    },
+    {
+      "path": "skills/plan-canvas",
+      "reason": "Requires ECC plan-canvas.js runtime script"
+    },
+    {
+      "path": "skills/plankton-code-quality",
+      "reason": "Hook-based with claude -p fixes"
+    },
+    {
+      "path": "skills/prediction-market-oracle-research",
+      "reason": "Prediction markets"
+    },
+    {
+      "path": "skills/prediction-market-risk-review",
+      "reason": "Prediction markets"
+    },
+    {
+      "path": "skills/production-scheduling",
+      "reason": "Manufacturing domain"
+    },
+    {
+      "path": "skills/prompt-optimizer",
+      "reason": "ECC command-matching meta"
+    },
+    {
+      "path": "skills/quality-nonconformance",
+      "reason": "Manufacturing QA domain"
+    },
+    {
+      "path": "skills/recsys-pipeline-architect",
+      "reason": "unpinned npx install of third-party package and promotional tone"
+    },
+    {
+      "path": "skills/recursive-decision-ledger",
+      "reason": "Experimental recursive prompting, not core dev"
+    },
+    {
+      "path": "skills/remotion-video-creation",
+      "reason": "Video content; stub"
+    },
+    {
+      "path": "skills/repo-scan",
+      "reason": "Bootstrap installer for external skill"
+    },
+    {
+      "path": "skills/returns-reverse-logistics",
+      "reason": "Logistics"
+    },
+    {
+      "path": "skills/safety-guard",
+      "reason": "Requires PreToolUse hooks (hook runtime)"
+    },
+    {
+      "path": "skills/scientific-db-pubmed-database",
+      "reason": "Scientific"
+    },
+    {
+      "path": "skills/scientific-db-uspto-database",
+      "reason": "Scientific/patents"
+    },
+    {
+      "path": "skills/scientific-pkg-gget",
+      "reason": "Scientific"
+    },
+    {
+      "path": "skills/scientific-thinking-literature-review",
+      "reason": "Scientific"
+    },
+    {
+      "path": "skills/scientific-thinking-scholar-evaluation",
+      "reason": "Scientific"
+    },
+    {
+      "path": "skills/security-scan",
+      "reason": "Scans Claude config via unpinned npx ecc-agentshield"
+    },
+    {
+      "path": "skills/skill-host-compat",
+      "reason": "Codex/Cursor skill lint"
+    },
+    {
+      "path": "skills/skill-scout",
+      "reason": "Skill-authoring meta"
+    },
+    {
+      "path": "skills/skill-stocktake",
+      "reason": "Skill-authoring meta"
+    },
+    {
+      "path": "skills/social-graph-ranker",
+      "reason": "Social media"
+    },
+    {
+      "path": "skills/social-publisher",
+      "reason": "Social media"
+    },
+    {
+      "path": "skills/strategic-compact",
+      "reason": "Hook-based harness context meta"
+    },
+    {
+      "path": "skills/taste",
+      "reason": "Music video content"
+    },
+    {
+      "path": "skills/taste-application",
+      "reason": "Video content"
+    },
+    {
+      "path": "skills/taste-distillation",
+      "reason": "Video content"
+    },
+    {
+      "path": "skills/tasteforge-video",
+      "reason": "Video content"
+    },
+    {
+      "path": "skills/team-builder",
+      "reason": "Agent persona picker (harness meta)"
+    },
+    {
+      "path": "skills/terminal-opener",
+      "reason": "Personal utility"
+    },
+    {
+      "path": "skills/token-budget-advisor",
+      "reason": "Harness meta"
+    },
+    {
+      "path": "skills/token-card",
+      "reason": "Token usage card (harness meta)"
+    },
+    {
+      "path": "skills/unified-memory",
+      "reason": "Multi-harness memory vault"
+    },
+    {
+      "path": "skills/unified-notifications-ops",
+      "reason": "Notifications ops"
+    },
+    {
+      "path": "skills/video-editing",
+      "reason": "Video content"
+    },
+    {
+      "path": "skills/videodb",
+      "reason": "Video content"
+    },
+    {
+      "path": "skills/visa-doc-translate",
+      "reason": "Visa"
+    },
+    {
+      "path": "skills/workspace-surface-audit",
+      "reason": "ECC harness audit"
+    },
+    {
+      "path": "skills/x-api",
+      "reason": "Social media"
+    }
+  ],
+  "review_notes": [
+    {
+      "path": "skills/gan-style-harness",
+      "issue": "Instructs running `claude -p --model sonnet` loops (planner/generator/evaluator); cost and headless execution. Also links external blog epsilla.com"
+    },
+    {
+      "path": "agents/e2e-runner.md",
+      "issue": "Instructs unpinned global install `npm install -g agent-browser && agent-browser install`"
+    },
+    {
+      "path": "skills/recsys-pipeline-architect",
+      "issue": "Self-promotional install line `npx skills add mturac/recsys-pipeline-architect` (unpinned, third-party)"
+    },
+    {
+      "path": "skills/ui-to-vue",
+      "issue": "Relies on third-party npx package `ui-to-vue-converter@1.0.2` (pinned, but external code execution)"
+    },
+    {
+      "path": "skills/inherit-legacy-style",
+      "issue": "Optional tier adds PreToolUse hook in settings.json"
+    },
+    {
+      "path": "skills/search-first",
+      "issue": "Tells agent to read ~/.claude/settings.json for MCP discovery (read-only)"
+    },
+    {
+      "path": "rules/common",
+      "issue": "hooks.md/git-workflow.md/performance.md instruct editing ~/.claude/settings.json (permissions, includeCoAuthoredBy, effort); git-workflow notes ECC disables Co-Authored-By"
+    },
+    {
+      "path": "rules/*/hooks.md",
+      "issue": "Every language rules dir has hooks.md telling to configure PostToolUse/Stop hooks in ~/.claude/settings.json; consider dropping hooks.md on vendor"
+    },
+    {
+      "path": "skills/deep-research",
+      "issue": "Depends on firecrawl and exa MCP servers (external network APIs)"
+    },
+    {
+      "path": "skills/exa-search",
+      "issue": "Depends on Exa MCP (external API key/network)"
+    },
+    {
+      "path": "agents/docs-lookup.md",
+      "issue": "Depends on Context7 MCP (external network)"
+    },
+    {
+      "path": "skills/documentation-lookup",
+      "issue": "Depends on Context7 MCP (external network)"
+    },
+    {
+      "path": "skills/ios-icon-gen",
+      "issue": "Fetches icons from Iconify public API (network)"
+    },
+    {
+      "path": "skills/mailtrap-email-integration",
+      "issue": "Vendor-specific (Mailtrap) integration; mildly promotional"
+    },
+    {
+      "path": "skills/laravel-plugin-discovery",
+      "issue": "Depends on third-party LaraPlugins.io MCP"
+    },
+    {
+      "path": "agents/opensource-packager.md",
+      "issue": "Generates setup.sh and CLAUDE.md for target repos; review generated scripts"
+    },
+    {
+      "path": "skills/orch-pipeline",
+      "issue": "orch-* skills and frontend-design-direction/docs-governance/research-ops/terminal-ops reference ECC-specific skills/commands; may need path rewrites"
+    }
+  ],
+  "acknowledged": [
+    "agents/agent-evaluator.md: pipe-to-shell download",
+    "rules/common/git-workflow.md: touches user Claude settings",
+    "rules/common/performance.md: touches user Claude settings",
+    "skills/gan-style-harness/SKILL.md: hidden claude -p call",
+    "skills/github-ops/SKILL.md: pipe-to-shell download",
+    "skills/github-ops/references/ecc-release-checklist.md: promotional / sponsor content",
+    "skills/search-first/SKILL.md: touches user Claude settings",
+    "skills/skill-comply/SKILL.md: hidden claude -p call",
+    "skills/skill-comply/prompts/scenario_generator.md: hidden claude -p call",
+    "skills/skill-comply/scripts/runner.py: hidden claude -p call",
+    "skills/skill-comply/scripts/scenario_generator.py: hidden claude -p call",
+    "skills/skill-comply/scripts/spec_generator.py: hidden claude -p call",
+    "skills/skill-comply/tests/test_runner.py: hidden claude -p call",
+    "skills/tdd-workflow/SKILL.md: pipe-to-shell download"
+  ],
+  "acknowledged_note": "Reviewed 2026-10-13: defensive warnings (pipe-to-shell, settings) are false positives; skill-comply and gan-style-harness run claude -p visibly and on explicit request only."
+}

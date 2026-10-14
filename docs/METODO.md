@@ -1,7 +1,7 @@
 # Método Shipwright
 
 > Documento maestro. Define el camino completo desde "me encargan algo" hasta "entregado, documentado y con lecciones aprendidas".
-> Versión del método: **v0.4.0** (solo documentación; base de agentes: ECC).
+> Versión del método: **v0.5.0** (plugin con `mission` e `intake` funcionando; base de agentes: ECC v2.2.3).
 
 ---
 
@@ -369,7 +369,7 @@ GitHub Action diario en el repo de Shipwright:
 
 | Fase | Herramientas ECC |
 |---|---|
-| Mission | `commands/project-init.md` |
+| Mission | — (lo hace Shipwright) |
 | Intake | `commands/prp-prd.md`, `skills/intent-driven-development`, `skills/product-capability`, `agents/spec-miner.md`, `agents/code-architect.md` |
 | Architect | `agents/architect.md`, `agents/code-architect.md`, `skills/architecture-decision-records`, `skills/contract-first`, `skills/council`, `skills/hexagonal-architecture`, `skills/plan-canvas`, `skills/api-design` |
 | Plan | `skills/blueprint`, `agents/planner.md`, `skills/plan-orchestrate`, `skills/orch-pipeline` |
@@ -383,15 +383,32 @@ GitHub Action diario en el repo de Shipwright:
 ## 12. Requisitos técnicos
 
 - Claude Code, git, Node (hooks y scripts solo en Node, para funcionar igual en Windows, macOS y Linux), Python 3.10+ con `graphifyy`.
-- Los plugins de Claude Code no pueden instalar `rules/`: `/shipwright:mission` las copia al proyecto cuando hacen falta.
+- Los plugins de Claude Code no pueden instalar `rules/`: Shipwright las copia al proyecto (`.claude/rules/`) tras el gate de Architect.
+- Las skills de fase solo se ejecutan cuando el usuario las invoca (`/shipwright:<fase>`); el modelo no las lanza por su cuenta.
+
+### Piezas del plugin
+
+| Pieza | Ruta |
+|---|---|
+| Manifiesto y marketplace | `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` |
+| Fases | `skills/<fase>/SKILL.md` (`mission`, `intake`) |
+| Checklist de entrevista | `skills/intake/checklist.md` |
+| Agentes propios | `agents/analyst.md` |
+| Plantillas | `templates/` |
+| Trazabilidad | `scripts/trace.mjs` (`node scripts/trace.mjs <docsDir> --phase intake\|architect\|plan`) |
+| Métricas | `scripts/metrics.mjs` + hook `UserPromptExpansion` |
+| Protección de specs aprobadas | hook `PreToolUse` → `scripts/hooks/protect-approved.mjs` |
+| ECC | `vendor/ecc/`, `vendor/ecc.manifest.json`, `vendor/ecc.index.md`, `reference/using-ecc.md` |
+| Sincronización ECC | `scripts/ecc-sync.mjs`, `.github/workflows/ecc-sync.yml` |
+| Tests | `node --test "scripts/**/*.test.mjs"` (CI en Windows, macOS y Linux) |
 
 ## 13. Hoja de ruta
 
 | Versión | Contenido |
 |---|---|
 | v0.1–v0.3 | Método, investigación, integración con ECC, misiones y cadena de objetivos |
-| v0.4 | Método sin recortes, un solo método (desde cero / sobre lo existente), crítica aplicada *(actual)* |
-| v0.5 | Esqueleto del plugin + `vendor/ecc` completo + índice + sync con PR; `mission` + `intake` funcionando; `shipwright trace`; hook de métricas |
+| v0.4 | Método sin recortes, un solo método (desde cero / sobre lo existente), crítica aplicada |
+| v0.5 | Plugin instalable + `vendor/ecc` (324 piezas de ECC v2.2.3) + índice + sync con PR; `mission` + `intake` + agente `analyst`; `shipwright trace`; métricas; protección de specs aprobadas *(actual)* |
 | v0.6 | `architect` + plantillas arc42/MADR/QS + packs de stack por proyecto |
 | v0.7 | `plan` + `build` (subagente por tarea, TDD, hooks) + `change` |
 | v0.8 | `verify` + `ship` + `status` |
