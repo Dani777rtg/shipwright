@@ -1,6 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parse, check } from './trace.mjs';
+import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { parse, check, collectTestIds } from './trace.mjs';
 
 const mission = `# Misión M: demo
 ## Objetivos
@@ -15,7 +18,7 @@ serves: O-1 — es el flujo principal del objetivo
 - **AC-01.1** WHEN the user uploads audio THE SYSTEM SHALL show a summary
   serves: US-01 — criterio verificable de la historia
 `;
-const run = (files, phase) => check(parse(files.map(([path, text]) => ({ path, text }))), phase);
+const run = (files, phase, testIds) => check(parse(files.map(([path, text]) => ({ path, text }))), phase, testIds);
 
 test('valid intake passes', () => {
   assert.deepEqual(run([['mission.md', mission], ['req.md', reqs]], 'intake'), []);
@@ -46,4 +49,22 @@ test('later phases add coverage; No aplica waives it', () => {
   assert.ok(run(files, 'architect').some((p) => p.includes('QG-1 not covered')));
   const waived = mission.replace('sin fiabilidad no hay demo', 'sin fiabilidad no hay demo. No aplica: demo offline');
   assert.ok(!run([['mission.md', waived], ['req.md', reqs]], 'architect').some((p) => p.includes('QG-1 not covered')));
+});
+
+test('qa phase: every AC needs a test citing it; QS needs a test or report evidence', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'sw-'));
+  mkdirSync(join(dir, 'acceptance'));
+  writeFileSync(join(dir, 'acceptance', 'resumen.test.ts'), "test('AC-01.1 shows summary', () => {})\n");
+  writeFileSync(join(dir, 'test_x.py'), 'def test_AC_01_2_rejects(): pass\nQS_3\n');
+  const ids = collectTestIds([dir]);
+  assert.deepEqual([...ids].sort(), ['AC-01.1', 'AC-01.2', 'QS-3']);
+
+  const qs = '- QS-1: p95 < 60 s — serves: QG-1 — demuestra la fiabilidad\n';
+  const files = [['mission.md', mission], ['req.md', reqs], ['arch.md', qs]];
+  const qa = (tested, extra = []) => run([...files, ...extra], 'qa', new Set(tested));
+  assert.ok(qa([]).some((x) => x.includes('AC-01.1 untested')));
+  assert.ok(qa([]).some((x) => x.includes('QS-1 no evidence')));
+  assert.ok(!qa(['AC-01.1', 'QS-1']).some((x) => /untested|no evidence/.test(x)));
+  const report = ['qa/report.md', '| QS-1 | k6 | evidencia: p95 = 40 s |\n'];
+  assert.ok(!qa(['AC-01.1'], [report]).some((x) => x.includes('QS-1 no evidence')));
 });

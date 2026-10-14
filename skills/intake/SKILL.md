@@ -50,8 +50,12 @@ Read `${CLAUDE_SKILL_DIR}/checklist.md`. Cover **every** section, in order, in b
 ### 5. Traceability check
 Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs" <docsDir> --phase intake`. Fix every problem and re-run until it prints OK. Never silence a problem by deleting a requirement; ask the user if a fix needs a decision.
 
-### 6. Independent review
-Spawn the `shipwright:analyst` subagent with the paths of mission.md, requirements.md, glossary.md, existing-system.md (if any) and `${CLAUDE_SKILL_DIR}/checklist.md`. Apply its findings; findings that need a decision go to the user via AskUserQuestion. Re-run step 5 after changes.
+### 6. Independent reviews
+Spawn in parallel:
+- `shipwright:analyst` with the paths of mission.md, requirements.md, glossary.md, existing-system.md (if any) and `${CLAUDE_SKILL_DIR}/checklist.md`.
+- `shipwright:qa-lead` with task **A (testability review)** and the same paths. Store the project profile it proposes in `.shipwright/state.json` under `"qaProfile"`; Architect uses it for the Test Strategy.
+
+Apply their findings; findings that need a decision go to the user via AskUserQuestion. Re-run step 5 after changes.
 
 ### 7. Gate
 Present:
@@ -65,4 +69,4 @@ Ask with AskUserQuestion: Aprobar (Recomendado) / Pedir cambios / Volver a la mi
 - Log the outcome: `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log intake gate-approved|gate-changes|gate-back "<short note>"`.
 - Pedir cambios → apply them, repeat steps 5–7.
 - Volver a la misión → set `phase` to `mission` in state.json and tell the user to run `/shipwright:mission`.
-- Aprobar → set `status: approved` in the frontmatter of mission.md and requirements.md (from now on they change only through `/shipwright:change`), set `"phase": "architect"` in state.json, and tell the user the next step is `/shipwright:architect` (available in Shipwright v0.6).
+- Aprobar → set `status: approved` in the frontmatter of mission.md and requirements.md (from now on they change only through `/shipwright:change`), set `"phase": "architect"` in state.json, and tell the user the next step is `/shipwright:architect` (available in a later Shipwright version).

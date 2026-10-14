@@ -6,15 +6,15 @@ Una misión puede partir desde cero (una app en una hackatón) o sobre un sistem
 
 > Spec-driven AI development method for Claude Code. Every mission (greenfield or brownfield) goes mission → intake → architecture → plan → build → verify → ship → retro, with every task traced to an explicit objective. Self-improving through retrospectives, evals and versioned releases.
 
-**Estado:** v0.5.0 — instalable. Funcionan `/shipwright:mission` e `/shipwright:intake`; las demás fases llegan en las siguientes versiones (ver hoja de ruta).
+**Estado:** v0.6.0 — instalable. Funcionan `/shipwright:mission` e `/shipwright:intake`; las demás fases llegan en las siguientes versiones (ver hoja de ruta).
 
 Construido sobre [ECC](https://github.com/affaan-m/ecc) (MIT): incluye todo su catálogo de desarrollo sin modificarlo, cargado bajo demanda mediante un índice y sincronizado con cada release (vía pull request revisado), y añade encima el método, las fases, los gates y la trazabilidad. Ver [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES.md).
 
 ## Pipeline
 
 ```
-MISSION → INTAKE → ARCHITECT → PLAN → BUILD → VERIFY → SHIP → RETRO
- confirma    gate      gate       gate            gate     gate    └─► nueva versión del framework
+MISSION → INTAKE → ARCHITECT → PLAN → BUILD → QA → SHIP → RETRO
+ confirma   gate      gate       gate          gate  gate     └─► nueva versión del framework
 ```
 
 ```
@@ -24,6 +24,7 @@ MISSION → INTAKE → ARCHITECT → PLAN → BUILD → VERIFY → SHIP → RETR
 - **Un solo método, siempre completo:** lo mejor posible en el menor tiempo posible, sin recortes. Todas las fases, todas las preguntas, todos los artefactos; lo que no aplica se marca y se justifica, nunca se omite en silencio.
 - **Una sola distinción:** desde cero o sobre lo existente. Al empezar, te explica qué detectó y qué va a hacer.
 - **Nada sin para qué:** misión → objetivos → métricas → calidad → decisiones → tareas → tests. Lo que no sirve a un objetivo se rechaza.
+- **QA independiente:** un agente QA, separado de quien programa, revisa la testabilidad, escribe y bloquea los tests de aceptación antes de construir, evalúa todos los tipos de prueba pertinentes (carga, estrés, seguridad, accesibilidad, evals de IA…) y da el veredicto SHIP / NO SHIP.
 - Puertas de aprobación humana entre fases.
 - [graphify](https://github.com/Graphify-Labs/graphify) como memoria en todas las fases.
 

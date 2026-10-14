@@ -1,7 +1,7 @@
 # Método Shipwright
 
 > Documento maestro. Define el camino completo desde "me encargan algo" hasta "entregado, documentado y con lecciones aprendidas".
-> Versión del método: **v0.5.0** (plugin con `mission` e `intake` funcionando; base de agentes: ECC v2.2.3).
+> Versión del método: **v0.6.0** (plugin con `mission` e `intake` funcionando; disciplina QA definida; base de agentes: ECC v2.2.3).
 
 ---
 
@@ -31,7 +31,8 @@ Métricas que el método optimiza y mide en cada misión (§9):
 7. **Contexto limpio.** El hilo principal orquesta; el trabajo pesado va en subagentes que se comunican por archivos. Las herramientas se cargan solo cuando se usan.
 8. **Lo no negociable es determinista.** Tests, lint, trazabilidad, métricas y protección de specs aprobadas se aplican con hooks y scripts, no con "por favor" en un prompt.
 9. **Nunca el mismo error dos veces.** Cada misión termina en retrospectiva; cada lección aprobada cambia el framework y genera una versión nueva, medida contra misiones de referencia (§9).
-10. **Lo mínimo que funciona en el producto.** Rigor total en el proceso no significa sobreingeniería en el código: YAGNI en lo que se construye.
+10. **QA independiente y transversal.** Quien programa no decide si su trabajo está bien: un agente QA independiente revisa la testabilidad desde Intake, escribe y bloquea los tests de aceptación antes de construir, y emite el veredicto final (Fase 5).
+11. **Lo mínimo que funciona en el producto.** Rigor total en el proceso no significa sobreingeniería en el código: YAGNI en lo que se construye.
 
 ## 3. La misión
 
@@ -76,7 +77,8 @@ Qué voy a hacer (método completo, con tu aprobación al final de cada fase):
  3. ARCHITECT  Documentar la arquitectura actual y diseñar el cambio
  4. PLAN       Dividir en tareas trazadas a los objetivos
  5. BUILD      Construir con tests primero, una tarea por subagente
- 6. VERIFY     Comprobar cada criterio con su test, revisiones de seguridad y calidad
+ 6. QA         Todos los tipos de prueba pertinentes; tests de aceptación escritos
+               y bloqueados por un agente QA independiente; veredicto SHIP / NO SHIP
  7. SHIP       Abrir el PR con nota de impacto y rollback
  8. RETRO      Extraer lecciones para mejorar el framework
 
@@ -125,8 +127,8 @@ Nunca se escribe "escalable" o "seguro". Siempre un escenario medible:
 
 Cómo se aplica, en tres capas:
 1. **Registro:** `docs/mission.md` es la única fuente de IDs válidos.
-2. **Script determinista** (`shipwright trace`, milisegundos, sin LLM): corre en el gate de Plan, en cada commit de Build y en Verify. Falla ante huérfanos, IDs inexistentes o coberturas vacías.
-3. **Revisión semántica:** el script solo comprueba que el ID exista, y un agente podría poner `serves: O-1` a cualquier cosa. Por eso el revisor de cada tarea y el de Verify comprueban que la justificación tenga sentido y preguntan "¿algo del diff no sirve a ningún objetivo?". Cada subagente recibe como primera línea `Sirves a <ID>: <texto>`.
+2. **Script determinista** (`shipwright trace`, milisegundos, sin LLM): corre en el gate de Plan, en cada commit de Build y en QA (donde además exige un test por cada AC y evidencia por cada QS). Falla ante huérfanos, IDs inexistentes o coberturas vacías.
+3. **Revisión semántica:** el script solo comprueba que el ID exista, y un agente podría poner `serves: O-1` a cualquier cosa. Por eso el revisor de cada tarea y el de QA comprueban que la justificación tenga sentido y preguntan "¿algo del diff no sirve a ningún objetivo?". Cada subagente recibe como primera línea `Sirves a <ID>: <texto>`.
 
 ### Tarjeta de misión (`docs/mission.md`)
 
@@ -174,7 +176,7 @@ No aplica: <elemento del método> — <motivo>
 ```
  encargo
     │
- [0] MISSION ─► [1] INTAKE ─► [2] ARCHITECT ─► [3] PLAN ─► [4] BUILD ─► [5] VERIFY ─► [6] SHIP ─► [7] RETRO
+ [0] MISSION ─► [1] INTAKE ─► [2] ARCHITECT ─► [3] PLAN ─► [4] BUILD ─► [5] QA ─► [6] SHIP ─► [7] RETRO
        ▲ confirma    ▲ gate        ▲ gate          ▲ gate      (por tarea)    ▲ gate       ▲ gate       │
        └──────────────── solicitudes de cambio vuelven a INTAKE como delta ──────────────────────────────┘
                                                                      lecciones ─► nueva versión del framework
@@ -189,7 +191,7 @@ Todas las fases y todos los gates se ejecutan siempre.
 | 2 | Architect | `/shipwright:architect` | `ARCHITECTURE.md`, `docs/adr/`, QS, componentes | Humano aprueba |
 | 3 | Plan | `/shipwright:plan` | `docs/plan/tasks.md` | Humano aprueba |
 | 4 | Build | `/shipwright:build` | código + tests, grafo actualizado | Automático (hooks + trace + revisor) |
-| 5 | Verify | `/shipwright:verify` | `docs/verify/report.md` | Humano aprueba |
+| 5 | QA | `/shipwright:qa` | `docs/qa/report.md` (informe de cierre), `docs/qa/bugs/` | Humano aprueba |
 | 6 | Ship | `/shipwright:ship` | entrega según tipo, README, CHANGELOG | Humano confirma |
 | 7 | Retro | `/shipwright:retro` | `docs/retro.md`, propuestas de cambio al framework | Humano aprueba cambios |
 | — | Cambio | `/shipwright:change` | delta sobre spec/arquitectura/plan | Humano aprueba |
@@ -222,7 +224,7 @@ Todas las fases y todos los gates se ejecutan siempre.
    - Lo que expresamente queda fuera
 4. **Respuesta "no sé":** el agente investiga (web, docs del sponsor o del cliente, grafo de misiones pasadas) y vuelve con opciones fundamentadas y sus fuentes. Lo que siga sin resolverse queda como **suposición explícita** con dueño.
 5. **Salida:** tarjeta de misión completa (O, KR, QG ordenados, DoD, parking, no aplica) + `requirements.md` con historias `US-NN` (MoSCoW), criterios **EARS** `AC-NN.M` con `serves: O-n`, no funcionales medibles, fuera de alcance, suposiciones, preguntas abiertas.
-6. **Revisión** por subagente *analyst*: contradicciones, huecos, criterios no verificables, objetivos sin métrica, preguntas de la checklist sin cubrir.
+6. **Revisiones en paralelo:** *analyst* (contradicciones, huecos, objetivos sin métrica, checklist sin cubrir) y *qa-lead* (testabilidad de cada criterio y perfil del proyecto para la estrategia de pruebas).
 7. **Gate.** La spec aprobada queda protegida por hook; desde aquí solo cambia vía `/shipwright:change`.
 
 ### Fase 2 — Architect
@@ -231,32 +233,61 @@ Todas las fases y todos los gates se ejecutan siempre.
 3. Stack: desde cero se elige con `docs/catalogo-stack.md` y se registra en ADR; sobre lo existente se usa el actual y cualquier dependencia nueva requiere ADR.
 4. `ARCHITECTURE.md` con **arc42 completo**: objetivos y restricciones (QG + QS), contexto (C4 L1), contenedores (C4 L2), componentes, modelo de datos, contratos/API, flujos clave (secuencia), decisiones transversales (auth, errores, logging, configuración, seguridad, observabilidad), despliegue, riesgos y deuda, glosario, matriz `QS/US → componente`. Sobre lo existente: primero el estado actual y luego el cambio. Lo desconocido se marca `TBD` y genera pregunta.
 5. **ADRs MADR**, uno por decisión relevante, cada uno con `serves: [QS-n]` y alternativas consideradas.
-6. Revisión en paralelo: *architect-reviewer* (¿cada QS está cubierto? ¿sobra alguna pieza?), *security-reviewer*, *council* de ECC para decisiones disputadas.
-7. **Gate.** Al aprobar, se instalan en el proyecto los packs del stack (§10).
+6. **Estrategia de pruebas** por *qa-lead* (`docs/qa/test-strategy.md`, ISO 29119-3): perfil del proyecto, registro de riesgos, **todos** los tipos del catálogo (pertinente o `No aplica: <motivo>`), herramientas, entornos, datos, umbrales y cómo se demuestra cada QS.
+7. Revisión en paralelo: *architect-reviewer* (¿cada QS está cubierto? ¿sobra alguna pieza?), *security-reviewer*, *council* de ECC para decisiones disputadas.
+8. **Gate.** Al aprobar, se instalan en el proyecto los packs del stack (§10).
 
 ### Fase 3 — Plan
 - Tareas de 2–15 min de agente: `T001 [P] [US-NN] serves: AC/QS — <cómo>`, rutas, paso de verificación, complejidad 1–10 (> 6 se divide).
 - Orden: walking skeleton primero (desde cero) o preparación segura del cambio (sobre lo existente: flag, tests de caracterización), luego verticales por prioridad.
-- `shipwright trace` + revisión de consistencia spec ↔ arquitectura ↔ tareas.
+- **Tests de aceptación por QA:** *qa-lead* escribe uno o más tests por cada AC (citando su ID), que fallan hasta que el comportamiento exista. Sus rutas se añaden a `lockedPaths` y se registran sus huellas (`scripts/lock.mjs record`). Cerca de 1 de cada 5 (entre los Must) queda en **holdout** fuera del repositorio hasta la fase QA.
+- **Plan de pruebas** (`docs/qa/test-plan.md`): suites concretas por tipo, datos, entornos, charters exploratorios, golden sets y evaluadores si es una misión de IA.
+- `shipwright trace` + revisión de consistencia spec ↔ arquitectura ↔ tareas ↔ tests.
 - **Gate.**
 
 ### Fase 4 — Build
 - Un subagente nuevo por tarea, con `Sirves a <ID>` como primera línea y la tarea autocontenida.
-- TDD: test del criterio primero (rojo) → implementación mínima (verde) → refactor.
+- TDD para los tests internos (unitarios, integración): test primero (rojo) → implementación mínima (verde) → refactor. Los tests de aceptación ya existen, están bloqueados (hook para edición y consola) y el código debe hacerlos pasar.
+- La instrucción de cada builder lo dice explícitamente: la spec y los tests de aceptación mandan; nunca se modifica, salta ni borra un test para que pase.
 - Tareas `[P]` en paralelo con git worktrees.
 - Hooks: tests + lint + typecheck (una vez por turno), protección de spec aprobada, `shipwright trace` en cada commit (mensaje con `serves:`).
-- Tras cada tarea: revisor (calidad + validez del `serves`), commit, `graphify update .`.
+- Tras cada tarea: revisor (calidad + validez del `serves`), **revisión del diff de tests por qa-lead** (sin asserts borrados, `skip`, valores esperados cambiados ni umbrales rebajados; cobertura y mutación no bajan), commit, `graphify update .`.
 - Desviación de la arquitectura → `/shipwright:change` con ADR nuevo antes de seguir.
 
-### Fase 5 — Verify
-- Matriz `O → KR → AC → test → estado` y `QG → QS → evidencia`. Un AC sin test o un QS sin evidencia = fallo.
-- Revisiones paralelas (workflow `orch-review` de ECC + verificador adversarial): correctitud, seguridad, sobreingeniería, documentación vs código, trabajo huérfano, revisores del lenguaje del stack.
-- E2E de los flujos críticos. Sobre lo existente: suite completa del sistema en verde.
-- `report.md`: veredicto por requisito (verified / partial / failed) y Definition of Done.
-- **Gate.**
+### Fase 5 — QA (fase completa de una disciplina transversal)
+
+QA no empieza aquí: acompaña toda la misión. Su dueño es el agente *qa-lead*, independiente de quien programa. Catálogo de tipos de prueba, reglas de pertinencia, herramientas y criterios de salida: [`reference/qa-catalog.md`](../reference/qa-catalog.md) (ISTQB, ISO 25010, ISO 29119-3, OWASP ASVS y LLM Top 10).
+
+| Fase | QA |
+|---|---|
+| Intake | Testabilidad de cada criterio; perfil del proyecto |
+| Architect | Estrategia de pruebas: todos los tipos evaluados, riesgos, herramientas, umbrales, demostración de cada QS |
+| Plan | Tests de aceptación escritos desde EARS, bloqueados y con huella; holdout; plan de pruebas |
+| Build | Revisión del diff de tests tras cada tarea; cobertura y mutación no bajan |
+| **QA** | Ejecución completa e informe de cierre con veredicto |
+| Ship | Smoke y canario tras desplegar, rollback ensayado, observabilidad verificada |
+| Retro | Análisis de bugs escapados: qué fase debió atraparlos |
+
+**Tipos de prueba** (cada uno pertinente o `No aplica: <motivo>`, nunca omitido): unitarias, componente, integración, contrato, API, aceptación, E2E, regresión visual, regresión, smoke, exploratorias con IA, basadas en propiedades, fuzzing, mutación, carga, estrés, pico, soak, escalabilidad, rendimiento web, SAST, dependencias, secretos, DAST, autenticación/autorización, accesibilidad, usabilidad, compatibilidad, i18n, datos/migración, resiliencia/caos, despliegue/rollback, observabilidad, cumplimiento/privacidad y, en misiones de IA, evals de LLM, calidad RAG, alucinación, inyección de prompt/red team, coste/latencia y trayectoria de agente.
+
+Ejecución de la fase:
+1. `scripts/lock.mjs verify`: cualquier alteración de los tests bloqueados es un bug S1.
+2. Se incorporan los tests holdout y se ejecuta la suite de aceptación completa.
+3. Se ejecutan todos los tipos pertinentes de la estrategia, guardando evidencia (comando, cifras).
+4. Revisiones paralelas (workflow `orch-review` de ECC + verificador adversarial): correctitud, seguridad, sobreingeniería, documentación vs código, trabajo huérfano, revisores del lenguaje del stack.
+5. Sesiones exploratorias con IA en navegador según los charters (si hay interfaz).
+6. Cada defecto se registra con `templates/bug-report.md` (severidad S1–S4, prioridad P1–P4) y lleva su test de regresión.
+7. `shipwright trace --phase qa`: todo AC con un test que lo cite y todo QS con evidencia.
+8. Informe de cierre `docs/qa/report.md` (ISO 29119-3): resultados por tipo, matriz AC → test → resultado, evidencia de cada QS, bugs, riesgos residuales y veredicto **SHIP / NO SHIP**.
+
+**Criterios de salida:** 100% de aceptación en verde y archivos bloqueados intactos · todos los tipos pertinentes ejecutados o "No aplica" aprobado · 0 bugs S1/S2 abiertos · SAST, dependencias, secretos y DAST sin high/critical · SLOs y QS cumplidos con evidencia · WCAG 2.2 AA sin serious/critical · evals de IA ≥ umbral · rollback ensayado · riesgos residuales aceptados por el usuario.
+
+**Tests inestables (flaky):** cuarentena fuera del gate, con dueño y plazo; cero flaky en la suite de aceptación; reintentos solo en E2E (máximo 2).
+
+**Gate:** el humano recibe el informe y aprueba la release, pide correcciones o acepta explícitamente riesgos residuales.
 
 ### Fase 6 — Ship
-Según el entregable: deploy, pull request con nota de impacto y rollback, demo grabada o informe. Docs finales (README, CHANGELOG, docs de usuario/operación). Grafo final al historial global (`graphify global add`). **Gate:** el humano confirma antes de desplegar o publicar.
+Según el entregable: deploy, pull request con nota de impacto y rollback, demo grabada o informe. Tras desplegar: smoke y canario (`canary-watch` de ECC), rollback ensayado y observabilidad verificada; todo bug de producción se convierte en test de regresión. Docs finales (README, CHANGELOG, docs de usuario/operación). Grafo final al historial global (`graphify global add`). **Gate:** el humano confirma antes de desplegar o publicar.
 
 ### Fase 7 — Retro
 Ver §9.
@@ -283,7 +314,10 @@ mi-proyecto/
 │   ├── architecture/ARCHITECTURE.md
 │   ├── adr/0001-*.md
 │   ├── plan/tasks.md
-│   ├── verify/report.md
+│   ├── qa/test-strategy.md
+│   ├── qa/test-plan.md
+│   ├── qa/report.md           # informe de cierre + veredicto
+│   ├── qa/bugs/BUG-NNN.md
 │   ├── metrics.md             # generado automáticamente
 │   └── retro.md
 ├── graphify-out/
@@ -316,6 +350,7 @@ Un hook registra en `docs/metrics.md`, sin intervención: inicio y fin de cada f
 
 ### Bucle de retro (obligatorio al cerrar cada misión)
 1. **Retro guiada:** ¿qué fase fue lenta?, ¿qué error se repitió?, ¿qué pregunta faltó en la checklist?, ¿qué "no sé" no se resolvió bien?, ¿qué decisión se revirtió?, ¿qué herramienta de ECC faltó o sobró?
+   **Análisis de bugs escapados:** cada bug encontrado en QA o después de entregar se asigna a la fase que debió atraparlo (criterio ambiguo en Intake, tipo de prueba descartado en la estrategia, test débil en Plan, revisión de diff en Build…). Esa asignación genera la lección.
 2. **Lecciones**, clasificadas: regla (checklist de fase) · pregunta faltante (entrevista) · patrón reutilizable (catálogo/plantilla) · error de proceso (skill/comando) · herramienta (índice de ECC).
 3. **Propuesta:** diff concreto sobre el framework (patrón `learn-eval` de ECC: contenido de la sesión tratado como no confiable, diff visible).
 4. **Gate humano:** aprobar, editar o descartar cada cambio.
@@ -374,7 +409,7 @@ GitHub Action diario en el repo de Shipwright:
 | Architect | `agents/architect.md`, `agents/code-architect.md`, `skills/architecture-decision-records`, `skills/contract-first`, `skills/council`, `skills/hexagonal-architecture`, `skills/plan-canvas`, `skills/api-design` |
 | Plan | `skills/blueprint`, `agents/planner.md`, `skills/plan-orchestrate`, `skills/orch-pipeline` |
 | Build | `skills/tdd-workflow`, `agents/tdd-guide.md`, `agents/*-build-resolver.md`, `skills/dmux-workflows`, skills del stack |
-| Verify | `workflows/orch-review.workflow.js`, `agents/code-reviewer.md`, `agents/security-reviewer.md`, `agents/e2e-runner.md`, `skills/e2e-testing`, `skills/verification-loop`, `agents/silent-failure-hunter.md`, `agents/pr-test-analyzer.md`, revisores por lenguaje |
+| QA | `skills/browser-qa`, `agents/gan-evaluator.md`, `skills/loop-design-check`, `skills/benchmark`, `skills/eval-harness`, `agents/rag-pipeline-reviewer.md`, `agents/a11y-architect.md`, `skills/canary-watch`, `workflows/orch-review.workflow.js`, `agents/code-reviewer.md`, `agents/security-reviewer.md`, `agents/e2e-runner.md`, `skills/e2e-testing`, `skills/verification-loop`, `agents/silent-failure-hunter.md`, `agents/pr-test-analyzer.md`, revisores por lenguaje |
 | Ship | `skills/deployment-patterns`, `skills/docker-patterns`, `skills/kubernetes-patterns`, `skills/canary-watch`, `agents/doc-updater.md`, `skills/living-docs-governance` |
 | Retro | `commands/learn-eval.md`, `scripts/lib/skill-evolution/`, `skills/skill-comply`, `skills/rules-distill`, `skills/skill-stocktake` |
 | Misiones de IA | `skills/eval-harness`, `skills/agent-harness-construction`, `skills/agent-security-hardening`, `skills/mcp-server-patterns`, `skills/cost-aware-llm-pipeline`, `skills/prompt-caching-strategy`, `agents/rag-pipeline-reviewer.md`, `skills/ui-demo` |
@@ -393,11 +428,13 @@ GitHub Action diario en el repo de Shipwright:
 | Manifiesto y marketplace | `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` |
 | Fases | `skills/<fase>/SKILL.md` (`mission`, `intake`) |
 | Checklist de entrevista | `skills/intake/checklist.md` |
-| Agentes propios | `agents/analyst.md` |
+| Agentes propios | `agents/analyst.md`, `agents/qa-lead.md` |
 | Plantillas | `templates/` |
-| Trazabilidad | `scripts/trace.mjs` (`node scripts/trace.mjs <docsDir> --phase intake\|architect\|plan`) |
+| Trazabilidad | `scripts/trace.mjs` (`node scripts/trace.mjs <docsDir> --phase intake\|architect\|plan\|qa [--tests <dir>]`) |
+| QA | `reference/qa-catalog.md`, `templates/test-strategy.md`, `templates/qa-report.md`, `templates/bug-report.md` |
+| Tests bloqueados | `lockedPaths` en `.shipwright/state.json` + hook (edición y consola) + `scripts/lock.mjs record\|verify` |
 | Métricas | `scripts/metrics.mjs` + hook `UserPromptExpansion` |
-| Protección de specs aprobadas | hook `PreToolUse` → `scripts/hooks/protect-approved.mjs` |
+| Protección de specs aprobadas | hook `PreToolUse` (Write, Edit, Bash, PowerShell) → `scripts/hooks/protect-approved.mjs` |
 | ECC | `vendor/ecc/`, `vendor/ecc.manifest.json`, `vendor/ecc.index.md`, `reference/using-ecc.md` |
 | Sincronización ECC | `scripts/ecc-sync.mjs`, `.github/workflows/ecc-sync.yml` |
 | Tests | `node --test "scripts/**/*.test.mjs"` (CI en Windows, macOS y Linux) |
@@ -408,11 +445,12 @@ GitHub Action diario en el repo de Shipwright:
 |---|---|
 | v0.1–v0.3 | Método, investigación, integración con ECC, misiones y cadena de objetivos |
 | v0.4 | Método sin recortes, un solo método (desde cero / sobre lo existente), crítica aplicada |
-| v0.5 | Plugin instalable + `vendor/ecc` (324 piezas de ECC v2.2.3) + índice + sync con PR; `mission` + `intake` + agente `analyst`; `shipwright trace`; métricas; protección de specs aprobadas *(actual)* |
-| v0.6 | `architect` + plantillas arc42/MADR/QS + packs de stack por proyecto |
-| v0.7 | `plan` + `build` (subagente por tarea, TDD, hooks) + `change` |
-| v0.8 | `verify` + `ship` + `status` |
-| v0.9 | `retro` + evals de skills + banco de misiones de referencia + versionado automático |
+| v0.5 | Plugin instalable + `vendor/ecc` (324 piezas de ECC v2.2.3) + índice + sync con PR; `mission` + `intake` + agente `analyst`; `shipwright trace`; métricas; protección de specs aprobadas |
+| v0.6 | Disciplina QA: agente `qa-lead`, catálogo de pruebas, plantillas (estrategia, informe de cierre, bug), tests de aceptación bloqueados (hook + huellas), trazabilidad AC → test *(actual)* |
+| v0.7 | `architect` (con estrategia de pruebas) + plantillas arc42/MADR/QS + packs de stack por proyecto |
+| v0.8 | `plan` (con tests de aceptación y holdout) + `build` (subagente por tarea, TDD, revisión de diff de tests) + `change` |
+| v0.9 | `qa` + `ship` + `status` |
+| v0.10 | `retro` (con bugs escapados) + evals de skills + banco de misiones de referencia + versionado automático |
 | v1.0 | Probado en ≥ 3 misiones reales (≥ 1 desde cero, ≥ 1 sobre lo existente) |
 | v2.0 | Orquestador con Claude Agent SDK (+ LangGraph para estado y gates) que ejecuta las fases ya probadas |
 

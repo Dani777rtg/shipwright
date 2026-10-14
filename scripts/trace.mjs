@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // shipwright trace — deterministic objective-traceability check (METODO.md §4).
-// Usage: node trace.mjs [docsDir=docs] [--phase intake|architect|plan]
+// Usage: node trace.mjs [docsDir=docs] [--phase intake|architect|plan|qa] [--tests <dir>]...
 // Exit 0 = ok, 1 = violations (printed), 2 = usage error.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
@@ -24,6 +24,7 @@ const COVERAGE = {
   intake: [['O', ['KR']], ['O', ['AC']]],
   architect: [['QG', ['QS']], ['QS', ['ADR', 'C']]],
   plan: [['AC', ['T']], ['QS', ['T']]],
+  qa: [],
 };
 const PHASES = Object.keys(COVERAGE);
 
@@ -65,10 +66,29 @@ export function parse(files) {
     it.serves = refs.split(/[,\s]+/).map((r) => r.replace(/[[\]`*]/g, '')).filter(Boolean);
     it.reason = reason.join(' ').trim();
   }
-  return { items, errors };
+  return { items, errors, texts: files.map((f) => f.text) };
 }
 
-export function check({ items, errors }, phase = 'intake') {
+// IDs cited anywhere in test files (names, docstrings, comments): the evidence that a criterion is tested.
+export function collectTestIds(dirs) {
+  const ids = new Set();
+  const walk = (d) => {
+    for (const name of readdirSync(d)) {
+      if (['node_modules', '.git', '__pycache__'].includes(name)) continue;
+      const p = join(d, name);
+      if (statSync(p).isDirectory()) walk(p);
+      else for (const m of readFileSync(p, 'utf8').matchAll(/(?<![A-Za-z0-9])(AC[-_]\d+[._]\d+|QS[-_]\d+)(?![0-9])/g)) ids.add(m[1].replace('_', '-').replace(/(AC-\d+)_/, '$1.'));
+    }
+  };
+  for (const d of dirs.filter(existsSync)) walk(d);
+  return ids;
+}
+
+// QS evidence may also be a QA report line such as "QS-2 … evidencia: k6 p95 = 180 ms".
+const evidenced = (texts) => new Set(texts.flatMap((t) => t.split(/\r?\n/))
+  .flatMap((l) => /evidencia:|evidence:/i.test(l) ? [...l.matchAll(/(?<![A-Za-z0-9])QS-\d+(?![0-9])/g)].map((m) => m[0]) : []));
+
+export function check({ items, errors, texts = [] }, phase = 'intake', testIds = null) {
   const out = [...errors];
   const where = (it) => `${it.path}:${it.line} ${it.id}`;
   for (const it of items.values()) {
@@ -104,6 +124,15 @@ export function check({ items, errors }, phase = 'intake') {
       }
     }
   }
+  if (phase === 'qa') {
+    const tested = testIds ?? new Set();
+    const withEvidence = evidenced(texts);
+    for (const it of items.values()) {
+      if (it.na) continue;
+      if (it.kind === 'AC' && !tested.has(it.id)) out.push(`${where(it)} untested: no test cites ${it.id}`);
+      if (it.kind === 'QS' && !tested.has(it.id) && !withEvidence.has(it.id)) out.push(`${where(it)} no evidence: cite ${it.id} in a test or in a QA report line with "evidencia:"`);
+    }
+  }
   if (![...items.values()].some((it) => it.kind === 'O')) out.push('no objectives (O-n) defined');
   if (![...items.values()].some((it) => it.kind === 'QG')) out.push('no quality goals (QG-n) defined');
   return out;
@@ -113,14 +142,17 @@ function main(argv) {
   const args = argv.slice(2);
   const pi = args.indexOf('--phase');
   const phase = pi >= 0 ? args.splice(pi, 2)[1] : 'intake';
+  const testDirs = [];
+  for (let ti; (ti = args.indexOf('--tests')) >= 0;) testDirs.push(args.splice(ti, 2)[1]);
+  if (phase === 'qa' && !testDirs.length) testDirs.push('tests');
   const dir = args[0] ?? 'docs';
   if (!PHASES.includes(phase) || !existsSync(dir)) {
-    console.error(`usage: trace.mjs [docsDir] [--phase ${PHASES.join('|')}]`);
+    console.error(`usage: trace.mjs [docsDir] [--phase ${PHASES.join('|')}] [--tests <dir>]...`);
     return 2;
   }
   const files = collectFiles(dir).map((p) => ({ path: relative(process.cwd(), p), text: readFileSync(p, 'utf8') }));
   const parsed = parse(files);
-  const problems = check(parsed, phase);
+  const problems = check(parsed, phase, phase === 'qa' ? collectTestIds(testDirs) : null);
   if (problems.length) {
     console.log(`shipwright trace (${phase}): ${problems.length} problem(s)`);
     for (const p of problems) console.log(`  - ${p}`);
@@ -130,4 +162,4 @@ function main(argv) {
   return 0;
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) process.exit(main(process.argv));
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) process.exit(main(process.argv));

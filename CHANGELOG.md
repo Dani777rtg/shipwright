@@ -3,6 +3,16 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
+## [0.6.0] - 2026-10-14
+### Añadido
+- Disciplina **QA** transversal con agente independiente `qa-lead`: testabilidad en Intake, estrategia de pruebas en Architect, tests de aceptación desde EARS en Plan, revisión del diff de tests en Build, fase QA completa con veredicto SHIP / NO SHIP, smoke y canario en Ship, análisis de bugs escapados en Retro.
+- `reference/qa-catalog.md`: más de 40 tipos de prueba (funcionales, no funcionales con carga, estrés, pico, soak y escalabilidad, seguridad, accesibilidad, IA) con regla de pertinencia, herramientas por stack y criterio de salida; políticas de integridad, flaky, bugs y salida de release.
+- Plantillas: estrategia de pruebas, informe de cierre (ISO 29119-3), reporte de bug.
+- Tests de aceptación bloqueados: `lockedPaths` + hook que bloquea edición y escritura por consola + `scripts/lock.mjs` (huellas SHA-256).
+- `shipwright trace --phase qa`: todo AC con un test que lo cite, todo QS con evidencia.
+### Cambiado
+- La fase VERIFY pasa a llamarse **QA** (`/shipwright:qa`).
+
 ## [0.5.0] - 2026-10-13
 ### Añadido
 - Plugin instalable de Claude Code (`.claude-plugin/plugin.json` + marketplace).

@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync, appendFileSync, existsSync, mkdirSync } fr
 import { join, dirname } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-export const PHASES = ['mission', 'intake', 'architect', 'plan', 'build', 'verify', 'ship', 'retro', 'change'];
+export const PHASES = ['mission', 'intake', 'architect', 'plan', 'build', 'qa', 'ship', 'retro', 'change'];
 export const EVENTS = ['start', 'gate-approved', 'gate-changes', 'gate-back', 'end'];
 const HEADER = '# Métricas de la misión\n\n<!-- Generado por Shipwright. No editar a mano. -->\n\n| Fecha (UTC) | Fase | Evento | Nota |\n|---|---|---|---|\n';
 
@@ -54,6 +54,6 @@ function main([cmd, phase, event, ...note]) {
   return 2;
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try { process.exit(main(process.argv.slice(2))); } catch (e) { console.error(e.message); process.exit(2); }
 }
