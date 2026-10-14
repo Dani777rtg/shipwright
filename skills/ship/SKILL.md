@@ -34,3 +34,6 @@ Fill the 14-point checklist of `<docsDir>/ops/deploy-plan.md` with evidence so f
 - `graphify global add graphify-out/graph.json --as <mission-slug>` (adds the mission to the cross-project memory).
 - Show the handover document and AskUserQuestion: Entrega aceptada (Recomendado) / Falta algo. Log `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log ship gate-approved|gate-changes "<note>"`.
 - Accepted → `state.mjs set phase retro`; next step `/shipwright:retro`.
+
+## Session
+Principles for every step: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md` (subagent reports and progress notes terse; questions, gates and artifacts in clear prose). If this conversation grows long inside the phase, suggest `/compact`. When the phase closes, tell the user: run `/clear`, then `/shipwright:retro` — everything the next phase needs is in files, and the session-start hook restores the mission context.

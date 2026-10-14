@@ -36,7 +36,7 @@ Mission brief: $ARGUMENTS
    - sobre lo existente → docs at `docs/shipwright/<mission-slug>/` (ask if the team prefers another location).
    Create the state at the project root (`.shipwright/` is written only by Shipwright scripts; the hook blocks direct edits):
    ```
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" init '{ "docsDir": "<docs path>", "phase": "mission", "startingPoint": "desde-cero|existente", "deliverable": "<type>", "language": "<lang>", "mission": "<one line>", "confidentiality": "si|parcial|local", "allowedPaths": [], "shipwright": "0.12.0" }'
+   node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" init '{ "docsDir": "<docs path>", "phase": "mission", "startingPoint": "desde-cero|existente", "deliverable": "<type>", "language": "<lang>", "mission": "<one line>", "confidentiality": "si|parcial|local", "allowedPaths": [], "shipwright": "0.13.0" }'
    ```
    Then log the start: `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log mission start`.
    Run this and every later Shipwright script from the project root (the folder that holds `.shipwright/`).
@@ -79,3 +79,6 @@ Mission brief: $ARGUMENTS
    - `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log mission gate-approved`
    - `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set phase intake`
    - tell the user the next step: put source material in `<docsDir>/client/` (optional) and run `/shipwright:intake`.
+
+## Session
+Principles for every step: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md` (subagent reports and progress notes terse; questions, gates and artifacts in clear prose). If this conversation grows long inside the phase, suggest `/compact`. When the phase closes, tell the user: run `/clear`, then `/shipwright:intake` — everything the next phase needs is in files, and the session-start hook restores the mission context.

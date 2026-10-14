@@ -1,5 +1,6 @@
 ---
 name: status
+model: haiku
 description: Shipwright mission status report for the person who requested the work — phase, progress, objectives coverage, risks, open decisions and next step. Read-only. Use when the user runs /shipwright:status or asks how the mission is going.
 ---
 

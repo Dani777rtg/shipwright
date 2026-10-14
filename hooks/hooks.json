@@ -4,14 +4,34 @@
       {
         "matcher": "Write|Edit|MultiEdit|Bash|PowerShell",
         "hooks": [
-          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/protect-approved.mjs\"", "timeout": 10 }
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/protect-approved.mjs\"",
+            "timeout": 10
+          }
         ]
       }
     ],
     "UserPromptExpansion": [
       {
         "hooks": [
-          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/metrics-start.mjs\"", "timeout": 10 }
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/metrics-start.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/session-context.mjs\"",
+            "timeout": 10
+          }
         ]
       }
     ]

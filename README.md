@@ -4,7 +4,7 @@ Plugin de Claude Code para construir software con IA **siguiendo un método**, n
 
 > Claude Code plugin: a spec-driven method that takes a brief to production — requirements, architecture, build, QA, security and deployment — with every task traced to an objective.
 
-**Estado:** v0.12 — las 8 fases, `change` y `status` están implementadas; falta validarlas en misiones reales antes de la v1.0 ([hoja de ruta](docs/METODO.md#hoja-de-ruta)).
+**Estado:** v0.13 — las 8 fases, `change` y `status` están implementadas; falta validarlas en misiones reales antes de la v1.0 ([hoja de ruta](docs/METODO.md#hoja-de-ruta)).
 
 ## Instalar
 
@@ -42,6 +42,12 @@ Reglas que no se negocian:
 - **Tú apruebas cada fase.**
 - **QA, seguridad, producción, documentación y UX** a cargo de agentes independientes de quien programa; los tests de aceptación no se pueden alterar.
 - **Listo = funcionando en producción y documentado**, no "compila en mi máquina".
+
+## Modelos, sesiones y complementos
+
+- Cada agente usa el modelo de su rol (Opus para juicio, Sonnet para construir, Haiku para reportes). Para forzar otro: variables `CLAUDE_CODE_SUBAGENT_MODEL` y `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1`.
+- Al cerrar cada fase, Shipwright te recomienda `/clear`: todo está en archivos y se restaura solo.
+- Complementos opcionales (caveman, ponytail, context7, playwright, Trail of Bits…): [reference/companions.md](reference/companions.md).
 
 ## Documentación
 

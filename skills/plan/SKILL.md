@@ -39,3 +39,6 @@ From `${CLAUDE_PLUGIN_ROOT}/templates/tasks.md` (ECC `skills/blueprint` and `age
 Present: number of tasks by group, the critical path and parallel groups, an estimate (sum of complexities and the critical path), acceptance tests written (visible / holdout), the test plan summary and risks. AskUserQuestion: Aprobar (Recomendado) / Pedir cambios / Volver a architect. Log `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log plan gate-approved|gate-changes|gate-back "<note>"`.
 - Aprobar → `state.mjs set phase build`; next step `/shipwright:build`.
 - Volver a architect → approved architecture changes only through `/shipwright:change`; explain and stop.
+
+## Session
+Principles for every step: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md` (subagent reports and progress notes terse; questions, gates and artifacts in clear prose). If this conversation grows long inside the phase, suggest `/compact`. When the phase closes, tell the user: run `/clear`, then `/shipwright:build` — everything the next phase needs is in files, and the session-start hook restores the mission context.

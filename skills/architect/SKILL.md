@@ -57,3 +57,6 @@ AskUserQuestion: Aprobar (Recomendado) / Pedir cambios / Volver a intake. Log wi
   1. Set `status: approved` in ARCHITECTURE.md, threat-model.md, test-strategy.md, deploy-plan.md and ux-spec.md, and `status: accepted` in each ADR.
   2. Stack packs: search `${CLAUDE_PLUGIN_ROOT}/vendor/ecc.index.md` under `## stack` (and `## ai` for AI missions) for the chosen languages and frameworks — rules (`rules/<lang>`, `rules/web` for web UIs, `rules/common`), framework skills, testing skills and language reviewer agents. Show the list, then run `node "${CLAUDE_PLUGIN_ROOT}/scripts/install-packs.mjs" <paths...>` from the project root.
   3. `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set phase plan` and tell the user the next step is `/shipwright:plan`.
+
+## Session
+Principles for every step: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md` (subagent reports and progress notes terse; questions, gates and artifacts in clear prose). If this conversation grows long inside the phase, suggest `/compact`. When the phase closes, tell the user: run `/clear`, then `/shipwright:plan` — everything the next phase needs is in files, and the session-start hook restores the mission context.

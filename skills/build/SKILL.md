@@ -29,4 +29,7 @@ Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §4–§5; git rules: `${CLAUDE_P
 6. **Progress:** after each group, a 3-line update (done/total, blockers, next).
 
 ## End
-All tasks done → full test suite, `lock.mjs verify`, `trace.mjs --phase plan`; `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log build end`; `state.mjs set phase qa`; tell the user the next step is `/shipwright:qa`.
+All tasks done → run the built-in `/simplify` on the mission diff (reuse, simplification, efficiency; it never touches locked tests) and re-run the checks; then full test suite, `lock.mjs verify`, `trace.mjs --phase plan`; `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log build end`; `state.mjs set phase qa`; tell the user the next step is `/shipwright:qa`.
+
+## Session
+Principles for every step: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md` (subagent reports and progress notes terse; questions, gates and artifacts in clear prose). If this conversation grows long inside the phase, suggest `/compact`. When the phase closes, tell the user: run `/clear`, then `/shipwright:qa` — everything the next phase needs is in files, and the session-start hook restores the mission context.

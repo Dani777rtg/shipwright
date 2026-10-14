@@ -44,3 +44,6 @@ In the clone:
 - `graphify save-result` for the mission's useful / dead-end / corrected findings, then `graphify reflect`.
 - Every 5 missions (count in `lessons/LESSONS.md`): propose pruning obsolete rules.
 - `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log retro end`; `state.mjs set phase done`. Tell the user the mission is closed and which framework version now carries its lessons.
+
+## Session
+Principles for every step: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md` (subagent reports and progress notes terse; questions, gates and artifacts in clear prose). If this conversation grows long inside the phase, suggest `/compact`.

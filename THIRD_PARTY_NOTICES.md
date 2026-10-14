@@ -28,3 +28,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## superpowers — https://github.com/obra/superpowers
+
+`systematic-debugging` and `verification-before-completion`, vendored unmodified under `vendor/superpowers/` from v7.0.0 (bb92a777). MIT License, Copyright (c) 2025 Jesse Vincent. Full text: `vendor/superpowers/LICENSE`.
+
+## Principles adapted in `reference/engineering-principles.md`
+
+Ideas summarized and adapted (not copied verbatim) from these MIT-licensed projects:
+
+- **andrej-karpathy-skills** — https://github.com/multica-ai/andrej-karpathy-skills — MIT, by forrestchang and contributors.
+- **ponytail** — https://github.com/DietrichGebert/ponytail — MIT License, Copyright (c) 2026 DietrichGebert.
+- **caveman** — https://github.com/JuliusBrussee/caveman — MIT License, Copyright (c) 2026 Julius Brussee.
+
+The MIT License text above (ECC section) applies to each, with its own copyright holder.

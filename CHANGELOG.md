@@ -3,6 +3,15 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
+## [0.13.0] - 2026-10-14
+### Añadido
+- `reference/engineering-principles.md`: principios para todos los agentes, adaptados de andrej-karpathy-skills (pensar antes de actuar, cambios quirúrgicos), ponytail (lo mínimo que funciona, sin recortar tests ni seguridad), superpowers (evidencia antes de afirmar, depuración por causa raíz) y caveman (reportes breves solo entre agentes; preguntas y documentos en prosa clara).
+- `vendor/superpowers/`: `systematic-debugging` y `verification-before-completion` (MIT), usados por el builder y en el ciclo de corrección de QA.
+- Modelo por rol en cada agente (Opus: analyst, architecture-reviewer, security-lead, qa-lead; Sonnet: builder, devops-lead, docs-lead, ux-lead; Haiku: status), sobreescribible con variables de entorno.
+- Hook `SessionStart` (inicio, `/clear`, `/compact`, reanudar) que restaura misión, fase y siguiente comando; cada fase recomienda `/clear` al cerrar y `/compact` si se alarga.
+- Revisiones integradas de Claude Code: `/code-review` y `/security-review` en QA, `/simplify` al final de Build.
+- `reference/companions.md`: complementos opcionales recomendados.
+
 ## [0.12.0] - 2026-10-14
 ### Añadido
 - `/shipwright:retro`: evidencia (métricas, puntuación, bugs, incidentes, cambios), análisis de qué fase debió atrapar cada defecto escapado, retrospectiva guiada, lecciones convertidas en diffs concretos al framework, aplicación con aprobación en un clon local de Shipwright con tests, evals, comparación contra el banco y nueva versión; memoria con graphify.

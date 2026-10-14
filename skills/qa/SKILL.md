@@ -28,8 +28,10 @@ Spawn `shipwright:devops-lead` task **B1**: deploy to staging from the deploy pl
 - `shipwright:docs-lead` task **C**: documentation verification (quick start on a clean machine, samples, links, drift).
 - `shipwright:ux-lead` task **C** when there is a UI: built UI vs approved prototype, heuristics, accessibility.
 
+Also run the built-in reviews on the mission's full diff: `/code-review high` (correctness) and, when the repository has an `origin` remote, `/security-review`. Their findings join the bug list.
+
 ### 5. Fix loop
-For each S1/S2 bug, high/critical security finding and documentation failure: spawn `shipwright:builder` with the bug report (`Sirves a <AC/QS/TM>`), code changes only plus a regression test outside the locked paths; then re-run the affected checks. A bug that needs a requirement, architecture or acceptance-test change → `/shipwright:change`. S3/S4 bugs: fix or list in the report as known issues.
+For each S1/S2 bug, high/critical security finding and documentation failure: spawn `shipwright:builder` with the bug report and the instruction to follow `${CLAUDE_PLUGIN_ROOT}/vendor/superpowers/systematic-debugging/SKILL.md` (root cause before fix) (`Sirves a <AC/QS/TM>`), code changes only plus a regression test outside the locked paths; then re-run the affected checks. A bug that needs a requirement, architecture or acceptance-test change → `/shipwright:change`. S3/S4 bugs: fix or list in the report as known issues.
 
 ### 6. Traceability and report
 - `node "${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs" <docsDir> --phase qa --tests <test dirs>`: every AC cited by a test, every QS and TM with evidence.
@@ -38,3 +40,6 @@ For each S1/S2 bug, high/critical security finding and documentation failure: sp
 ### 7. Gate
 Present the verdict, results per test type, open bugs, the security verdict and residual risks. AskUserQuestion: Aprobar release (Recomendado when SHIP) / Corregir lo pendiente / Aceptar riesgos residuales y aprobar (record who and why in the report). Log `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log qa gate-approved|gate-changes "<note>"`.
 - Approved → `state.mjs set phase ship`; next step `/shipwright:ship`.
+
+## Session
+Principles for every step: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md` (subagent reports and progress notes terse; questions, gates and artifacts in clear prose). If this conversation grows long inside the phase, suggest `/compact`. When the phase closes, tell the user: run `/clear`, then `/shipwright:ship` — everything the next phase needs is in files, and the session-start hook restores the mission context.

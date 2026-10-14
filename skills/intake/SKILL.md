@@ -72,3 +72,6 @@ Ask with AskUserQuestion: Aprobar (Recomendado) / Pedir cambios / Volver a la mi
 - Pedir cambios → apply them, repeat steps 5–7.
 - Volver a la misión → `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set phase mission` and tell the user to run `/shipwright:mission`.
 - Aprobar → set `status: approved` in the frontmatter of mission.md and requirements.md (from now on they change only through `/shipwright:change`), run `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set phase architect`, and tell the user the next step is `/shipwright:architect`.
+
+## Session
+Principles for every step: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md` (subagent reports and progress notes terse; questions, gates and artifacts in clear prose). If this conversation grows long inside the phase, suggest `/compact`. When the phase closes, tell the user: run `/clear`, then `/shipwright:architect` — everything the next phase needs is in files, and the session-start hook restores the mission context.

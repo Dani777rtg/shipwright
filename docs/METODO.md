@@ -1,6 +1,6 @@
 # Método Shipwright
 
-Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.12.0**.
+Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.13.0**.
 
 ## 1. Principios
 
@@ -13,7 +13,8 @@ Cómo Shipwright lleva un encargo hasta software funcionando en producción. Ver
 7. **Listo = funcionando en producción**, observable, reversible y documentado.
 8. **Lo no negociable es determinista:** hooks y scripts, no ruegos en un prompt.
 9. **Nunca el mismo error dos veces:** cada misión mejora el framework (§9).
-10. **Rigor en el proceso, simplicidad en el código** (YAGNI).
+10. **Rigor en el proceso, simplicidad en el código.** Todos los agentes siguen los [principios de ingeniería](../reference/engineering-principles.md): pensar antes de actuar (Karpathy), construir lo mínimo que funciona (ponytail), evidencia antes de afirmar y depuración por causa raíz (superpowers), reportes breves entre agentes (caveman).
+11. **Modelo según el rol:** Opus para juicio (análisis, arquitectura, seguridad, QA), Sonnet para construir y documentar, Haiku para reportes. **Sesión limpia por fase:** al cerrar cada fase se recomienda `/clear`; todo el estado está en archivos y un hook lo restaura.
 
 ## 2. Misión
 
@@ -145,10 +146,10 @@ Nada aprende ni se inyecta solo.
 |---|---|
 | Fases | `skills/<fase>/SKILL.md` |
 | Agentes | `agents/analyst.md`, `architecture-reviewer.md`, `builder.md`, `qa-lead.md`, `security-lead.md`, `devops-lead.md`, `docs-lead.md`, `ux-lead.md` |
-| Referencias | `reference/qa-catalog.md`, `security-baseline.md`, `deploy-catalog.md`, `docs-standard.md`, `ux-standard.md`, `git-workflow.md`, `using-ecc.md` |
+| Referencias | `reference/engineering-principles.md`, `companions.md`, `qa-catalog.md`, `security-baseline.md`, `deploy-catalog.md`, `docs-standard.md`, `ux-standard.md`, `git-workflow.md`, `using-ecc.md` |
 | Plantillas | `templates/` |
 | Scripts | `scripts/state.mjs` (único que escribe el estado), `trace.mjs` (trazabilidad), `lock.mjs` (huellas), `change.mjs` (abre/cierra un cambio aprobado), `install-packs.mjs` (packs del stack), `metrics.mjs`, `bench.mjs` (puntúa misiones), `ecc-sync.mjs` |
-| Hooks | Protección de `.shipwright/`, artefactos aprobados y tests bloqueados (edición y consola), salvo archivos abiertos por un cambio aprobado; inicio de fase en métricas |
+| Hooks | Contexto de la misión al iniciar, tras `/clear` o `/compact`; protección de `.shipwright/`, artefactos aprobados y tests bloqueados (edición y consola), salvo archivos abiertos por un cambio aprobado; inicio de fase en métricas |
 | Tests | `node --test "scripts/**/*.test.mjs"` — CI en Windows, macOS y Linux |
 
 ## Hoja de ruta
@@ -162,6 +163,7 @@ Nada aprende ni se inyecta solo.
 | v0.9 | `architect` |
 | v0.10 | `plan` + `build` + `change` |
 | v0.11 | `qa` + `ship` |
-| **v0.12** | `retro`, banco de misiones, puntuación y comparación de versiones *(actual)* |
+| v0.12 | `retro`, banco de misiones, puntuación y comparación de versiones |
+| **v0.13** | Principios de ingeniería (Karpathy, ponytail, caveman, superpowers), modelo por rol, sesiones limpias *(actual)* |
 | v1.0 | Probado en ≥ 3 misiones reales |
 | v2.0 | Orquestador autónomo con Claude Agent SDK |
