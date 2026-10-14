@@ -57,7 +57,7 @@ Used by the `devops-lead` agent (deployment strategy in Architect, delivery in S
 | 9 | Reliability | ≥ 2 instances or HA when the SLO needs it; graceful SIGTERM shutdown; timeouts and retries with backoff; autoscaling limits | Instance killed during a test without user-visible errors |
 | 10 | Performance | Load test at 2× expected peak; Core Web Vitals within budget for web | QA report |
 | 11 | Cost | Budget and anomaly alerts; right-sized instances; non-production scales to zero; previews cleaned up | Budget alert exists |
-| 12 | Operations | Runbook (deploy, rollback, restore, rotate secrets, alerts), owner, escalation path, incident and postmortem templates | `docs/ops/runbook.md` linked from README |
+| 12 | Operations | Runbook (deploy, rollback, restore, rotate secrets, alerts), owner, escalation path, incident and postmortem templates | `<docsDir>/ops/runbook.md` linked from README |
 | 13 | Post-deploy | Smoke + canary watch on the production URL ≥ 15 min; no error-rate regression | Canary report |
 | 14 | Domain | Custom domain, DNS and TLS certificate configured and auto-renewing (when the deliverable is public) | HTTPS check on the final URL |
 

@@ -11,16 +11,16 @@ Reference: `${CLAUDE_PLUGIN_ROOT}/reference/security-baseline.md` (per-phase act
 Do only the task you are given.
 
 ## A. Mission / Intake — requirements
-Given the mission card and requirements: confirm the data class, security profiles and jurisdictions; propose the ASVS level with its reason; list every baseline item for the applicable profiles as an EARS criterion (`AC-…`, including abuse cases) or `No aplica: <reason>`; write `docs/security/data-inventory.md` when there is personal data. Report gaps as `<severity> <file>:<line> — problem — fix`.
+Given the mission card and requirements: confirm the data class, security profiles and jurisdictions; propose the ASVS level with its reason; list every baseline item for the applicable profiles as an EARS criterion (`AC-…`, including abuse cases) or `No aplica: <reason>`; write `<docsDir>/security/data-inventory.md` when there is personal data. Report gaps as `<severity> <file>:<line> — problem — fix`.
 
-## B. Architect — threat model → `docs/security/threat-model.md`
+## B. Architect — threat model → `<docsDir>/security/threat-model.md`
 From `${CLAUDE_PLUGIN_ROOT}/templates/threat-model.md`: assets, actors, trust boundaries over the C4 diagrams, threats `TM-n` (STRIDE + LLM/agentic categories) with likelihood × impact, mitigation linked to AC/QS/ADR, status. Propose security ADRs (authentication, sessions, secrets, crypto, tenancy, logging, supply chain). Every High threat needs a mitigation or an explicit user acceptance (`Riesgo aceptado: <who, why>`).
 
 ## C. Build — dependency vetting and sensitive-diff review
 - Dependency: verify it exists in the official registry, is not a near-typo of a popular package, has reasonable age/downloads, a real maintainer and repository, and a compatible license. Answer `OK` or `REJECT — reason`.
 - Diff touching authentication, input handling, queries, uploads, payments, secrets or LLM tools: review against the baseline and the threat model. Answer `OK` or `<file>:<line> — problem — required fix`.
 
-## D. QA — verification → `docs/security/report.md`
+## D. QA — verification → `<docsDir>/security/report.md`
 From `${CLAUDE_PLUGIN_ROOT}/templates/security-report.md`: ASVS checklist for the chosen level (pass / fail / not applicable per relevant item), each `TM-n` closed with evidence (`TM-n … evidencia: …`) or accepted, results of SAST, SCA, secrets, DAST, header/TLS scan and privacy tests, adversarial pass (ECC `skills/security-bounty-hunter`). Verdict: no open High/Critical, level met.
 
 ## E. Ship — supply chain and hardening

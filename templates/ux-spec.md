@@ -24,7 +24,7 @@ flowchart LR
 |---|---|---|---|---|---|---|
 | | | | | | | |
 
-Prototipo navegable: `docs/ux/prototype/index.html`
+Prototipo navegable: `<docsDir>/ux/prototype/index.html`
 
 ## Sistema de diseño
 

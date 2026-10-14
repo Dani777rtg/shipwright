@@ -10,7 +10,7 @@ References: `${CLAUDE_PLUGIN_ROOT}/reference/deploy-catalog.md` (platforms, prod
 
 Do only the task you are given.
 
-## A. Deployment strategy (Architect) → `docs/ops/deploy-plan.md`
+## A. Deployment strategy (Architect) → `<docsDir>/ops/deploy-plan.md`
 From `${CLAUDE_PLUGIN_ROOT}/templates/deploy-plan.md`:
 1. Platform: the one the user has or the constraints impose; otherwise propose 2–3 options with fit, cost and lock-in, for an ADR.
 2. Environments (preview, staging, production), artifact promotion, regions and data residency.
@@ -26,7 +26,7 @@ From `${CLAUDE_PLUGIN_ROOT}/templates/deploy-plan.md`:
 Write or update the IaC/config and CI/CD workflow, deploy to staging, run smoke tests, rehearse rollback (record the time), run a restore drill when there is a database. Report the staging URL and evidence.
 
 ## B2-prep. Production preparation (Ship phase)
-Final IaC/config, health endpoints, alerts (errors, burn rate, cost), runbook (`docs/ops/runbook.md` from `${CLAUDE_PLUGIN_ROOT}/templates/runbook.md`), and the exact production commands with platform, region, cost and rollback.
+Final IaC/config, health endpoints, alerts (errors, burn rate, cost), runbook (`<docsDir>/ops/runbook.md` from `${CLAUDE_PLUGIN_ROOT}/templates/runbook.md`), and the exact production commands with platform, region, cost and rollback.
 
 ## B2. Production (Ship phase, only after the user's approval)
 Deploy, smoke + canary watch (ECC `skills/canary-watch`) for at least 15 minutes, verify alerts and traces; roll back immediately on regression. Fill the readiness checklist with evidence.

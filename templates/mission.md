@@ -6,7 +6,7 @@ status: draft
 | Campo | Valor |
 |---|---|
 | Entregable | app · funcionalidad · integración · arreglo · prueba de concepto · informe |
-| Punto de partida | desde cero · sobre lo existente (`<repo/sistema>`, convenciones: `docs/spec/existing-system.md`) |
+| Punto de partida | desde cero · sobre lo existente (`<repo/sistema>`, convenciones: `<docsDir>/spec/existing-system.md`) |
 | Confidencialidad | ¿Se permite enviar el código a Claude? sí / no / parcial — autorizado por `<quién>` |
 | Plazo | `<fecha/hora>` |
 | Idioma de entregables | `<idioma>` |

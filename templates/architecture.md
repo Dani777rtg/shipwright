@@ -69,15 +69,15 @@ C4Container
 | Errores | | |
 | Logging y observabilidad | | |
 | Configuración y secretos | | |
-| Seguridad (ver `docs/security/threat-model.md`) | | |
+| Seguridad (ver `<docsDir>/security/threat-model.md`) | | |
 
 ## 9. Despliegue
 
-Resumen y enlace a `docs/ops/deploy-plan.md`.
+Resumen y enlace a `<docsDir>/ops/deploy-plan.md`.
 
 ## 10. Pruebas, documentación e interfaz
 
-Enlaces a `docs/qa/test-strategy.md`, plan de documentación (tabla de docs-lead) y `docs/ux/ux-spec.md` (o `No aplica`).
+Enlaces a `<docsDir>/qa/test-strategy.md`, plan de documentación (tabla de docs-lead) y `<docsDir>/ux/ux-spec.md` (o `No aplica`).
 
 ## 11. Riesgos y deuda técnica
 

@@ -4,7 +4,7 @@ Used by the `docs-lead` agent. Structure follows **Diátaxis** (tutorials, how-t
 
 ## Required documents
 
-Each one exists or is marked `No aplica: <reason>` in `docs/qa/report.md`.
+Each one exists or is marked `No aplica: <reason>` in `<docsDir>/qa/report.md`.
 
 | Document | Diátaxis | Required when | Content |
 |---|---|---|---|
@@ -13,14 +13,14 @@ Each one exists or is marked `No aplica: <reason>` in `docs/qa/report.md`.
 | `docs/guides/*.md` | how-to | Recurring tasks exist (configure X, add a Y, operate Z) | One task per guide |
 | API reference | reference | There is an API | Generated from the OpenAPI/AsyncAPI/GraphQL contract (never hand-written); errors and auth included |
 | `docs/configuration.md` | reference | There is configuration | Every env var: purpose, default, required, example; never real secrets |
-| `ARCHITECTURE.md` + `docs/adr/` | explanation | Always (from Architect) | arc42 + C4 + decisions |
-| `docs/ops/runbook.md` | how-to | There is a deployment | Deploy, rollback, restore, rotate secrets, alerts |
+| `ARCHITECTURE.md` + `<docsDir>/adr/` | explanation | Always (from Architect) | arc42 + C4 + decisions |
+| `<docsDir>/ops/runbook.md` | how-to | There is a deployment | Deploy, rollback, restore, rotate secrets, alerts |
 | `docs/user-guide.md` | how-to | There is a UI for end users | Main tasks with screenshots |
 | `CONTRIBUTING.md` | how-to | The repo will be maintained by others | Setup, conventions, branch/commit/PR rules, how to run checks |
 | `CHANGELOG.md` | reference | Always | Keep a Changelog, generated from Conventional Commits |
 | `SECURITY.md` | reference | Public repository or external users | How to report vulnerabilities, supported versions |
 | `LICENSE` | — | Public or delivered to a third party | Chosen with the user |
-| `docs/handover.md` | — | Always | Delivery document (template `templates/handover.md`) |
+| `<docsDir>/handover.md` | — | Always | Delivery document (template `templates/handover.md`) |
 | Docs site | — | Only when there are external users (public product, API for third parties) | MkDocs Material (Python projects) or Starlight/Docusaurus (JS projects), built in CI, deployed with the product |
 
 Existing systems: follow and extend the team's documentation layout; add only what is missing for the change, plus the handover.

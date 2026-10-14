@@ -41,4 +41,4 @@ RTO/RPO medidos: <valores>
 
 1. Mitigar primero (rollback / feature flag).
 2. Comunicar a <quién>.
-3. Postmortem sin culpables en `docs/ops/postmortems/AAAA-MM-DD.md`: qué pasó, impacto, causa, acciones.
+3. Postmortem sin culpables en `<docsDir>/ops/postmortems/AAAA-MM-DD.md`: qué pasó, impacto, causa, acciones.

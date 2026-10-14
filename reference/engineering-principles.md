@@ -39,6 +39,9 @@ Subagent reports and orchestrator progress notes are terse: no pleasantries, no 
 
 **Not** terse: questions to the user, gate summaries, explanations of decisions, and every persisted artifact (requirements, architecture, ADRs, docs, commits, PRs, handover) — those are written in clear, complete prose in the deliverable language.
 
-## 8. Models and sessions
+## 8. Where mission artifacts go
+`<docsDir>` is the `docsDir` value in `.shipwright/state.json` (e.g. `docs/` for a new project, `docs/shipwright/<mission>/` in an existing system). Every Shipwright artifact (spec, architecture, ADRs, security, QA, ops, UX, plan, handover) goes under `<docsDir>`, never in a hard-coded `docs/` path. Only the delivered product's own documentation (README, tutorial, guides, configuration, user guide) lives where the repository keeps its docs.
+
+## 9. Models and sessions
 - Agents carry a default model for their role: judgment-heavy work on Opus (analyst, architecture-reviewer, security-lead, qa-lead), building and writing on Sonnet (builder, devops-lead, docs-lead, ux-lead), mechanical reporting on Haiku (status). Users override with `CLAUDE_CODE_SUBAGENT_MODEL` (+ `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` to ignore these defaults).
 - Everything a phase needs lives in files (`.shipwright/`, `docs/`), so each phase starts cleanly: at the end of a phase recommend `/clear` before the next command. Within a long phase (build, QA), recommend `/compact` when the conversation grows; the session-start hook restores the mission context after `/clear` or `/compact`. Only the user can run these commands.

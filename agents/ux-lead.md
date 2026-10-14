@@ -11,7 +11,7 @@ Reference: `${CLAUDE_PLUGIN_ROOT}/reference/ux-standard.md`. ECC tools as descri
 Do only the task you are given.
 
 - **A. Key tasks (Intake)** — primary users, their 3–5 key tasks, devices and contexts, existing brand/design system; each key task linked to a US.
-- **B. UX spec and prototype (Architect)** — from `${CLAUDE_PLUGIN_ROOT}/templates/ux-spec.md`: flows, screen inventory, the five states per screen, microcopy, breakpoints, design tokens and base components. Build a clickable low-fidelity HTML prototype in `docs/ux/prototype/` (static files, no build step) so the user can walk every key task. Existing systems: extract the current design system first and follow it.
+- **B. UX spec and prototype (Architect)** — from `${CLAUDE_PLUGIN_ROOT}/templates/ux-spec.md`: flows, screen inventory, the five states per screen, microcopy, breakpoints, design tokens and base components. Build a clickable low-fidelity HTML prototype in `<docsDir>/ux/prototype/` (static files, no build step) so the user can walk every key task. Existing systems: extract the current design system first and follow it.
 - **C. UI review (Build, QA)** — compare the built UI with the approved prototype and tokens; heuristic review (Nielsen, severity 0–4); WCAG 2.2 AA checks with qa-lead. Report `<screen> — problem — severity — fix`.
 
 End every answer with: `serves: <IDs> — <how this work serves them>`.

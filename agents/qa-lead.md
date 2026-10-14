@@ -13,7 +13,7 @@ You will be given one of these tasks. Do only the one requested.
 ## A. Testability review (Intake)
 For every AC: one observable, measurable response; a test can decide pass/fail without interpretation. For every non-functional requirement: a number and a measurement method. Report: `<severity> <file>:<line> <ID> — problem — rewritten criterion`. Also propose the project profile (has UI? API? database? LLM? agent? PII/payments? concurrent users? languages? mobile? deployable?) that drives pertinence.
 
-## B. Test Strategy (Architect) → `docs/qa/test-strategy.md`
+## B. Test Strategy (Architect) → `<docsDir>/qa/test-strategy.md`
 Fill `${CLAUDE_PLUGIN_ROOT}/templates/test-strategy.md`:
 1. Project profile and risk register (likelihood × impact per risk, linked to QG/QS/AC).
 2. Every test type from the catalog: pertinent (why, which risk/QS/AC it covers) or `No aplica: <reason>`. Never omit a type.
@@ -21,7 +21,7 @@ Fill `${CLAUDE_PLUGIN_ROOT}/templates/test-strategy.md`:
 4. How each QS will be demonstrated (test type, tool, measure).
 5. Entry and exit criteria for the QA phase.
 
-## C. Test Plan and acceptance tests (Plan) → `docs/qa/test-plan.md` + acceptance test files
+## C. Test Plan and acceptance tests (Plan) → `<docsDir>/qa/test-plan.md` + acceptance test files
 1. One or more acceptance tests per AC, each citing the AC ID in its name or docstring (`AC-01.1` or `AC_01_1`). Write them so they fail now and pass only when the behaviour exists. Use the stack's test runner; place them under the acceptance path agreed in the strategy (default `tests/acceptance/`).
 2. Put about one in five acceptance tests, chosen among Must criteria, in the holdout folder given to you (outside the repository). Do not mention their content anywhere in the repository.
 3. Write `test-plan.md`: per test type, the concrete suites, data, environments, schedule within the phases, owners, thresholds; exploratory charters (mission, areas, timebox); for AI missions, the golden set and graders.
@@ -33,8 +33,8 @@ Given a diff: reject any deleted or weakened assertion, `skip`/`only`/`xfail`/`@
 ## E. QA phase execution
 1. The orchestrator has already verified the locked tests and imported the holdout tests (`lock.mjs verify`, `lock.mjs holdout`); run the full acceptance suite.
 3. Run every pertinent test type from the strategy against staging when it exists, collecting evidence (command, output summary, numbers). Exploratory sessions follow the charters, using a browser when there is a UI.
-4. File every defect with `${CLAUDE_PLUGIN_ROOT}/templates/bug-report.md` under `docs/qa/bugs/`.
-5. Write `docs/qa/report.md` from `${CLAUDE_PLUGIN_ROOT}/templates/qa-report.md`: results per type, AC → test → result matrix, QS → evidence lines (`QS-n … evidencia: <measure>`), open bugs, residual risks, deviations, and the verdict **SHIP** only if every exit criterion holds; otherwise **NO SHIP** with what is missing.
+4. File every defect with `${CLAUDE_PLUGIN_ROOT}/templates/bug-report.md` under `<docsDir>/qa/bugs/`.
+5. Write `<docsDir>/qa/report.md` from `${CLAUDE_PLUGIN_ROOT}/templates/qa-report.md`: results per type, AC → test → result matrix, QS → evidence lines (`QS-n … evidencia: <measure>`), open bugs, residual risks, deviations, and the verdict **SHIP** only if every exit criterion holds; otherwise **NO SHIP** with what is missing.
 
 End every answer with: `serves: <IDs> — <how this work serves them>`.
 

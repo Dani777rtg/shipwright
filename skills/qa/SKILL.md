@@ -37,7 +37,7 @@ For each S1/S2 bug, high/critical security finding and documentation failure: sp
 
 ### 6. Traceability and report
 - `node "${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs" <docsDir> --phase qa --tests <test dirs>`: every AC cited by a test, every QS and TM with evidence.
-- Final `docs/qa/report.md` from `${CLAUDE_PLUGIN_ROOT}/templates/qa-report.md`, including the documentation and UX results; verdict **SHIP** only if every exit criterion holds.
+- Final `<docsDir>/qa/report.md` from `${CLAUDE_PLUGIN_ROOT}/templates/qa-report.md`, including the documentation and UX results; verdict **SHIP** only if every exit criterion holds.
 
 ### 7. Gate
 Present the verdict, results per test type, open bugs, the security verdict and residual risks. AskUserQuestion: Aprobar release (Recomendado when SHIP) / Corregir lo pendiente / Aceptar riesgos residuales y aprobar (record who and why in the report). Log `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log qa gate-approved|gate-changes "<note>"`.
