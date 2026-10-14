@@ -19,7 +19,6 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `commands/jira.md` | command | Retrieve a Jira ticket, analyze requirements, update status, or add comments. Uses the jira-integration skill and MCP or REST API. |
 | `commands/plan-prd.md` | command | Generate a lean, problem-first PRD and hand off to /plan for implementation planning. |
 | `commands/prp-prd.md` | command | Interactive PRD generator - problem-first, hypothesis-driven product spec with back-and-forth questioning |
-| `skills/brownfield-retrospective` | skill | Retroactive process audit and gap report on existing project |
 | `skills/codebase-onboarding` | skill | Analyze an unfamiliar codebase and generate a structured onboarding guide with architecture map, key entry points, conventions, and a starter CLAUDE.md. Use when joining a new project or setting up Cl |
 | `skills/deep-research` | skill | Produce cited research reports from multiple web sources using firecrawl and exa MCP tools — plan sub-questions, search and deep-read sources, then synthesize findings with inline citations and confid |
 | `skills/exa-search` | skill | Neural search via Exa MCP for web, code, and company research. Use when the user needs web search, code examples, company intel, people lookup, or AI-powered deep research with Exa's neural search eng |
@@ -45,7 +44,6 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `skills/android-clean-architecture` | skill | Clean Architecture patterns for Android and Kotlin Multiplatform projects — module structure, dependency rules, UseCases, Repositories, and data layer patterns. Use when structuring modules, layers, o |
 | `skills/api-design` | skill | REST API design patterns including resource naming, status codes, pagination, filtering, error responses, versioning, and rate limiting for production APIs. Use when designing or reviewing REST endpoi |
 | `skills/architecture-decision-records` | skill | Capture architectural decisions as numbered ADR markdown files in docs/adr/ with context, alternatives considered, consequences, and an index README. Use when the user says 'record this decision' or ' |
-| `skills/context-and-decisions` | skill | Governs domain CONTEXT.md and routes decisions to ADRs |
 | `skills/contract-first` | skill | Coordinate frontend/backend or service-to-service work through one authoritative machine-checkable contract (OpenAPI, AsyncAPI, Protocol Buffers, or JSON Schema), with generated consumer types and con |
 | `skills/council` | skill | Convene a four-voice council for ambiguous decisions, tradeoffs, and go/no-go calls. Use when multiple valid paths exist and you need structured disagreement before choosing. |
 | `skills/deep-research` | skill | Produce cited research reports from multiple web sources using firecrawl and exa MCP tools — plan sub-questions, search and deep-read sources, then synthesize findings with inline citations and confid |
@@ -70,7 +68,6 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `commands/prp-plan.md` | command | Create comprehensive feature implementation plan with codebase analysis and pattern extraction |
 | `skills/agentic-engineering` | skill | Operate as an agentic engineer using eval-first execution, decomposition, and cost-aware model routing. Use when planning or executing engineering work that agents will carry out end to end. |
 | `skills/blueprint` | skill | Turn a one-line objective into a step-by-step construction plan for multi-session, multi-agent engineering projects: one-PR-sized steps with self-contained context briefs, dependency graph with parall |
-| `skills/change-impact` | skill | Evidence-backed impact analysis before and after changes |
 | `skills/contract-first` | skill | Coordinate frontend/backend or service-to-service work through one authoritative machine-checkable contract (OpenAPI, AsyncAPI, Protocol Buffers, or JSON Schema), with generated consumer types and con |
 | `skills/council` | skill | Convene a four-voice council for ambiguous decisions, tradeoffs, and go/no-go calls. Use when multiple valid paths exist and you need structured disagreement before choosing. |
 | `skills/dev-team` | skill | Simulate a collaborative dev team session where multiple role-based personas (PM, Architect, Developer, QA) respond to the same problem together in one session. Use when designing a feature, reviewing |
@@ -88,9 +85,7 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `skills/project-flow-ops` | skill | Operate execution flow across GitHub and Linear by triaging issues and pull requests, linking active work, and keeping GitHub public-facing while Linear remains the internal execution layer. Use when  |
 | `skills/ralphinho-rfc-pipeline` | skill | Split an RFC into a multi-agent execution DAG — decompose into work units with dependencies and acceptance tests, run research, plan, implement, test, and review per unit, then merge through a queue w |
 | `skills/search-first` | skill | Research-before-coding workflow: search npm/PyPI, MCP servers, skills, and GitHub for existing tools before writing custom code, then adopt, extend, or build. Launches the researcher agent for non-tri |
-| `skills/story-lifecycle` | skill | File-based epic, story, sprint development loop |
 | `skills/team-agent-orchestration` | skill | Run team-based orchestration for agent squads: work items with owners and scope, agent Kanban state, branch isolation, control pane visibility, and merge gates. Use when coordinating multiple agents i |
-| `skills/test-collaboration` | skill | Inventories and governs test assets linked to requirements |
 
 ## build
 
@@ -187,7 +182,6 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 |---|---|---|
 | `agents/a11y-architect.md` | agent | Accessibility Architect specializing in WCAG 2.2 compliance for Web and Native platforms. Use PROACTIVELY when designing UI components, establishing design systems, or auditing code for inclusive user |
 | `agents/agent-evaluator.md` | agent | Evaluates agent output against 5-axis quality rubric (accuracy, completeness, clarity, actionability, conciseness). Use after any non-trivial task when the user wants a quality assessment, or when the |
-| `agents/bengali-reviewer.md` | agent | Reviews Bengali text handling: Unicode, normalization, i18n correctness |
 | `agents/build-error-resolver.md` | agent | Build and TypeScript error resolution specialist. Use PROACTIVELY when build fails or type errors occur. Fixes build/type errors only with minimal diffs, no architectural edits. Focuses on getting the |
 | `agents/code-reviewer.md` | agent | Expert code review specialist. Proactively reviews code for quality, security, and maintainability. Use immediately after writing or modifying code. MUST BE USED for all code changes. |
 | `agents/code-simplifier.md` | agent | Simplifies and refines code for clarity, consistency, and maintainability while preserving behavior. Focus on recently modified code unless instructed otherwise. |
@@ -215,7 +209,6 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `agents/rag-pipeline-reviewer.md` | agent | Reviews RAG (Retrieval-Augmented Generation) pipelines for retrieval quality, chunking strategy, embedding choices, and evaluation coverage. Invoke when the user builds, modifies, or debugs a RAG syst |
 | `agents/react-reviewer.md` | agent | Expert React/JSX code reviewer specializing in hook correctness, render performance, server/client component boundaries, accessibility, and React-specific security. Use for any change touching .tsx/.j |
 | `agents/refactor-cleaner.md` | agent | Dead code cleanup and consolidation specialist. Use PROACTIVELY for removing unused code, duplicates, and refactoring. Runs analysis tools (knip, depcheck, ts-prune) to identify dead code and safely r |
-| `agents/ruby-reviewer.md` | agent | Ruby/Rails review: Active Record safety, security, tests |
 | `agents/rust-reviewer.md` | agent | Expert Rust code reviewer specializing in ownership, lifetimes, error handling, unsafe usage, and idiomatic patterns. Use for all Rust code changes. MUST BE USED for Rust projects. |
 | `agents/security-reviewer.md` | agent | Security vulnerability detection and remediation specialist. Use PROACTIVELY after writing code that handles user input, authentication, API endpoints, or sensitive data. Flags secrets, SSRF, injectio |
 | `agents/seo-specialist.md` | agent | SEO specialist for technical SEO audits, on-page optimization, structured data, Core Web Vitals, and content/keyword mapping. Use for site audits, meta tag reviews, schema markup, sitemap and robots i |
@@ -250,13 +243,11 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `skills/agent-eval` | skill | Head-to-head comparison of coding agents (Claude Code, Aider, Codex, etc.) on custom tasks with pass rate, cost, time, and consistency metrics. Use when choosing between coding agents, or when a chang |
 | `skills/agent-introspection-debugging` | skill | Structured self-debugging workflow for AI agent failures using capture, diagnosis, contained recovery, and introspection reports. Use when an agent run fails and you need a reproducible diagnosis inst |
 | `skills/agent-payment-x402` | skill | Add x402 payment execution to AI agents with per-task budgets, spending controls, and non-custodial wallets. Supports Base through agentwallet-sdk and X Layer through OKX Payments / OKX Agent Payments |
-| `skills/agent-security-hardening` | skill | Hardening agents that handle untrusted content and tools |
 | `skills/agent-self-evaluation` | skill | Use after completing any non-trivial task. The agent self-rates its output on 5 axes — accuracy, completeness, clarity, actionability, conciseness — with concrete evidence per criterion. Produces a st |
 | `skills/ai-regression-testing` | skill | Regression testing strategies for AI-assisted development. Sandbox-mode API testing without database dependencies, automated bug-check workflows, and patterns to catch AI blind spots where the same mo |
 | `skills/benchmark-optimization-loop` | skill | Convert 'make it faster' requests into a bounded measured optimization loop — baseline first, generate one-hypothesis variants, benchmark each against a correctness gate, and promote the fastest safe  |
 | `skills/benchmark` | skill | Measure performance baselines and detect regressions across browser Core Web Vitals (LCP, INP, CLS, page weight), API endpoint latency percentiles, and build/test feedback times, with before/after com |
 | `skills/browser-qa` | skill | Run automated post-deploy UI verification with a browser automation MCP (claude-in-chrome, Playwright, or Puppeteer): console-error and Core Web Vitals smoke checks, form and auth-flow interaction tes |
-| `skills/change-impact` | skill | Evidence-backed impact analysis before and after changes |
 | `skills/click-path-audit` | skill | Trace every user-facing button/touchpoint through its full state change sequence to find bugs where functions individually work but cancel each other out, produce wrong final state, or leave the UI in |
 | `skills/cpp-testing` | skill | Use only when writing/updating/fixing C++ tests, configuring GoogleTest/CTest, diagnosing failing or flaky tests, or adding coverage/sanitizers. |
 | `skills/csharp-testing` | skill | C# and .NET testing patterns with xUnit, FluentAssertions, mocking, integration tests, and test organization best practices. Use when writing or reviewing xUnit tests, mocks, or integration tests in a |
@@ -276,8 +267,6 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `skills/laravel-security` | skill | Laravel security best practices — authentication, authorization, Eloquent safety, CSRF, XSS prevention, API security, and secure deployment configurations. Use when reviewing Laravel auth, Eloquent sa |
 | `skills/laravel-verification` | skill | Verification loop for Laravel projects: env checks, linting, static analysis, tests with coverage, security scans, and deployment readiness. Use when verifying a Laravel project before merge or deploy |
 | `skills/latency-critical-systems` | skill | Optimize and verify latency-sensitive systems — realtime dashboards, market data feeds, streaming agents, execution gateways, queues, and caches — by tracking p50/p95/p99 latency, freshness age, and q |
-| `skills/mcp-dependency-review` | skill | Static review of MCP configs for mutable package refs |
-| `skills/module-regression` | skill | Cross-module regression ledger with downstream acceptance commands |
 | `skills/nodejs-keccak256` | skill | Prevent Ethereum hashing bugs in JavaScript and TypeScript. Node's sha3-256 is NIST SHA3, not Ethereum Keccak-256, and silently breaks selectors, signatures, storage slots, and address derivation. Use |
 | `skills/orch-add-feature` | skill | Orchestrate building a brand-new feature end to end — research, plan, TDD implementation, review, and gated commit — by delegating each phase to the matching ECC agent. Use when adding a capability th |
 | `skills/orch-build-mvp` | skill | Orchestrate bootstrapping a working MVP from a design or spec document — ingest the SDD/PRD, plan thin vertical slices, scaffold the first end-to-end slice, then drive a generator-evaluator build loop |
@@ -302,7 +291,6 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `skills/springboot-verification` | skill | Run the full Spring Boot verification loop — Maven or Gradle build, SpotBugs, PMD, and Checkstyle static analysis, unit and Testcontainers integration tests with JaCoCo coverage, OWASP dependency and  |
 | `skills/swift-protocol-di-testing` | skill | Protocol-based dependency injection for testable Swift code — mock file system, network, and external APIs using focused protocols and Swift Testing. Use when Swift code needs testing and file system, |
 | `skills/terminal-ops` | skill | Evidence-first repo execution workflow for ECC. Use when the user wants a command run, a repo checked, a CI failure debugged, or a narrow fix pushed with exact proof of what was executed and verified. |
-| `skills/test-collaboration` | skill | Inventories and governs test assets linked to requirements |
 | `skills/verification-loop` | skill | Run a six-phase verification of a Claude Code session's work — build, type check, lint, tests with coverage, security grep, and diff review — then produce a PASS/FAIL verification report. Use when ver |
 | `skills/windows-desktop-e2e` | skill | E2E testing for Windows native desktop apps (WPF, WinForms, Win32/MFC, Qt) using pywinauto and Windows UI Automation. Use when writing E2E tests for a Windows native desktop app with pywinauto or UI A |
 | `workflows/orch-review.workflow.js` | workflow | Parallel multi-dimension review plus adversarial verification of CRITICAL/HIGH findings |
@@ -311,7 +299,6 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 
 | Path | Kind | What it does |
 |---|---|---|
-| `agents/commit-reviewer.md` | agent | Reviews staged diff and drafts Conventional Commits message |
 | `agents/doc-updater.md` | agent | Documentation and codemap specialist. Use PROACTIVELY for updating codemaps and documentation. Generates docs/CODEMAPS/*, updates READMEs and guides. Backs the /update-codemaps and /update-docs comman |
 | `agents/opensource-forker.md` | agent | Fork any project for open-sourcing. Copies files, strips secrets and credentials (20+ patterns), replaces internal references with placeholders, generates .env.example, and cleans git history. First s |
 | `agents/opensource-packager.md` | agent | Generate complete open-source packaging for a sanitized project. Produces CLAUDE.md, setup.sh, README.md, LICENSE, CONTRIBUTING.md, and GitHub issue templates. Makes any repo immediately usable with C |
@@ -326,12 +313,10 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `skills/browser-qa` | skill | Run automated post-deploy UI verification with a browser automation MCP (claude-in-chrome, Playwright, or Puppeteer): console-error and Core Web Vitals smoke checks, form and auth-flow interaction tes |
 | `skills/canary-watch` | skill | Use this skill to monitor and verify a deployed URL after releases — checks HTTP endpoints, SSE streams, static assets, console errors, and performance regressions after deploys, merges, or dependency |
 | `skills/code-tour` | skill | Create CodeTour `.tour` files — persona-targeted, step-by-step walkthroughs with real file and line anchors. Use for onboarding tours, architecture walkthroughs, PR tours, RCA tours, and structured "e |
-| `skills/conventional-commit-review` | skill | Drafts Conventional Commits message from staged changes |
 | `skills/dashboard-builder` | skill | Build monitoring dashboards that answer real operator questions for Grafana, SigNoz, and similar platforms. Use when turning metrics into a working dashboard instead of a vanity board. |
 | `skills/database-migrations` | skill | Safe, reversible database migration patterns: forward-only production changes, expand-contract zero-downtime renames, concurrent indexes, batched backfills, and per-tool workflows for PostgreSQL, Pris |
 | `skills/deployment-patterns` | skill | Deployment workflows, CI/CD pipeline patterns, Docker containerization, health checks, rollback strategies, and production readiness checklists for web applications. Use when setting up CI/CD, contain |
 | `skills/docker-patterns` | skill | Docker and Docker Compose patterns for local development, hardened CLI installer harnesses, container security, networking, volumes, and multi-service orchestration. Use when creating or reviewing Doc |
-| `skills/docs-governance` | skill | Read-only documentation governance audit and routing |
 | `skills/enterprise-agent-ops` | skill | Operational controls for long-lived or cloud-hosted agent systems — runtime lifecycle (start, pause, stop, restart), observability (logs, metrics, traces), least-privilege safety scopes and kill switc |
 | `skills/generating-python-installer` | skill | Commercial-grade Python installer expert for Windows: Nuitka extreme compilation, dist slimming, DLL footprint analysis, and Inno Setup packaging to ship the smallest, fastest installers. Use when a P |
 | `skills/git-workflow` | skill | Git workflow patterns including branching strategies, commit conventions, keeping history clean and readable, tidying local commits before merging, merge vs rebase, conflict resolution, and collaborat |
@@ -360,7 +345,6 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `commands/learn.md` | command | Extract reusable patterns from the current session and save them as candidate skills or guidance. Use to review a session on demand and persist an approved skill file; continuous-learning-v2 is a sepa |
 | `commands/save-session.md` | command | Save current session state to a dated file in ~/.claude/session-data/ so work can be resumed in a future session with full context. |
 | `skills/agent-self-evaluation` | skill | Use after completing any non-trivial task. The agent self-rates its output on 5 axes — accuracy, completeness, clarity, actionability, conciseness — with concrete evidence per criterion. Produces a st |
-| `skills/brownfield-retrospective` | skill | Retroactive process audit and gap report on existing project |
 | `skills/growth-log` | skill | Write growth log entries that extract reusable patterns from completed work — root cause, transferable rule, and a recognizable signal — instead of diary-style event narration, with a 4-8 sentence tem |
 | `skills/living-docs-governance` | skill | Keep a long-lived project's documentation from rotting by assigning existing project docs clear constitution, map, status, and history roles, then wiring the active agent harness to those canonical so |
 | `skills/rules-distill` | skill | Scan skills to extract cross-cutting principles and distill them into rules — append, revise, or create new rule files. Use when the same principle keeps recurring across skills and belongs in a rule  |
@@ -377,7 +361,6 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `skills/agent-eval` | skill | Head-to-head comparison of coding agents (Claude Code, Aider, Codex, etc.) on custom tasks with pass rate, cost, time, and consistency metrics. Use when choosing between coding agents, or when a chang |
 | `skills/agent-harness-construction` | skill | Design and optimize AI agent action spaces, tool definitions, and observation formatting for higher completion rates. Use when defining or revising an agent's tool set, action space, or observation fo |
 | `skills/agent-introspection-debugging` | skill | Structured self-debugging workflow for AI agent failures using capture, diagnosis, contained recovery, and introspection reports. Use when an agent run fails and you need a reproducible diagnosis inst |
-| `skills/agent-security-hardening` | skill | Hardening agents that handle untrusted content and tools |
 | `skills/agentic-engineering` | skill | Operate as an agentic engineer using eval-first execution, decomposition, and cost-aware model routing. Use when planning or executing engineering work that agents will carry out end to end. |
 | `skills/ai-first-engineering` | skill | Engineering operating model for teams where AI agents generate a large share of implementation output. Use when setting team process, review gates, or ownership rules for a codebase largely written by |
 | `skills/ai-regression-testing` | skill | Regression testing strategies for AI-assisted development. Sandbox-mode API testing without database dependencies, automated bug-check workflows, and patterns to catch AI blind spots where the same mo |
@@ -389,11 +372,9 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `skills/foundation-models-on-device` | skill | Apple FoundationModels framework for on-device LLM — text generation, guided generation with @Generable, tool calling, and snapshot streaming in iOS 26+. Use when adding on-device LLM features with Ap |
 | `skills/iterative-retrieval` | skill | Pattern for progressively refining context retrieval to solve the subagent context problem. Use when a subagent lacks the context it needs and retrieval must be refined across passes. |
 | `skills/loop-design-check` | skill | Design a goal-oriented agent loop or review one for failure modes: spinning, Goodhart-gaming the verifier, or running a wrong answer to completion. Covers machine-decidable goals, loop types, plan/bui |
-| `skills/mcp-dependency-review` | skill | Static review of MCP configs for mutable package refs |
 | `skills/mcp-server-patterns` | skill | Build MCP servers with Node/TypeScript SDK — tools, resources, prompts, Zod validation, stdio vs Streamable HTTP. Use Context7 or official MCP docs for latest API. Use when building or debugging an MC |
 | `skills/ml-adoption-playbook` | skill | End-to-end methodology for AI agents and software engineers to add machine learning algorithms to existing non-ML codebases. Covers problem framing, data readiness, architectural decoupling, and basel |
 | `skills/mle-workflow` | skill | Production machine-learning engineering workflow for data contracts, reproducible training, model evaluation, deployment, monitoring, and rollback. Use when building, reviewing, or hardening ML system |
-| `skills/prompt-caching-strategy` | skill | Optimizes LLM prompt cache hit rate |
 | `skills/pytorch-patterns` | skill | PyTorch deep learning patterns and best practices for building robust, efficient, and reproducible training pipelines, model architectures, and data loading. Use when writing or reviewing PyTorch trai |
 | `skills/regex-vs-llm-structured-text` | skill | Decision framework for parsing structured text (quizzes, forms, invoices, receipts, tables) with a hybrid regex-first pipeline — regex extraction handles 95%+ cheaply, a confidence scorer flags low-co |
 | `skills/team-agent-orchestration` | skill | Run team-based orchestration for agent squads: work items with owners and scope, agent Kanban state, branch isolation, control pane visibility, and merge gates. Use when coordinating multiple agents i |
@@ -402,7 +383,6 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 
 | Path | Kind | What it does |
 |---|---|---|
-| `agents/bengali-reviewer.md` | agent | Reviews Bengali text handling: Unicode, normalization, i18n correctness |
 | `agents/cpp-build-resolver.md` | agent | C++ build, CMake, and compilation error resolution specialist. Fixes build errors, linker issues, and template errors with minimal changes. Use when C++ builds fail. |
 | `agents/cpp-reviewer.md` | agent | Expert C++ code reviewer specializing in memory safety, modern C++ idioms, concurrency, and performance. Use for all C++ code changes. MUST BE USED for C++ projects. |
 | `agents/csharp-reviewer.md` | agent | Expert C# code reviewer specializing in .NET conventions, async patterns, security, nullable reference types, and performance. Use for all C# code changes. MUST BE USED for C# projects. |
@@ -426,7 +406,6 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `agents/pytorch-build-resolver.md` | agent | PyTorch runtime, CUDA, and training error resolution specialist. Fixes tensor shape mismatches, device errors, gradient issues, DataLoader problems, and mixed precision failures with minimal changes.  |
 | `agents/react-build-resolver.md` | agent | Diagnose and fix React build failures across Vite, webpack, Next.js, CRA, Parcel, esbuild, and Bun. Handles JSX/TSX compile errors, hydration mismatches, server/client component boundary failures, mis |
 | `agents/react-reviewer.md` | agent | Expert React/JSX code reviewer specializing in hook correctness, render performance, server/client component boundaries, accessibility, and React-specific security. Use for any change touching .tsx/.j |
-| `agents/ruby-reviewer.md` | agent | Ruby/Rails review: Active Record safety, security, tests |
 | `agents/rust-build-resolver.md` | agent | Rust build, compilation, and dependency error resolution specialist. Fixes cargo build errors, borrow checker issues, and Cargo.toml problems with minimal changes. Use when Rust builds fail. |
 | `agents/rust-reviewer.md` | agent | Expert Rust code reviewer specializing in ownership, lifetimes, error handling, unsafe usage, and idiomatic patterns. Use for all Rust code changes. MUST BE USED for Rust projects. |
 | `agents/swift-build-resolver.md` | agent | Swift/Xcode build, compilation, and dependency error resolution specialist. Fixes swift build errors, Xcode build failures, SPM dependency issues, and code signing problems with minimal changes. Use w |
@@ -480,7 +459,6 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `skills/android-clean-architecture` | skill | Clean Architecture patterns for Android and Kotlin Multiplatform projects — module structure, dependency rules, UseCases, Repositories, and data layer patterns. Use when structuring modules, layers, o |
 | `skills/angular-developer` | skill | Generates Angular code and provides architectural guidance. Trigger when creating projects, components, or services, or for best practices on reactivity (signals, linkedSignal, resource), forms, depen |
 | `skills/backend-patterns` | skill | Backend architecture patterns, API design, database optimization, and server-side best practices for Node.js, Express, and Next.js API routes. Use when building or reviewing Node.js, Express, or Next. |
-| `skills/bengali-nlp` | skill | Bengali text processing: Unicode, tokenization, NLP |
 | `skills/bun-runtime` | skill | Bun as runtime, package manager, bundler, and test runner. When to choose Bun vs Node, migration notes, and Vercel support. |
 | `skills/clickhouse-io` | skill | ClickHouse database patterns, query optimization, analytics, and data engineering best practices for high-performance analytical workloads. Use when writing ClickHouse schemas or queries, or when an a |
 | `skills/compose-multiplatform-patterns` | skill | Compose Multiplatform and Jetpack Compose patterns for KMP projects — state management, navigation, theming, performance, and platform-specific UI. Use when building Compose or Jetpack Compose UI, sta |
@@ -529,7 +507,6 @@ How to use these tools: `reference/using-ecc.md`. Paths are relative to `vendor/
 | `skills/motion-advanced` | skill | Advanced motion patterns for React / Next.js — drag & drop, gestures, text animations, SVG path drawing, custom hooks, imperative sequences (useAnimate), loaders, and the full API decision tree. Requi |
 | `skills/motion-foundations` | skill | Motion tokens, spring presets, performance rules, device adaptation, accessibility enforcement, and SSR safety for React / Next.js using motion/react. Foundation layer — all other motion skills depend |
 | `skills/motion-patterns` | skill | Production-ready animation patterns for React / Next.js — button, modal, toast, stagger, page transitions, exit animations, scroll, and layout — built on motion-foundations tokens and springs. Use whe |
-| `skills/mybatis-patterns` | skill | MyBatis mapper, SQL and transaction patterns |
 | `skills/mysql-patterns` | skill | MySQL and MariaDB schema, query, indexing, transaction, replication, and connection-pool patterns for production backends. Use when designing MySQL or MariaDB schemas and indexes, or when a query, tra |
 | `skills/nestjs-patterns` | skill | NestJS architecture patterns for modules, controllers, providers, DTO validation, guards, interceptors, config, and production-grade TypeScript backends. Use when building or reviewing a NestJS backen |
 | `skills/nextjs-turbopack` | skill | Next.js 16+ and Turbopack guidance — incremental Rust bundling, file-system caching, faster dev startup and HMR, Turbopack vs webpack tradeoffs, and the middleware.ts to proxy.ts filename change. Use  |

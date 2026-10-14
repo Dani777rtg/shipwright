@@ -4,7 +4,7 @@ Guía de decisión para la fase 2 (Architect). El stack se elige **por proyecto*
 
 Datos verificados a 2026-10-13 (ver [`investigacion/frameworks-agentes.md`](investigacion/frameworks-agentes.md)).
 
-Cada opción elegida instala en el proyecto **solo** sus packs (reglas, skills y revisores, en su mayoría de ECC). Ver `METODO.md` §10.
+Cada opción elegida instala en el proyecto **solo** sus packs (reglas, skills y revisores, en su mayoría de ECC). Ver `METODO.md` §4 (Architect).
 
 ## Reglas generales
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Vendors the ECC pieces listed in vendor/ecc.manifest.json from a local ECC checkout,
-// regenerates vendor/ecc.index.md and writes a review report (METODO.md §11).
+// regenerates vendor/ecc.index.md and writes a review report (METODO.md §10).
 // Usage: node scripts/ecc-sync.mjs <ecc-checkout> --release <tag> --commit <sha> [--report <file>]
 // Exit 0 = synced and clean, 1 = synced with findings for the human reviewer, 2 = cannot sync.
 import { readFileSync, writeFileSync, existsSync, rmSync, cpSync, readdirSync, statSync, mkdirSync } from 'node:fs';
@@ -67,6 +67,7 @@ export function scan(vendorDir, manifest, previousUrls = new Set()) {
 export function buildIndex(vendorDir, manifest) {
   const byPhase = {};
   for (const item of manifest.include) {
+    if (!existsSync(join(vendorDir, item.path))) continue; // pending upstream: not usable yet
     const fm = readFm(mainFile(vendorDir, item));
     const summary = (fm?.description ?? item.summary ?? '').replace(/\s+/g, ' ').slice(0, 200);
     for (const phase of item.phases ?? ['other']) (byPhase[phase] ??= []).push(`| \`${item.path}\` | ${item.kind} | ${summary.replace(/\|/g, '/')} |`);

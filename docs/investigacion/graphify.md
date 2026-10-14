@@ -39,4 +39,4 @@ graphify merge-graphs a.json b.json --out c.json
 - PowerShell 5.1: usar Windows Terminal (ANSI).
 - `global` y `reflect` no resumen solos: la calidad depende de `save-result`.
 
-Uso por fase: ver `../METODO.md` §7.
+Uso por fase: ver `../METODO.md` §8.

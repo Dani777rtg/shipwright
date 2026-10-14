@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # Shipwright — Phase 0: MISSION
 
-You are starting a Shipwright mission. Method reference: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` (§3 mission, §4 objectives chain). Follow every step; never skip one silently. If a step truly does not apply, record `No aplica: <reason>` in the mission card.
+You are starting a Shipwright mission. Method reference: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` (§2 mission, §3 objectives chain). Follow every step; never skip one silently. If a step truly does not apply, record `No aplica: <reason>` in the mission card.
 
 Mission brief: $ARGUMENTS
 
@@ -25,6 +25,7 @@ Mission brief: $ARGUMENTS
    - Empty or unrelated directory → propose **desde cero**. If the directory is not empty, ask whether to create the project in a new subfolder (propose a kebab-case name).
    - Also propose the **deliverable type**: app · funcionalidad · integración · arreglo · prueba de concepto · informe.
    Confirm both with one AskUserQuestion call (add the deadline and the deliverable language in the same call).
+   In a second call ask: the data class (public · internal · personal · payments · health), where the users are (jurisdictions for data-protection law), and the deployment platform the user has (Azure, AWS, GCP, Render, Railway, Fly.io, Vercel, Netlify, Cloudflare, DigitalOcean, own server/VPS, Kubernetes, app stores, or "decide in Architect").
 
 3. **Confidentiality (only sobre lo existente).** Ask: "¿Tu organización permite enviar el código de este sistema a Claude?" Options: Sí, tengo autorización (Recomendado) / Solo algunas partes / No o no sé. Record who authorized it.
    - "Solo algunas partes" → ask which folders; restrict all later analysis to them.
@@ -35,7 +36,7 @@ Mission brief: $ARGUMENTS
    - sobre lo existente → docs at `docs/shipwright/<mission-slug>/` (ask if the team prefers another location).
    Create `.shipwright/state.json` at the project root:
    ```json
-   { "docsDir": "<docs path>", "phase": "mission", "startingPoint": "desde-cero|existente", "deliverable": "<type>", "language": "<lang>", "mission": "<one line>", "confidentiality": "si|parcial|local", "allowedPaths": [], "shipwright": "0.6.0" }
+   { "docsDir": "<docs path>", "phase": "mission", "startingPoint": "desde-cero|existente", "deliverable": "<type>", "language": "<lang>", "mission": "<one line>", "confidentiality": "si|parcial|local", "allowedPaths": [], "shipwright": "0.7.0" }
    ```
    Then log the start: `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log mission start`.
    Run this and every later Shipwright script from the project root (the folder that holds `.shipwright/`).
@@ -45,6 +46,8 @@ Mission brief: $ARGUMENTS
 6. **Mission card.** Copy `${CLAUDE_PLUGIN_ROOT}/templates/mission.md` to `<docsDir>/mission.md` and fill what is known now: mission sentence (verb + result), deliverable, starting point, confidentiality, deadline, language, people. Propose the quality goals in order as a draft (Intake confirms them):
    - desde cero → QG-1 tiempo hasta la entrega · QG-2 fiabilidad · QG-3 usabilidad
    - sobre lo existente → QG-1 no romper nada (compatibilidad/fiabilidad) · QG-2 seguridad · QG-3 consistencia con el equipo (mantenibilidad)
+   Security is mandatory regardless of the QG order (`${CLAUDE_PLUGIN_ROOT}/reference/security-baseline.md`); also fill data class, jurisdictions and deployment platform.
+   Agent hygiene: make sure `.env*` is in `.gitignore` and remind the user never to paste secrets into the conversation.
    Leave objectives (O), metrics (KR) and DoD details as placeholders for Intake.
    Also create `<docsDir>/client/` and tell the user to drop the brief's source material there (PDFs, notes, images, audio).
 
@@ -64,8 +67,8 @@ Mission brief: $ARGUMENTS
     3. ARCHITECT  Diseñar la arquitectura [existente: documentar la actual y diseñar el cambio]
     4. PLAN       Dividir en tareas trazadas a los objetivos
     5. BUILD      Construir con tests primero, una tarea por subagente
-    6. VERIFY     Comprobar cada criterio con su test y revisiones de seguridad y calidad
-    7. SHIP       Entregar <entregable>
+    6. QA         Pruebas pertinentes y seguridad, por agentes independientes → SHIP / NO SHIP
+    7. SHIP       Desplegar a producción en <plataforma>, verificado y con rollback
     8. RETRO      Extraer lecciones para mejorar el framework
 
    Prioridades de calidad propuestas: 1º … · 2º … · 3º …

@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Shipwright — Phase 1: INTAKE
 
-Method reference: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §4 (objectives chain) and §5 (Fase 1). Follow every step; nothing is skipped silently — what does not apply becomes `No aplica: <reason>` in the mission card.
+Method reference: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3 (objectives chain) and §4 (Intake). Follow every step; nothing is skipped silently — what does not apply becomes `No aplica: <reason>` in the mission card.
 
 ## Preconditions
 Read `.shipwright/state.json` (project root). If it is missing or `phase` is `mission`, tell the user to run `/shipwright:mission` first and stop. Use `docsDir`, `startingPoint`, `language`, `confidentiality` and `allowedPaths` from it. Read `<docsDir>/mission.md`.
@@ -54,6 +54,7 @@ Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs" <docsDir> --phase intake`. F
 Spawn in parallel:
 - `shipwright:analyst` with the paths of mission.md, requirements.md, glossary.md, existing-system.md (if any) and `${CLAUDE_SKILL_DIR}/checklist.md`.
 - `shipwright:qa-lead` with task **A (testability review)** and the same paths. Store the project profile it proposes in `.shipwright/state.json` under `"qaProfile"`; Architect uses it for the Test Strategy.
+- `shipwright:security-lead` with task **A (requirements)** and the same paths. Add the security and privacy criteria it lists (or their `No aplica`) to requirements.md, record the ASVS level it proposes for the user to approve at the gate, and write `docs/security/data-inventory.md` when there is personal data.
 
 Apply their findings; findings that need a decision go to the user via AskUserQuestion. Re-run step 5 after changes.
 
@@ -61,7 +62,7 @@ Apply their findings; findings that need a decision go to the user via AskUserQu
 Present:
 - 5-line summary of the problem and the objectives
 - Counts: objectives, KRs, stories (by MoSCoW), ACs, assumptions, open questions
-- The ordered quality goals
+- The ordered quality goals and the proposed ASVS level
 - Everything marked `No aplica` and every open assumption
 - Paths of the artifacts
 

@@ -3,6 +3,15 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
+## [0.7.0] - 2026-10-14
+### Añadido
+- **Seguridad obligatoria** con agente independiente `security-lead`: clase de datos y jurisdicciones (Mission), requisitos EARS y nivel ASVS (Intake), modelo de amenazas STRIDE + LLM/agentes (Architect), verificación de dependencias contra paquetes inventados por IA (Build), informe ASVS (QA), SBOM y firma (Ship). Referencia `reference/security-baseline.md`; plantillas de modelo de amenazas e informe de seguridad.
+- **Producción en cualquier plataforma** con agente `devops-lead`: Azure, AWS, GCP, Render, Railway, Fly.io, Vercel, Netlify, Cloudflare, DigitalOcean, servidor propio, Kubernetes, tiendas móviles. Checklist de producción de 14 puntos, plan de despliegue y runbook. Ningún despliegue a producción sin aprobación del usuario.
+- Trazabilidad de amenazas (`TM-n`): mitigación en Plan, evidencia en QA, "Riesgo aceptado" como excepción explícita.
+### Cambiado
+- README y `METODO.md` reescritos: más cortos y directos (METODO de ~460 a ~160 líneas).
+- El índice de ECC ya no lista piezas pendientes de release.
+
 ## [0.6.0] - 2026-10-14
 ### Añadido
 - Disciplina **QA** transversal con agente independiente `qa-lead`: testabilidad en Intake, estrategia de pruebas en Architect, tests de aceptación desde EARS en Plan, revisión del diff de tests en Build, fase QA completa con veredicto SHIP / NO SHIP, smoke y canario en Ship, análisis de bugs escapados en Retro.

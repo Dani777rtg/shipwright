@@ -1,29 +1,29 @@
 #!/usr/bin/env node
-// shipwright trace — deterministic objective-traceability check (METODO.md §4).
+// shipwright trace — deterministic objective-traceability check (METODO.md §3).
 // Usage: node trace.mjs [docsDir=docs] [--phase intake|architect|plan|qa] [--tests <dir>]...
 // Exit 0 = ok, 1 = violations (printed), 2 = usage error.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const ID = String.raw`(?:O-\d+|KR-\d+|QG-\d+|QS-\d+|ADR-\d+|C-\d+|US-\d+|AC-\d+\.\d+|T\d{3,})`;
+const ID = String.raw`(?:O-\d+|KR-\d+|QG-\d+|QS-\d+|TM-\d+|ADR-\d+|C-\d+|US-\d+|AC-\d+\.\d+|T\d{3,})`;
 const DEF_RE = new RegExp(String.raw`^\s*(?:#{1,6}\s+|[-*]\s+)(?:\*\*)?(${ID})\b`);
 const SERVES_RE = /serves:\s*([^\n]*)/i;
-const NOT_APPLICABLE_RE = /no aplica:|not applicable:/i;
+const NOT_APPLICABLE_RE = /no aplica:|not applicable:|riesgo aceptado:|accepted risk:/i;
 
 const kindOf = (id) => id.match(/^[A-Z]+/)[0];
 
-// Which kinds each kind may serve. M is the root; O serves the mission implicitly.
+// Which kinds each kind may serve. M is the root; O serves the mission implicitly; TM (threats) are roots too.
 const ALLOWED = {
   KR: ['O'], QG: ['O', 'KR'], US: ['O'], AC: ['O', 'US'],
-  QS: ['QG'], ADR: ['QS'], C: ['ADR', 'US', 'QS'], T: ['AC', 'QS'],
+  QS: ['QG'], ADR: ['QS'], C: ['ADR', 'US', 'QS', 'TM'], T: ['AC', 'QS', 'TM'],
 };
 
 // Downward coverage required at each phase gate: [parent, child kinds that must serve it].
 const COVERAGE = {
   intake: [['O', ['KR']], ['O', ['AC']]],
   architect: [['QG', ['QS']], ['QS', ['ADR', 'C']]],
-  plan: [['AC', ['T']], ['QS', ['T']]],
+  plan: [['AC', ['T']], ['QS', ['T']], ['TM', ['T']]],
   qa: [],
 };
 const PHASES = Object.keys(COVERAGE);
@@ -77,16 +77,16 @@ export function collectTestIds(dirs) {
       if (['node_modules', '.git', '__pycache__'].includes(name)) continue;
       const p = join(d, name);
       if (statSync(p).isDirectory()) walk(p);
-      else for (const m of readFileSync(p, 'utf8').matchAll(/(?<![A-Za-z0-9])(AC[-_]\d+[._]\d+|QS[-_]\d+)(?![0-9])/g)) ids.add(m[1].replace('_', '-').replace(/(AC-\d+)_/, '$1.'));
+      else for (const m of readFileSync(p, 'utf8').matchAll(/(?<![A-Za-z0-9])(AC[-_]\d+[._]\d+|QS[-_]\d+|TM[-_]\d+)(?![0-9])/g)) ids.add(m[1].replace('_', '-').replace(/(AC-\d+)_/, '$1.'));
     }
   };
   for (const d of dirs.filter(existsSync)) walk(d);
   return ids;
 }
 
-// QS evidence may also be a QA report line such as "QS-2 … evidencia: k6 p95 = 180 ms".
+// QS and TM evidence may also be a QA report line such as "QS-2 … evidencia: k6 p95 = 180 ms".
 const evidenced = (texts) => new Set(texts.flatMap((t) => t.split(/\r?\n/))
-  .flatMap((l) => /evidencia:|evidence:/i.test(l) ? [...l.matchAll(/(?<![A-Za-z0-9])QS-\d+(?![0-9])/g)].map((m) => m[0]) : []));
+  .flatMap((l) => /evidencia:|evidence:/i.test(l) ? [...l.matchAll(/(?<![A-Za-z0-9])(?:QS|TM)-\d+(?![0-9])/g)].map((m) => m[0]) : []));
 
 export function check({ items, errors, texts = [] }, phase = 'intake', testIds = null) {
   const out = [...errors];
@@ -130,7 +130,7 @@ export function check({ items, errors, texts = [] }, phase = 'intake', testIds =
     for (const it of items.values()) {
       if (it.na) continue;
       if (it.kind === 'AC' && !tested.has(it.id)) out.push(`${where(it)} untested: no test cites ${it.id}`);
-      if (it.kind === 'QS' && !tested.has(it.id) && !withEvidence.has(it.id)) out.push(`${where(it)} no evidence: cite ${it.id} in a test or in a QA report line with "evidencia:"`);
+      if ((it.kind === 'QS' || it.kind === 'TM') && !tested.has(it.id) && !withEvidence.has(it.id)) out.push(`${where(it)} no evidence: cite ${it.id} in a test or in a QA report line with "evidencia:"`);
     }
   }
   if (![...items.values()].some((it) => it.kind === 'O')) out.push('no objectives (O-n) defined');

@@ -10,6 +10,9 @@ status: draft
 | Confidencialidad | ¿Se permite enviar el código a Claude? sí / no / parcial — autorizado por `<quién>` |
 | Plazo | `<fecha/hora>` |
 | Idioma de entregables | `<idioma>` |
+| Clase de datos | pública · interna · personal · pagos · salud |
+| Jurisdicciones de los usuarios | <países; leyes de datos aplicables: Ley 1581 (Colombia), GDPR, …> |
+| Plataforma de despliegue | <la que tiene el usuario o "por decidir en Architect"> |
 | Quien pide | |
 | Usuario final | |
 | Quien aprueba | |

@@ -68,3 +68,16 @@ test('qa phase: every AC needs a test citing it; QS needs a test or report evide
   const report = ['qa/report.md', '| QS-1 | k6 | evidencia: p95 = 40 s |\n'];
   assert.ok(!qa(['AC-01.1'], [report]).some((x) => x.includes('QS-1 no evidence')));
 });
+
+test('threats: TM needs a mitigating task at plan and evidence at qa; accepted risk waives it', () => {
+  const tm = '- TM-1: login · suplantación · fuerza bruta\n';
+  const t = '- T001 [US-01] serves: AC-01.1, TM-1 — limita intentos de login\n';
+  const base = [['mission.md', mission], ['req.md', reqs]];
+  assert.ok(run([...base, ['tm.md', tm]], 'plan').some((x) => x.includes('TM-1 not covered')));
+  assert.ok(!run([...base, ['tm.md', tm], ['tasks.md', t]], 'plan').some((x) => x.includes('TM-1')));
+  assert.ok(run([...base, ['tm.md', tm], ['tasks.md', t]], 'qa', new Set(['AC-01.1'])).some((x) => x.includes('TM-1 no evidence')));
+  const sec = ['sec.md', '| TM-1 | mitigada | evidencia: test_login_lockout |\n'];
+  assert.ok(!run([...base, ['tm.md', tm], ['tasks.md', t], sec], 'qa', new Set(['AC-01.1'])).some((x) => x.includes('TM-1')));
+  const accepted = '- TM-1: login · fuerza bruta · Riesgo aceptado: demo sin usuarios reales\n';
+  assert.ok(!run([...base, ['tm.md', accepted]], 'plan').some((x) => x.includes('TM-1')));
+});

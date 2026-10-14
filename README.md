@@ -1,63 +1,53 @@
 # Shipwright
 
-Método spec-driven para cumplir **misiones** de software con IA (Claude Code) en tiempo récord, con calidad profesional de código y documentación, y que **se mejora a sí mismo** después de cada misión.
+Plugin de Claude Code para construir software con IA **siguiendo un método**, no prompts sueltos: entiende el encargo, diseña, construye, prueba, asegura y despliega a producción, y mejora el propio método después de cada proyecto.
 
-Una misión puede partir desde cero (una app en una hackatón) o sobre un sistema existente (un empleado al que le piden "añade X"). Todo lo que construyen los agentes se traza a un objetivo claro.
+> Claude Code plugin: a spec-driven method that takes a brief to production — requirements, architecture, build, QA, security and deployment — with every task traced to an objective.
 
-> Spec-driven AI development method for Claude Code. Every mission (greenfield or brownfield) goes mission → intake → architecture → plan → build → verify → ship → retro, with every task traced to an explicit objective. Self-improving through retrospectives, evals and versioned releases.
+**Estado:** v0.7 — funcionan `mission` e `intake`; el resto de fases está diseñado y en construcción ([hoja de ruta](docs/METODO.md#hoja-de-ruta)).
 
-**Estado:** v0.6.0 — instalable. Funcionan `/shipwright:mission` e `/shipwright:intake`; las demás fases llegan en las siguientes versiones (ver hoja de ruta).
-
-Construido sobre [ECC](https://github.com/affaan-m/ecc) (MIT): incluye todo su catálogo de desarrollo sin modificarlo, cargado bajo demanda mediante un índice y sincronizado con cada release (vía pull request revisado), y añade encima el método, las fases, los gates y la trazabilidad. Ver [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES.md).
-
-## Pipeline
-
-```
-MISSION → INTAKE → ARCHITECT → PLAN → BUILD → QA → SHIP → RETRO
- confirma   gate      gate       gate          gate  gate     └─► nueva versión del framework
-```
-
-```
-/shipwright:mission "añade login con Google al sistema de la empresa"
-```
-
-- **Un solo método, siempre completo:** lo mejor posible en el menor tiempo posible, sin recortes. Todas las fases, todas las preguntas, todos los artefactos; lo que no aplica se marca y se justifica, nunca se omite en silencio.
-- **Una sola distinción:** desde cero o sobre lo existente. Al empezar, te explica qué detectó y qué va a hacer.
-- **Nada sin para qué:** misión → objetivos → métricas → calidad → decisiones → tareas → tests. Lo que no sirve a un objetivo se rechaza.
-- **QA independiente:** un agente QA, separado de quien programa, revisa la testabilidad, escribe y bloquea los tests de aceptación antes de construir, evalúa todos los tipos de prueba pertinentes (carga, estrés, seguridad, accesibilidad, evals de IA…) y da el veredicto SHIP / NO SHIP.
-- Puertas de aprobación humana entre fases.
-- [graphify](https://github.com/Graphify-Labs/graphify) como memoria en todas las fases.
-
-## Instalación
-
-En Claude Code:
+## Instalar
 
 ```
 /plugin marketplace add Dani777rtg/shipwright
 /plugin install shipwright@shipwright
 ```
 
-(En Claude Code 2.1.275 o posterior también: `/plugin install shipwright --marketplace Dani777rtg/shipwright`.)
-
 Requisitos: git, Node 18+, Python 3.10+ con `pip install graphifyy`.
 
-## Uso
+## Usar
 
 ```
 /shipwright:mission "app de IA que resume reuniones, hackatón de 24 h"
 /shipwright:intake
 ```
 
-`mission` detecta si partes desde cero o sobre un sistema existente, te explica el plan completo y espera tu confirmación. `intake` analiza el material (y tu código, si aplica) con graphify, te entrevista con la checklist completa y escribe los objetivos y requisitos trazados.
+Sirve igual para crear algo **desde cero** que para cambiar un **sistema existente** (por ejemplo, "añade login con Google a nuestra app").
+
+## Qué hace
+
+| Fase | Resultado |
+|---|---|
+| 1. Mission | Clasifica el encargo, explica el plan y pide confirmación |
+| 2. Intake | Entrevista completa → objetivos medibles y requisitos verificables |
+| 3. Architect | Arquitectura, decisiones, modelo de amenazas, estrategia de pruebas y de despliegue |
+| 4. Plan | Tareas pequeñas; QA escribe y bloquea los tests de aceptación |
+| 5. Build | Un subagente por tarea, tests primero |
+| 6. QA | Todas las pruebas pertinentes (funcionales, carga, seguridad, accesibilidad, IA) → SHIP / NO SHIP |
+| 7. Ship | Despliegue a producción en tu plataforma, verificado y con rollback |
+| 8. Retro | Lecciones → nueva versión del framework |
+
+Reglas que no se negocian:
+- **Todo tiene un para qué:** cada tarea y test cita el objetivo al que sirve; lo que no sirve se rechaza.
+- **Tú apruebas cada fase.**
+- **QA y seguridad independientes** de quien programa; los tests de aceptación no se pueden alterar.
+- **Listo = funcionando en producción**, no "compila en mi máquina".
 
 ## Documentación
 
-- [Método completo](docs/METODO.md)
-- [Catálogo de stack](docs/catalogo-stack.md)
-- [Investigación](docs/investigacion/)
-- [Lecciones aprendidas](lessons/LESSONS.md)
+- [Método](docs/METODO.md) — cómo funciona cada fase
+- [Catálogo de pruebas](reference/qa-catalog.md) · [Catálogo de stack](docs/catalogo-stack.md)
+- [Investigación](docs/investigacion/) — fuentes de cada decisión
 - [Changelog](CHANGELOG.md)
 
-## Licencia
-
-MIT
+Construido sobre [ECC](https://github.com/affaan-m/ecc) (MIT) y [graphify](https://github.com/Graphify-Labs/graphify). Licencia MIT.
