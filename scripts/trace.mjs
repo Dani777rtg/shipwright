@@ -16,7 +16,7 @@ const kindOf = (id) => id.match(/^[A-Z]+/)[0];
 // Which kinds each kind may serve. M is the root; O serves the mission implicitly; TM (threats) are roots too.
 const ALLOWED = {
   KR: ['O'], QG: ['O', 'KR'], US: ['O'], AC: ['O', 'US'],
-  QS: ['QG'], ADR: ['QS'], C: ['ADR', 'US', 'QS', 'TM'], T: ['AC', 'QS', 'TM'],
+  QS: ['QG'], ADR: ['QS', 'TM'], C: ['ADR', 'US', 'QS', 'TM'], T: ['AC', 'QS', 'TM'],
 };
 
 // Downward coverage required at each phase gate: [parent, child kinds that must serve it].

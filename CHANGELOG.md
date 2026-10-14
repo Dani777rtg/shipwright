@@ -3,6 +3,14 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
+## [0.9.0] - 2026-10-14
+### Añadido
+- `/shipwright:architect`: escenarios de calidad medibles confirmados con el usuario, stack y ADRs, `ARCHITECTURE.md` (arc42 + C4), y en paralelo modelo de amenazas, estrategia de pruebas, plan de despliegue, plan de documentación y prototipo navegable. Gate con recorrido del prototipo; al aprobar instala los packs del stack.
+- Agente `architecture-reviewer`; plantillas `architecture.md` y `adr.md` (MADR con `serves:`).
+- `scripts/install-packs.mjs`: instala en el proyecto solo las reglas, skills y agentes de ECC del stack elegido.
+### Cambiado
+- Los ADR aceptados quedan protegidos igual que los artefactos aprobados; un ADR puede servir a una amenaza (`TM-n`).
+
 ## [0.8.0] - 2026-10-14
 ### Añadido
 - **Documentación de los repositorios entregados** con agente `docs-lead`: estándar Diátaxis por tipo de proyecto, documentación verificada en QA (quick start en máquina limpia, ejemplos ejecutables, enlaces, desfase con el código), sitio de docs solo con usuarios externos, documento de entrega.

@@ -1,6 +1,6 @@
 # Método Shipwright
 
-Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.8.0**.
+Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.9.0**.
 
 ## 1. Principios
 
@@ -144,10 +144,10 @@ Nada aprende ni se inyecta solo.
 | Qué | Dónde |
 |---|---|
 | Fases | `skills/<fase>/SKILL.md` |
-| Agentes | `agents/analyst.md`, `qa-lead.md`, `security-lead.md`, `devops-lead.md`, `docs-lead.md`, `ux-lead.md` |
+| Agentes | `agents/analyst.md`, `architecture-reviewer.md`, `qa-lead.md`, `security-lead.md`, `devops-lead.md`, `docs-lead.md`, `ux-lead.md` |
 | Referencias | `reference/qa-catalog.md`, `security-baseline.md`, `deploy-catalog.md`, `docs-standard.md`, `ux-standard.md`, `git-workflow.md`, `using-ecc.md` |
 | Plantillas | `templates/` |
-| Scripts | `scripts/trace.mjs` (trazabilidad), `lock.mjs` (huellas), `metrics.mjs`, `ecc-sync.mjs` |
+| Scripts | `scripts/trace.mjs` (trazabilidad), `lock.mjs` (huellas), `install-packs.mjs` (packs del stack), `metrics.mjs`, `ecc-sync.mjs` |
 | Hooks | Protección de specs aprobadas y tests bloqueados (edición y consola); inicio de fase en métricas |
 | Tests | `node --test "scripts/**/*.test.mjs"` — CI en Windows, macOS y Linux |
 
@@ -158,8 +158,8 @@ Nada aprende ni se inyecta solo.
 | v0.5 | Plugin, `mission`, `intake`, trazabilidad, ECC |
 | v0.6 | Disciplina QA |
 | v0.7 | Seguridad obligatoria, producción en cualquier plataforma, documentación concisa |
-| **v0.8** | Documentación de los repos entregados, UX/UI, flujo git, `status` *(actual)* |
-| v0.9 | `architect` |
+| v0.8 | Documentación de los repos entregados, UX/UI, flujo git, `status` |
+| **v0.9** | `architect` *(actual)* |
 | v0.10 | `plan` + `build` + `change` |
 | v0.11 | `qa` + `ship` |
 | v0.12 | `retro`, evals de skills, banco de misiones |

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // PreToolUse hook (Write|Edit|MultiEdit): block edits to
-//  - artifacts whose frontmatter says `status: approved` (approved specs change only via /shipwright:change), and
+//  - artifacts whose frontmatter says `status: approved` or `accepted` (they change only via /shipwright:change), and
 //  - paths listed in `lockedPaths` of .shipwright/state.json (e.g. acceptance tests written by the QA agent,
 //    so the builder cannot weaken them to make them pass).
 // Shell commands (Bash|PowerShell) that write to a locked path are blocked by a heuristic; this is a guardrail
@@ -15,7 +15,7 @@ function readState(root) {
 
 export function isApproved(text) {
   const fm = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-  return !!fm && /^status:\s*approved\s*$/m.test(fm[1]);
+  return !!fm && /^status:\s*(approved|accepted)\s*$/m.test(fm[1]);
 }
 
 // Glob → RegExp: `**` any depth, `*` within one segment; a trailing `/**` also matches the directory itself.

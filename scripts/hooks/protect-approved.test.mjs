@@ -15,6 +15,8 @@ test('isApproved reads only frontmatter status', () => {
   assert.equal(isApproved('---\r\nstatus: approved\r\n---\r\n# x'), true);
   assert.equal(isApproved('---\nstatus: draft\n---\nstatus: approved'), false);
   assert.equal(isApproved('# no frontmatter'), false);
+  assert.equal(isApproved('---\nstatus: accepted\n---\n# ADR-1'), true);
+  assert.equal(isApproved('---\nstatus: proposed\n---\n# ADR-1'), false);
 });
 
 test('hook blocks approved file and allows draft / missing / malformed input', () => {
