@@ -8,11 +8,16 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const PLUGIN = join(dirname(fileURLToPath(import.meta.url)), '..');
 
+// The ECC manifest tags tools with the 0.x phase names; Shipwright 1.0 phases map onto them.
+const PHASE_TAGS = { spec: ['mission', 'intake', 'architect', 'plan'], build: ['build'], verify: ['verify'], ship: ['ship'], retro: ['retro'] };
+
 export function find(items, words, phase = null) {
   const ws = words.map((w) => w.toLowerCase());
+  const tags = PHASE_TAGS[phase] ?? [phase];
+  const inPhase = (i) => Number((i.phases ?? []).some((p) => tags.includes(p)));
   return items
     .filter((i) => !i.pending && ws.every((w) => `${i.path} ${i.summary ?? ''}`.toLowerCase().includes(w)))
-    .sort((a, b) => Number((b.phases ?? []).includes(phase)) - Number((a.phases ?? []).includes(phase)) || a.path.localeCompare(b.path));
+    .sort((a, b) => inPhase(b) - inPhase(a) || a.path.localeCompare(b.path));
 }
 
 function main(args) {

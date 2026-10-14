@@ -14,3 +14,7 @@ test('find searches every phase, puts the current phase first, skips pending ite
   assert.deepEqual(find(items, ['security', 'review'], 'architect').map((i) => i.path), ['agents/security-reviewer.md']);
   assert.deepEqual(find(items, ['nothing']), []);
 });
+
+test('Shipwright 1.0 phase names map onto the manifest tags', () => {
+  assert.deepEqual(find(items, ['a'], 'spec').map((i) => i.path)[0], 'agents/a11y-architect.md');
+});

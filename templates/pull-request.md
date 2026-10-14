@@ -2,7 +2,7 @@
 
 <1–3 líneas>
 
-serves: <AC-… / QS-… / TM-…> — <cómo>
+serves: <AC-… / TM-…>
 
 ## Cómo probarlo
 

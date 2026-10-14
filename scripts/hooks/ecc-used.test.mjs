@@ -27,10 +27,10 @@ test('hook logs once per phase inside a mission and never fails', () => {
   assert.equal(read(agent).status, 0);
   assert.equal(existsSync(join(root, 'docs', 'metrics.md')), false);
   mkdirSync(join(root, '.shipwright'));
-  writeFileSync(join(root, '.shipwright', 'state.json'), JSON.stringify({ docsDir: 'docs/sw', phase: 'plan' }));
+  writeFileSync(join(root, '.shipwright', 'state.json'), JSON.stringify({ docsDir: 'docs/sw', phase: 'spec' }));
   read(agent);
   read(agent);
-  const rows = readFileSync(join(root, 'docs', 'sw', 'metrics.md'), 'utf8').match(/\| plan \| ecc \| agents\/planner\.md \|/g);
+  const rows = readFileSync(join(root, 'docs', 'sw', 'metrics.md'), 'utf8').match(/\| spec \| ecc \| agents\/planner\.md \|/g);
   assert.equal(rows.length, 1);
   assert.equal(spawnSync(process.execPath, [hook], { input: '{' }).status, 0);
 });

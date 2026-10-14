@@ -1,10 +1,10 @@
 # Catálogo de stack
 
-Guía de decisión para la fase 2 (Architect). El stack se elige **por proyecto** y se justifica en un ADR. Este catálogo se actualiza en cada retro.
+Guía de decisión para la fase Spec. El stack se elige **por proyecto** y se justifica en la sección Decisiones de la spec. Este catálogo se actualiza en cada retro.
 
 Datos verificados a 2026-10-13 (ver [`investigacion/frameworks-agentes.md`](investigacion/frameworks-agentes.md)).
 
-Cada opción elegida instala en el proyecto **solo** sus packs (reglas, skills y revisores, en su mayoría de ECC). Ver `METODO.md` §4 (Architect).
+Cada opción elegida instala en el proyecto **solo** sus packs (reglas, skills y revisores, en su mayoría de ECC). Se instalan al aprobar la spec con `install-packs.mjs --stack` (`reference/stack-packs.json`).
 
 ## Reglas generales
 

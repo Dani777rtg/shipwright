@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Mission metrics log (METODO.md §9). Appends events to <docsDir>/metrics.md and prints a per-phase summary.
+// Mission metrics log (METODO.md §7). Appends events to <docsDir>/metrics.md and prints a per-phase summary.
 // Usage:
 //   node metrics.mjs log <phase> <event> [note]   event: start | gate-approved | gate-changes | gate-back | end | ecc
 //   (ecc rows are written by the ecc-used hook: one per ECC tool read in a phase, note = its vendor path)
@@ -9,7 +9,7 @@ import { readFileSync, writeFileSync, appendFileSync, existsSync, mkdirSync } fr
 import { join, dirname } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-export const PHASES = ['mission', 'intake', 'architect', 'plan', 'build', 'qa', 'ship', 'retro', 'change'];
+export const PHASES = ['spec', 'build', 'verify', 'ship', 'retro', 'change'];
 export const EVENTS = ['start', 'gate-approved', 'gate-changes', 'gate-back', 'end', 'ecc'];
 const HEADER = '# Métricas de la misión\n\n<!-- Generado por Shipwright. No editar a mano. -->\n\n| Fecha (UTC) | Fase | Evento | Nota |\n|---|---|---|---|\n';
 

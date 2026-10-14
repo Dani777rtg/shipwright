@@ -3,6 +3,31 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
+## [1.0.0] - 2026-10-14
+Reescritura orientada a velocidad sin bajar el suelo de calidad. Rompe compatibilidad: las misiones empezadas con 0.x siguen con la etiqueta `v0.16.0`.
+
+### Cambiado
+- **4 fases y 2 aprobaciones humanas:** `spec` (reúne mission, intake, architect y plan) → `build` → `verify` → `ship`, encadenadas solas. Tú apruebas la spec con el plan y la entrega. `retro` pasa a ser opcional.
+- **Un solo documento de proceso**, `spec.md`, más `verify.md`. El producto entregado sí se documenta: README con quick start probado en un clon limpio, configuración, API.
+- **Paralelo por defecto:** un qa-lead por historia escribe los tests de aceptación a la vez; builders en worktrees para todas las tareas independientes; revisión de código y del diff de tests por tanda, no por tarea; puerta por tarea ligera (tests del área y tipos), suite completa por tanda.
+- **Deducir antes que preguntar:** una sola tanda de preguntas; lo demás son supuestos con dueño y fecha.
+- **Contexto mínimo** para cada builder: su tarea, criterios, tests y archivos.
+- **Ritmo visible:** tras cada tanda, hora estimada contra el plazo y propuesta de recorte en cuanto no se llega.
+- **Expertos de ECC nombrados por fase** (explorador de código, planner, revisores de código, base de datos y seguridad, e2e, accesibilidad, fallos silenciosos, documentación, despliegue); los packs del stack se instalan al aprobar la spec, antes del primer commit.
+- Trazabilidad simplificada: O → US → AC → T → test, más TM solo para historias de riesgo alto; `serves:` solo con IDs. Presupuesto por historia en lugar de tamaños S/M/L.
+- `bench.mjs` penaliza también las palabras de proceso.
+
+### Eliminado
+- Fases `mission`, `intake`, `architect`, `plan`, `qa` (ahora `spec` y `verify`); tamaños S/M/L.
+- Agentes `analyst`, `architecture-reviewer` (ahora `spec-reviewer`) y `ux-lead` (expertos de ECC cuando hay interfaz).
+- Plantillas de arquitectura arc42, ADR, modelo de amenazas, estrategia y plan de pruebas, requisitos, glosario, sistema existente, tareas, UX, informes de QA y seguridad, plan de despliegue, runbook y handover (ahora `spec.md`, `verify.md` y `deploy.md`).
+- Escenarios QS, metas de calidad QG, KR, ADR y componentes como IDs trazados.
+
+### Añadido
+- `scripts/refs.test.mjs`: toda herramienta de ECC y todo archivo de Shipwright que nombran skills y agentes existe; una sincronización de ECC que la quite rompe el CI.
+
+Origen: primer uso real (sistema-taller): 7 h hasta empezar a construir, 55.700 palabras de documentos y 63 tareas para 4 funcionalidades.
+
 ## [0.16.0] - 2026-10-14
 ### Añadido
 - **Tamaño de misión S / M / L** (`docs/METODO.md` §2), deducido en `/shipwright:mission` y confirmado por el usuario. Decide el recorrido: S no tiene fase Architect, entrevista solo 5 secciones, QA, Ship y Retro ligeros; M aplica el rigor según riesgo; L es el método completo. Una historia de riesgo alto sube una misión S a M; el tamaño nunca baja en silencio.

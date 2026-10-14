@@ -1,185 +1,92 @@
 # Método Shipwright
 
-Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.16.0**.
+Cómo Shipwright lleva un encargo hasta software funcionando, rápido y sin bajar la calidad. Versión **v1.0.0**.
 
 ## 1. Principios
 
-1. **Método proporcional.** El tamaño de la misión (§2) decide qué fases y documentos existen, y el riesgo de cada historia (§3) cuánto rigor lleva. Nada se omite en silencio, pero lo que no aplica se registra en una línea, no elemento por elemento. Lo pequeño se hace en pequeño: producir más documentos no es trabajar mejor.
-2. **Velocidad por paralelismo y por tamaño justo**, nunca recortando tests, seguridad ni requisitos aprobados.
-3. **Todo tiene un para qué.** Cada decisión, tarea y test cita el objetivo al que sirve (§3).
-4. **Spec antes que código.**
-5. **El humano aprueba cada fase.**
-6. **QA, seguridad, operación, documentación y UX independientes** de quien programa (§5).
-7. **Listo = funcionando en producción**, observable, reversible y documentado.
-8. **Lo no negociable es determinista:** hooks y scripts, no ruegos en un prompt.
-9. **Nunca el mismo error dos veces:** cada misión mejora el framework (§9).
-10. **Rigor en el proceso, simplicidad en el código.** Todos los agentes siguen los [principios de ingeniería](../reference/engineering-principles.md): pensar antes de actuar (Karpathy), construir lo mínimo que funciona (ponytail), evidencia antes de afirmar y depuración por causa raíz (superpowers), reportes breves entre agentes (caveman).
-11. **Modelo según el rol:** Opus para juicio (análisis, arquitectura, seguridad, QA), Sonnet para construir y documentar, Haiku para reportes. **Sesión limpia por fase:** al cerrar cada fase se recomienda `/clear`; todo el estado está en archivos y un hook lo restaura.
+1. **Velocidad primero, sobre un suelo de calidad fijo.** Lo que no se negocia: tests de aceptación escritos desde los criterios por un agente independiente y bloqueados; TDD; suite, tipos y lint en verde antes de integrar; revisión de seguridad de los diffs sensibles y escaneos; aprobación humana de la spec y de producción. Todo lo demás se mide por si acelera o frena.
+2. **Los agentes construyen en paralelo; las comprobaciones ejecutables dan la calidad.** Un agente de QA por historia, un builder por tarea independiente, revisores lado a lado. La calidad la prueban tests y escaneos, no documentos.
+3. **Deducir antes que preguntar.** Se lee el encargo, el repositorio y su documentación; se pregunta solo lo que bloquea, en una tanda. Lo demás es un supuesto con dueño y fecha.
+4. **Un solo documento de proceso.** `spec.md` reúne objetivos, historias, criterios, decisiones, diseño mínimo, amenazas, pruebas y tareas. `verify.md` cierra con el veredicto. El producto entregado sí queda bien documentado (README que funciona, configuración, API, guías).
+5. **Rigor según riesgo** (§3): lo pesado solo donde hay dinero, datos personales, permisos, integraciones u operaciones irreversibles.
+6. **Dos aprobaciones humanas:** la spec (con el plan) y la entrega.
+7. **Lo no negociable es determinista:** hooks y scripts, no ruegos en un prompt.
+8. **Expertos de ECC por fase**, nombrados en cada paso, y los packs del stack instalados desde el primer commit.
+9. **Principios de ingeniería** para todos los agentes ([`engineering-principles`](../reference/engineering-principles.md)): pensar antes de actuar, lo mínimo que funciona, cambios quirúrgicos, evidencia antes de afirmar, depuración por causa raíz, velocidad.
 
-## 2. Misión
+## 2. Fases
 
-Todo empieza con `/shipwright:mission "<encargo>"`. Una única distinción, detectada sola y confirmada por el usuario:
+| # | Fase | Comando | Qué pasa | Humano |
+|---|---|---|---|---|
+| 1 | **Spec** | `/shipwright:spec "<encargo>"` | Lee el encargo y el sistema (explorador de código de ECC + graphify local, en paralelo); una tanda de preguntas; escribe `spec.md`; spec-reviewer la revisa; **aprobación**; packs del stack instalados; un qa-lead por historia escribe los tests de aceptación en paralelo; se bloquean | **Aprueba spec y plan** |
+| 2 | **Build** | `/shipwright:build` | Tandas de tareas listas, cada una en su worktree con su builder; puerta ligera por tarea (tests del área + tipos; seguridad si el diff es sensible); revisión y suite completa por tanda; ritmo y hora estimada contra el plazo; pasada final de documentación con quick start probado y `/simplify` | — |
+| 3 | **Verify** | `/shipwright:verify` | Huellas, tests ocultos, suite completa, tipos de prueba pertinentes, seguridad, `/code-review`, `/security-review`, cazador de fallos silenciosos; corrección en paralelo; **SHIP / NO SHIP** | Solo si NO SHIP |
+| 4 | **Ship** | `/shipwright:ship` | PR, despliegue a producción con canario y rollback, o documento | **Aprueba la entrega** |
+| — | Change | `/shipwright:change` | Delta con impacto y aprobación sobre la spec o los tests bloqueados | Aprueba |
+| — | Status | `/shipwright:status` | Fase, ritmo, hora estimada contra el plazo, riesgos | — |
+| — | Retro | `/shipwright:retro` | Opcional: lecciones → cambios probados al framework | Aprueba |
 
-| | Desde cero | Sobre lo existente |
+Las fases se encadenan solas: al aprobar la spec empieza Build, Build pasa a Verify y un SHIP lleva a la aprobación de la entrega. Los comandos sirven para retomar.
+
+**Desde cero o sobre lo existente.** Desde cero: la spec elige el stack ([`catalogo-stack`](catalogo-stack.md)) y la primera tarea es un esqueleto que corre y despliega. Sobre lo existente: primero se pregunta si se permite enviar el código a Claude; la spec documenta el sistema actual en una sección y se siguen sus convenciones.
+
+## 3. Trazabilidad, riesgo y presupuesto
+
+Cadena: **O** objetivo (con medida) → **US** historia → **AC** criterio EARS → **T** tarea → test. Las historias de riesgo alto añaden **TM** amenazas (sirven a su historia; las tareas que las mitigan sirven a la amenaza).
+
+- Cada elemento lleva `serves: <IDs>`. `scripts/trace.mjs` comprueba huérfanos, IDs y tipos inválidos, cobertura (todo O con historia, toda historia con criterio, todo criterio y amenaza con tarea) y, en Verify, que cada criterio tenga un test que lo cite y cada amenaza evidencia.
+- **Riesgo.** Cada historia lleva `riesgo: alto — <motivo>` o `riesgo: bajo — <motivo>`. Es alto si toca dinero (cobros, facturación, caja, crédito), datos personales o sensibles, autenticación, permisos o aislamiento entre clientes o sedes, una integración externa, u operaciones masivas o irreversibles sobre datos. Ante la duda, alto.
+  - Toda historia: criterios EARS, tests de aceptación, TDD, revisión de código, controles base de seguridad.
+  - Solo riesgo alto: amenazas, tipos de prueba pesados (carga, DAST, matriz de autorización, exploratoria, recuperación), pasada adversaria. `trace.mjs` rechaza amenazas sobre historias de riesgo bajo.
+- **Presupuesto** (comprobado por `trace.mjs`): ≤ 12 historias por misión, ≤ 6 criterios y ≤ 3 tareas por historia, ≤ 4 amenazas por historia de riesgo alto. Pasarse exige la línea `Presupuesto excedido: <TIPO> — <motivo>`, que el usuario ve en la aprobación.
+
+## 4. Agentes
+
+| Agente | Modelo | Cuándo |
 |---|---|---|
-| Ejemplo | App de IA en una hackatón | "Añade login con Google a nuestra app" |
-| Primero | Entender el problema | Entender el sistema (graphify, convenciones), luego el problema |
-| Arquitectura | Nueva | Se documenta la actual y se diseña el cambio |
-| Calidad propuesta | Tiempo de entrega · fiabilidad · usabilidad | No romper nada · seguridad · consistencia con el equipo |
-| Entrega típica | Producto en producción + demo | Pull request + pruebas + nota de impacto |
+| `spec-reviewer` | Opus | Revisa la spec antes de la aprobación (solo lectura) |
+| `qa-lead` | Opus | Tests de aceptación por historia; revisión del diff de tests por tanda; verificación y veredicto |
+| `security-lead` | Opus | Diffs sensibles y dependencias nuevas; verificación de seguridad; endurecimiento de producción |
+| `builder` | Sonnet | Una tarea, tests primero, con contexto mínimo |
+| `docs-lead` | Sonnet | Pasada final de documentación del producto y quick start probado |
+| `devops-lead` | Sonnet | Solo si se despliega: staging y producción |
 
-**Tamaño.** Se deduce del encargo y del repositorio, y el usuario lo confirma:
+Expertos de ECC por fase: tabla en [`using-ecc`](../reference/using-ecc.md). El catálogo completo de ECC (324 piezas, sin modificar, en `vendor/ecc/`) se consulta con `scripts/ecc-find.mjs`; cada pieza leída en una misión queda registrada en `metrics.md`.
 
-| | S | M | L |
-|---|---|---|---|
-| Cuándo | Arreglo o cambio pequeño; todas las historias de riesgo bajo | Funcionalidad sobre lo existente; alguna historia de riesgo alto | Producto nuevo o cambio grande |
-| Fases | Mission → Intake → Plan → Build → QA ligero → Ship → Retro breve (sin Architect) | Todas; rigor según el riesgo de cada historia | Todas, completas |
-| Entrevista | Secciones 1, 3, 5, 12 y 15 de la checklist | Las secciones que tocan las historias | Checklist completa |
-| Documentos obligatorios | mission, requirements, tasks, informe de QA | + ARCHITECTURE, amenazas, estrategia de pruebas, informe de seguridad | + plan de despliegue, documento de entrega |
-| Presupuesto | ≤ 3 historias, 12 criterios, 10 tareas, 1 ADR, 0 amenazas, 0 QS | ≤ 10 historias, 50 criterios, 40 tareas, 6 ADR, 15 amenazas, 8 QS | Sin tope |
-
-`trace.mjs` comprueba el presupuesto en cada gate. Pasarse no está prohibido: exige la línea `Presupuesto excedido: <TIPO> — <motivo>` en un documento de la misión, y el usuario la ve en el gate. Una historia de riesgo alto en una misión S la sube a M; el tamaño nunca baja en silencio.
-
-Además se fijan: tipo de entregable (app, funcionalidad, integración, arreglo, PoC, informe), plazo, idioma de los entregables, clase de datos, jurisdicciones, plataforma de despliegue y —si hay código existente— si se permite enviarlo a Claude. Antes de empezar, el agente explica el plan y espera confirmación. Tarjeta: [`templates/mission.md`](../templates/mission.md).
-
-## 3. Cadena de objetivos
-
-Misión → **O** objetivos de usuario → **KR** métricas → **QG** 3 objetivos de calidad ordenados (ISO 25010) → **QS** escenarios medibles → **TM** amenazas → **ADR** decisiones → **C** componentes → **US/AC** historias y criterios EARS → **T** tareas → tests.
-
-- Cada elemento lleva `serves: <ID> — <cómo>`. Sin él, o con un ID inexistente, es **huérfano** y se rechaza.
-- El objetivo de la arquitectura es cumplir los QG en su orden con el mínimo de piezas, demostrado por escenarios medibles. Ejemplo QS: *el jurado sube un audio de 5 min con el wifi del evento → resumen en ≤ 60 s, 5 de 5 veces*.
-- **Rigor según riesgo.** En Intake cada historia lleva `riesgo: alto — <motivo>` o `riesgo: bajo — <motivo>`. Es **alto** si toca dinero (cobros, facturación, caja, crédito), datos personales o sensibles, autenticación, permisos o aislamiento entre clientes o sedes, una integración externa, u operaciones masivas o irreversibles sobre datos (borrado, migración, respaldo, restauración). Ante la duda, alto. El usuario confirma la clasificación en el gate de Intake.
-  - Toda historia: criterios EARS, un test de aceptación por AC, tests unitarios, revisión de código y los controles base de seguridad del sistema.
-  - Solo las de riesgo alto: escenarios QS, amenazas TM y ADR propios; tipos de prueba pesados (DAST, carga, matriz completa de autorización, exploratoria, caos, recuperación); revisión de diff sensible por security-lead.
-  - Una historia de riesgo bajo que añade una dependencia o un patrón nuevo sigue necesitando ADR.
-- `scripts/trace.mjs` lo comprueba (con `--size`, también el presupuesto del tamaño) en cada gate (`--phase intake|architect|plan|qa`): huérfanos, IDs inválidos, historias sin `riesgo:` (en Intake), cobertura (todo O con KR y AC, todo QG con QS, todo AC/QS/TM con tarea, y en QA todo AC con test y todo QS/TM con evidencia). Un revisor valida además que cada justificación tenga sentido.
-
-## 4. Fases
-
-| # | Fase | Comando | Produce | Revisan | Gate |
-|---|---|---|---|---|---|
-| 1 | Mission | `/shipwright:mission` | `mission.md` borrador, plan explicado | — | Usuario confirma |
-| 2 | Intake | `/shipwright:intake` | Objetivos, `requirements.md` (EARS), glosario, inventario de datos, tareas clave de usuario | analyst, qa-lead, security-lead, ux-lead | Usuario aprueba |
-| 3 | Architect | `/shipwright:architect` | `ARCHITECTURE.md` (arc42, C4), ADRs, QS, modelo de amenazas, estrategia de pruebas, plan de despliegue, prototipo UX, plan de documentación | architect-reviewer y los 5 agentes de §5 | Usuario aprueba (y recorre el prototipo) |
-| 4 | Plan | `/shipwright:plan` | Tareas `T001`, tests de aceptación bloqueados, plan de pruebas | qa-lead | Usuario aprueba |
-| 5 | Build | `/shipwright:build` | Código + tests + docs, un subagente por tarea, un PR por tarea | reviewer, qa-lead, security-lead, ux-lead | Automático |
-| 6 | QA | `/shipwright:qa` | Informes de pruebas, seguridad, documentación y UX → SHIP / NO SHIP | qa-lead, security-lead, docs-lead, ux-lead | Usuario aprueba |
-| 7 | Ship | `/shipwright:ship` | Producción verificada, release con CHANGELOG, runbook, SBOM, documento de entrega | devops-lead, security-lead, docs-lead | Usuario confirma cada despliegue |
-| 8 | Retro | `/shipwright:retro` | Lecciones → nueva versión del framework | — | Usuario aprueba |
-| — | Cambio | `/shipwright:change` | Delta sobre spec, arquitectura, plan y amenazas | — | Usuario aprueba |
-| — | Estado | `/shipwright:status` | Reporte de una pantalla para quien pidió el trabajo | — | — |
-
-**Mission.** Clasifica el encargo, pregunta lo de §2, comprueba herramientas (git, Node, graphify), crea la tarjeta y explica el plan.
-
-**Intake.** Si hay sistema existente: graphify + convenciones + comportamiento actual (`existing-system.md`). graphify sobre el material del cliente: sus ambigüedades se vuelven preguntas. Entrevista con la [checklist completa](../skills/intake/checklist.md) en bloques de 4 preguntas con opciones; ante "no sé", el agente investiga y vuelve con opciones y fuentes. Salida: O, KR, QG, historias y criterios EARS (incluidos los de seguridad y privacidad), nivel ASVS propuesto. La spec aprobada queda protegida.
-
-**Architect.** QS por cada QG; stack (catálogo + ADR; en sistemas existentes, el actual); arc42 con C4 L1–L2, datos, contratos, flujos, decisiones transversales, despliegue y riesgos. En paralelo: modelo de amenazas, estrategia de pruebas (todos los tipos evaluados), plan de despliegue para la plataforma del usuario, plan de documentación y, si hay interfaz, flujos + prototipo navegable + sistema de diseño. Al aprobar se instalan los packs del stack.
-
-**Plan.** Tareas de 2–15 min con `serves:`, rutas, verificación y complejidad (> 6 se divide). qa-lead escribe los tests de aceptación desde los EARS; quedan bloqueados (hook + huellas SHA-256) y ~1 de cada 5 queda oculto hasta QA.
-
-**Build.** Subagente nuevo por tarea con su objetivo en la primera línea. TDD para tests internos; los de aceptación no se tocan. La documentación se actualiza en la misma tarea que el código. Tras cada tarea: revisión de código, del diff de tests (qa-lead), de dependencias nuevas y diffs sensibles (security-lead), de la interfaz contra el prototipo (ux-lead), PR con Conventional Commits y `graphify update`. Desviación de la arquitectura → `/shipwright:change`.
-
-**QA.** Despliegue a staging, huellas intactas, tests ocultos incorporados, todos los tipos de prueba pertinentes, verificación de amenazas y nivel ASVS, exploración con IA, bugs con severidad, documentación verificada (quick start en máquina limpia, ejemplos, enlaces) y revisión UX. Criterios de salida en [`reference/qa-catalog.md`](../reference/qa-catalog.md).
-
-**Ship.** Preparación de la release → checklist → **aprobación del usuario** → producción → canario ≥ 15 min (rollback inmediato si empeora). En sistemas existentes: PR con nota de impacto; en informes o PoC: entrega del documento o demo. Checklist de producción de 14 puntos con evidencia, runbook, SBOM y firma, tag de versión con CHANGELOG, documentación final y documento de entrega.
-
-**Retro.** §9.
-
-## 5. Disciplinas transversales
-
-Cinco agentes independientes de quien programa. Cada referencia detalla qué hace el agente en cada fase, sus herramientas y sus criterios de salida.
-
-| Disciplina | Agente | Garantiza | Referencia |
-|---|---|---|---|
-| QA | `qa-lead` | Todas las pruebas pertinentes (40+ tipos); tests de aceptación inalterables; veredicto SHIP / NO SHIP | [`qa-catalog`](../reference/qa-catalog.md) |
-| Seguridad | `security-lead` | Clase de datos y leyes aplicables, nivel ASVS, modelo de amenazas, dependencias verificadas, SBOM y firma | [`security-baseline`](../reference/security-baseline.md) |
-| Producción | `devops-lead` | Despliegue en la plataforma del usuario, checklist de 14 puntos, rollback ensayado, runbook | [`deploy-catalog`](../reference/deploy-catalog.md) |
-| Documentación | `docs-lead` | Repositorio que se explica solo (Diátaxis), documentación verificada, documento de entrega | [`docs-standard`](../reference/docs-standard.md) |
-| UX/UI | `ux-lead` | Flujos, prototipo navegable aprobado por el usuario, sistema de diseño, accesibilidad | [`ux-standard`](../reference/ux-standard.md) |
-
-Git del repositorio entregado: ramas cortas, Conventional Commits con `serves:`, PR con checklist, semver y CHANGELOG automático ([`git-workflow`](../reference/git-workflow.md)).
-
-Plataformas de despliegue cubiertas: Azure, AWS, GCP, Render, Railway, Fly.io, Vercel, Netlify, Cloudflare, DigitalOcean, servidor propio/Docker, Kubernetes y tiendas móviles. **Ningún despliegue a producción, cambio de DNS o recurso de pago sin aprobación explícita del usuario.**
-
-## 6. Gates
-
-El agente presenta: resumen, artefactos, objetivos cubiertos, lo marcado "No aplica", riesgos. Opciones: **Aprobar / Pedir cambios / Volver**. Nunca avanza sin respuesta.
-
-## 7. Estructura de un proyecto
+## 5. Estructura de una misión
 
 ```
-.shipwright/state.json        fase, rutas, tests bloqueados
-docs/
-  mission.md                  tarjeta y objetivos (fuente de IDs)
-  client/                     material original del encargo
-  spec/                       requirements, glossary, existing-system
-  architecture/ARCHITECTURE.md
-  adr/
-  security/                   threat-model, data-inventory, report
-  ux/                         ux-spec, prototype/, design-tokens.json
-  qa/                         test-strategy, test-plan, report, bugs/
-  ops/                        deploy-plan, runbook
-  handover.md                 documento de entrega
-  status/                     reportes de estado
-  plan/tasks.md
-  changes/                    deltas aprobados
-  metrics.md                  generado automáticamente
-  retro.md
-tests/acceptance/             bloqueados
+.shipwright/state.json   fase, plazo, rutas, tests bloqueados, tareas hechas
+<docsDir>/
+  spec.md                el único documento de proceso (aprobado = protegido)
+  review.md              hallazgos del spec-reviewer y qué se hizo con cada uno
+  verify.md              veredicto y evidencia
+  deploy.md              solo si se crea o cambia infraestructura de producción
+  changes/               deltas aprobados
+  client/                material original del encargo
+  metrics.md             generado automáticamente
+tests/acceptance/        bloqueados (hook + huellas SHA-256); ~1 de cada 5 oculto hasta Verify
 ```
 
-En sistemas existentes, `docs/` va en `docs/shipwright/<misión>/`.
+`<docsDir>` es `docs/` desde cero y `docs/shipwright/<misión>/` en un sistema existente.
 
-## 8. graphify
+## 6. Protecciones deterministas
 
-| Fase | Uso |
-|---|---|
-| Intake | `/graphify .` (sistema existente) y `/graphify docs/client --mode deep` (encargo) |
-| Architect | `/graphify query`, `path`, `god-nodes`; grafo global y lecciones de misiones pasadas |
-| Build | `graphify update .` en cada commit; `graphify affected "X"` antes de tocar un componente |
-| Ship | `graphify global add` al historial |
-| Retro | `graphify save-result` + `reflect` |
+- Hook `PreToolUse`: bloquea editar `.shipwright/`, los tests bloqueados y los artefactos aprobados, salvo los archivos abiertos por un cambio aprobado.
+- `lock.mjs`: huellas de los tests bloqueados e importación de los ocultos.
+- `trace.mjs`: trazabilidad, riesgo y presupuesto.
+- Hooks de métricas (inicio de fase, expertos de ECC usados) y de contexto (misión, fase, plazo y siguiente comando tras `/clear` o `/compact`).
+- **Ningún despliegue a producción, cambio de DNS, recurso de pago, push o PR sin aprobación explícita del usuario.**
 
-Sin permiso para enviar código: solo `graphify update .` (local). `query` busca texto literal: consultar en el idioma de las etiquetas.
+## 7. Banco y mejora
 
-## 9. Automejora
-
-1. Métricas automáticas por fase (`metrics.md`): tiempos, vueltas en gates, tests fallidos, hallazgos.
-2. Retro: qué fue lento, qué se repitió, qué pregunta faltó, y qué fase debió atrapar cada bug, vulnerabilidad o incidente escapado.
-3. Cada lección se convierte en un cambio concreto al framework (diff), que el usuario aprueba.
-4. Las skills modificadas pasan evals y la versión nueva se compara contra un [banco de 3 misiones de referencia](../benchmarks/) con `scripts/bench.mjs`; si empeora, no se publica.
-5. Commit + tag semver + CHANGELOG. Poda de reglas cada 5 misiones.
-
-Nada aprende ni se inyecta solo.
-
-## 10. ECC
-
-[ECC](https://github.com/affaan-m/ecc) (MIT) aporta agentes, skills y reglas por lenguaje. Su catálogo de desarrollo (324 piezas) está en `vendor/ecc/` sin modificar y **no se carga entero**: el índice `vendor/ecc.index.md` dice qué usar en cada fase y se invoca bajo demanda ([`reference/using-ecc.md`](../reference/using-ecc.md)). Búsqueda en todo el catálogo con `scripts/ecc-find.mjs`; packs del stack deterministas con `install-packs.mjs --stack` y el mapa [`reference/stack-packs.json`](../reference/stack-packs.json); cada herramienta de ECC leída en una misión queda registrada en `metrics.md` por un hook. Se sincroniza con cada release de ECC mediante un pull request revisado por IA y aprobado por el maintainer. Excluido por seguridad: aprendizaje automático que se autoinyecta, hooks con llamadas ocultas a Claude, MCPs de patrocinadores, GateGuard. Análisis: [`investigacion/ecc.md`](investigacion/ecc.md).
-
-## 11. Piezas del plugin
-
-| Qué | Dónde |
-|---|---|
-| Fases | `skills/<fase>/SKILL.md` |
-| Agentes | `agents/analyst.md`, `architecture-reviewer.md`, `builder.md`, `qa-lead.md`, `security-lead.md`, `devops-lead.md`, `docs-lead.md`, `ux-lead.md` |
-| Referencias | `reference/engineering-principles.md`, `companions.md`, `qa-catalog.md`, `security-baseline.md`, `deploy-catalog.md`, `docs-standard.md`, `ux-standard.md`, `git-workflow.md`, `using-ecc.md`, `stack-packs.json` |
-| Plantillas | `templates/` |
-| Scripts | `scripts/state.mjs` (único que escribe el estado), `trace.mjs` (trazabilidad), `lock.mjs` (huellas), `change.mjs` (abre/cierra un cambio aprobado), `install-packs.mjs` (packs del stack), `ecc-find.mjs` (busca en ECC), `metrics.mjs`, `bench.mjs` (puntúa misiones), `ecc-sync.mjs` |
-| Hooks | Contexto de la misión (fase, tamaño, siguiente comando) al iniciar, tras `/clear` o `/compact`; protección de `.shipwright/`, artefactos aprobados y tests bloqueados (edición y consola), salvo archivos abiertos por un cambio aprobado; inicio de fase y herramientas de ECC usadas en métricas |
-| Tests | `node --test "scripts/**/*.test.mjs"` — CI en Windows, macOS y Linux |
+`benchmarks/` tiene 4 misiones fijas; `scripts/bench.mjs` puntúa una misión terminada y compara versiones. Es peor una versión que tarda más, necesita más rondas de aprobación, deja problemas de trazabilidad, se pasa del presupuesto o escribe más palabras de proceso. La retro opcional convierte lecciones en cambios probados contra el banco.
 
 ## Hoja de ruta
 
 | Versión | Contenido |
 |---|---|
-| v0.5 | Plugin, `mission`, `intake`, trazabilidad, ECC |
-| v0.6 | Disciplina QA |
-| v0.7 | Seguridad obligatoria, producción en cualquier plataforma, documentación concisa |
-| v0.8 | Documentación de los repos entregados, UX/UI, flujo git, `status` |
-| v0.9 | `architect` |
-| v0.10 | `plan` + `build` + `change` |
-| v0.11 | `qa` + `ship` |
-| v0.12 | `retro`, banco de misiones, puntuación y comparación de versiones |
-| **v0.13** | Principios de ingeniería (Karpathy, ponytail, caveman, superpowers), modelo por rol, sesiones limpias *(actual)* |
-| v1.0 | Probado en ≥ 3 misiones reales |
+| v0.5–v0.16 | Método de 8 fases (etiqueta `v0.16.0`) |
+| **v1.0** | 4 fases, 2 aprobaciones, paralelo por defecto, un documento de proceso, expertos de ECC por fase *(actual)* |
+| v1.x | Medido con el banco y en misiones reales |
 | v2.0 | Orquestador autónomo con Claude Agent SDK |

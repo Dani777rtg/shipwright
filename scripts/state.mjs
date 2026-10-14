@@ -23,7 +23,7 @@ export function run(root, [cmd, key, value]) {
     write(root, s);
     return s;
   }
-  if (!existsSync(statePath(root))) throw new Error('no .shipwright/state.json: run /shipwright:mission first');
+  if (!existsSync(statePath(root))) throw new Error('no .shipwright/state.json: run /shipwright:spec first');
   const s = read(root);
   if (cmd === 'get') return key ? s[key] : s;
   if (!key || value === undefined) throw new Error(`usage: ${cmd} <key> <value>`);

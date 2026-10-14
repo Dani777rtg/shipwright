@@ -12,20 +12,15 @@
 
 ## Delta
 
-| Artefacto | ADDED | MODIFIED | REMOVED |
+| Parte | Añade | Modifica | Quita |
 |---|---|---|---|
-| Requisitos (US/AC) | | | |
-| Objetivos (O/KR/QG) | | | |
-| Arquitectura / ADR / QS | | | |
-| Modelo de amenazas (TM) | | | |
+| Spec (O, US, AC, TM, decisiones, tareas) | | | |
 | Tests de aceptación | | | |
-| Tareas | | | |
-| Despliegue / documentación / UX | | | |
+| Código ya construido | | | |
 
 ## Impacto
 
 - Tareas a rehacer:
 - Plazo: <+/- horas>
-- Coste: <+/- mensual>
 - Riesgos nuevos:
 - Archivos que se abrirán para edición:

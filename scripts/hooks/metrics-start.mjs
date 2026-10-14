@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // UserPromptExpansion hook: when the user runs /shipwright:<phase>, log "<phase> start" in the mission metrics.
-// Never blocks: any problem exits 0 silently. Mission start is logged by the mission skill itself,
-// because the docs directory does not exist until the mission creates .shipwright/state.json.
+// Never blocks: any problem exits 0 silently. Spec start is logged by the spec skill itself,
+// because the docs directory does not exist until spec creates .shipwright/state.json.
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -13,7 +13,7 @@ export function phaseOf(input) {
   if (!/^(shipwright:)?[a-z]+$/.test(name)) return null;
   if (!name.startsWith('shipwright:') && input.command_source !== 'plugin') return null;
   const phase = name.replace('shipwright:', '');
-  return PHASES.includes(phase) && phase !== 'mission' ? phase : null;
+  return PHASES.includes(phase) && phase !== 'spec' ? phase : null;
 }
 
 function main() {

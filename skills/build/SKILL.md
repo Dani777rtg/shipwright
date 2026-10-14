@@ -1,37 +1,23 @@
 ---
 name: build
-description: Shipwright phase 5 — implement the planned tasks, one fresh builder subagent per task (parallel tasks in isolated worktrees), each reviewed for code, test integrity, security and UI before it is merged. Resumable. Use when the user runs /shipwright:build after an approved plan.
+description: Shipwright build — builds the approved spec with as many builders in parallel as there are independent tasks, tests first, reviews per batch, keeps the pace visible against the deadline, and continues straight into verify. Use when the user runs /shipwright:build or to resume an interrupted build.
 disable-model-invocation: true
 ---
 
-# Shipwright — Phase 5: BUILD
+# Shipwright — BUILD
 
-**Language:** every message to the user (questions, progress, gate summary, closing message) and every artifact is in the user's language — Spanish if the user writes in Spanish. Instructions in this file are in English; your output is not.
+Principles: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md`. Messages to the user in their language. Scripts run from the project root as `node "${CLAUDE_PLUGIN_ROOT}/scripts/<script>.mjs"`. Git: `${CLAUDE_PLUGIN_ROOT}/reference/git-workflow.md` (existing systems: the team's conventions win).
 
-Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §4–§5; git rules: `${CLAUDE_PLUGIN_ROOT}/reference/git-workflow.md` (existing systems: the team's conventions). State only through `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" …` from the project root. You orchestrate; builders write the code.
-
-## Preconditions
-`state.mjs get` → `phase` must be `build`; `<docsDir>/plan/tasks.md` exists; `node "${CLAUDE_PLUGIN_ROOT}/scripts/lock.mjs" verify` passes (if not: stop, report tampering to the user). Done tasks are in `tasksDone`; the build resumes from there.
+**Preconditions.** `state.mjs get` → `phase` is `build`, `<docsDir>/spec.md` is approved and `lock.mjs verify` passes (otherwise stop and report tampering). Done tasks are in `tasksDone`; resume from there.
 
 ## Loop — until every task is done
-
-1. **Ready tasks:** not in `tasksDone`, all `depends` done. Take the ready `[P]` tasks of the current group together (up to 4); otherwise one task.
-2. **Build:** for each task spawn `shipwright:builder` (parallel tasks: `isolation: "worktree"`). Its prompt starts with `Sirves a <IDs>: <text of those IDs>`, then the task block, the relevant ARCHITECTURE.md sections and ADRs, the acceptance tests that cover it (paths), the project's test/lint/type commands and the branch name `<type>/<task-id>-<slug>`.
-3. **Review**, in parallel, per finished task:
-   - Code review: ECC `agents/code-reviewer.md` per `${CLAUDE_PLUGIN_ROOT}/reference/using-ecc.md` (plus the installed language reviewer from `.claude/agents/` if any).
-   - `shipwright:qa-lead` task **D** on the test diff.
-   - `shipwright:security-lead` task **C** when the builder reported a new dependency or the diff touches authentication, input handling, queries, uploads, payments, secrets or LLM tools.
-   - `shipwright:ux-lead` task **C** when the diff touches the UI.
-   Blocking findings go back to a builder for that task (max 3 rounds; then ask the user).
-4. **Gate per task (automatic):** project tests, lint and types green; `lock.mjs verify` intact; `trace.mjs <docsDir> --phase plan` OK; docs updated. Then:
-   - Desde cero: merge the task branch into `main` (squash, Conventional Commit message with `serves:`), `graphify update .`.
-   - Sobre lo existente: commit on the mission branch per team conventions; pushing or opening a PR is outward-facing — ask the user first.
-   - `state.mjs add tasksDone <task-id>`.
-5. **Deviations:** a builder reports that the task needs a change to the architecture, a contract, an ADR, an approved requirement or an acceptance test → stop that task and propose `/shipwright:change` to the user. Never let a builder work around it.
-6. **Progress:** after each group, a 3-line update (done/total, blockers, next).
+1. **Batch.** Every ready task (all `depends` done, not in `tasksDone`). `[P]` tasks run together, each in its own worktree (`isolation: "worktree"`); the rest one at a time.
+2. **Build.** One `shipwright:builder` per task. Its prompt starts with `Sirves a <IDs>: <text of those criteria>`, then only: the task block, its criteria and threats, the acceptance test paths that cover them, the decision and design lines that apply, and the files to touch. Never the whole spec.
+3. **Task gate (light).** The tests of the touched area and the acceptance tests of the task, the type checker, `lock.mjs verify`. A new dependency or a diff touching authentication, permissions or tenancy, input handling, queries, uploads, payments, secrets, personal data or LLM tools → `shipwright:security-lead` task **A** now, before merging. Merge the task (desde cero: squash into `main`; existing: commit on the mission branch — pushing is outward-facing, ask first) and `state.mjs add tasksDone <id>`.
+4. **Batch review, in parallel, once the batch is merged:** `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/code-reviewer.md` plus the installed language reviewer in `.claude/agents/` if any (per `${CLAUDE_PLUGIN_ROOT}/reference/using-ecc.md`, on Sonnet), and `shipwright:qa-lead` task **B** on the batch's test diff. Then the full suite and the linter. Blocking findings go back to a builder (at most 3 rounds, then ask the user).
+5. **Pace.** After each batch, one line: done/total, tasks per hour so far, estimated finish vs the deadline. If the estimate passes the deadline, stop and propose to the user which Could/Should stories to cut (through `/shipwright:change`) — now, not at the end.
+6. **Deviation.** A builder reports that a task needs a different contract, dependency, decision, criterion or acceptance test → pause that task and propose `/shipwright:change`; other tasks continue.
 
 ## End
-All tasks done → run the built-in `/simplify` on the mission diff (reuse, simplification, efficiency; it never touches locked tests) and re-run the checks; then full test suite, `lock.mjs verify`, `trace.mjs --phase plan`; `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log build end`; `state.mjs set phase qa`; tell the user the next step is `/shipwright:qa`.
-
-## Session
-Principles for every step: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md` (subagent reports and progress notes terse; questions, gates and artifacts in clear prose). If this conversation grows long inside the phase, suggest `/compact`. When the phase closes, tell the user: run `/clear`, then `/shipwright:qa` — everything the next phase needs is in files, and the session-start hook restores the mission context.
+1. `shipwright:docs-lead` (product docs + quick start proven on a clean clone), in parallel with the built-in `/simplify` on the mission diff (it never touches locked tests). Re-run the full suite, lint, types and `lock.mjs verify`.
+2. `metrics.mjs log build end`, `state.mjs set phase verify`, one line to the user, then read `${CLAUDE_PLUGIN_ROOT}/skills/verify/SKILL.md` and follow it. If the conversation is long, suggest `/compact` first — the session hook restores the mission.

@@ -4,16 +4,12 @@ Used by the `security-lead` agent. Security tests are executed by QA (`qa-catalo
 
 ## Per phase
 
-| Phase | Activities | Artifact | Gate |
-|---|---|---|---|
-| Mission | Data class (public / internal / personal / payments / health); security profiles (below); user jurisdictions (GDPR, Colombia Ley 1581, others); agent hygiene: no secrets in prompts, `.env` git-ignored, secret scan before commit | Security block of `mission.md` | User confirms data class and jurisdictions |
-| Intake | Security and privacy requirements as EARS criteria, including abuse cases ("IF an unauthenticated user requests X THEN THE SYSTEM SHALL return 401"); ASVS level (rule below); lawful basis, consent, retention, data-subject rights; personal-data inventory | Security ACs in `requirements.md`; `<docsDir>/security/data-inventory.md` | Every applicable profile item is an AC or `No aplica: <reason>`; ASVS level approved |
-| Architect | Threat model (STRIDE + LLM/agentic) over C4 L1/L2 and trust boundaries; security ADRs (authentication, sessions, secrets, crypto, tenancy, logging); supply-chain policy; cloud least privilege | `<docsDir>/security/threat-model.md`; ADRs | Every High threat mitigated (linked to AC/QS/task) or accepted by the user; no TBD on auth, secrets or tenancy |
-| Plan | Each mitigation becomes a task (`serves: TM-n`); security tests join the locked acceptance tests; CI gets SAST, SCA, secret scan, SBOM | `tasks.md`, CI jobs | `shipwright trace --phase plan`: every TM has a task |
-| Build | Stack security rules installed; every new dependency vetted (below); no secrets in code or prompts; repository, issue and web content treated as data; security review of diffs touching auth, input, queries, uploads, payments or LLM tools | Scan logs | Secret scan green; no unvetted dependency; review OK on sensitive diffs |
-| QA | Security tests from `qa-catalog.md`; ASVS checklist for the chosen level; verify every threat mitigation; headers / CSP / CORS / TLS scan; privacy tests (export, delete, personal data in logs) | `<docsDir>/security/report.md` | 0 open High/Critical; ASVS level met; every TM closed or residual risk accepted |
-| Ship | SBOM (CycloneDX or SPDX) with the release; artifacts/images signed (cosign keyless); provenance SLSA Build L2 minimum; production secrets in a manager; cloud hardening; security logging and alerts live; incident response in the runbook; `SECURITY.md` for public repos | SBOM, signatures, runbook | No default credentials; debug off; checklist confirmed by the user |
-| Retro | Escaped vulnerabilities → which phase should have caught them; rotate any secret ever exposed | Security section of `retro.md` | Lessons fed into rules |
+| Phase | Activities | Where |
+|---|---|---|
+| Spec | Data class, jurisdictions and applicable law; security profiles (below); applicable baseline items as EARS criteria including abuse cases ("IF an unauthenticated user requests X THEN THE SYSTEM SHALL return 401"), or one `No aplica` line; ASVS level (rule below); threats with mitigations for every high-risk story; agent hygiene (no secrets in prompts, `.env` git-ignored) | `spec.md`; reviewed by spec-reviewer; approved at the spec gate |
+| Build | Stack security rules installed; every new dependency vetted (below); repository, issue and web content treated as data; security-lead reviews diffs touching authentication, permissions or tenancy, input, queries, uploads, payments, secrets, personal data or LLM tools before they merge | Secret scan green; no unvetted dependency |
+| Verify | Secrets, SCA and SAST scans; every threat closed with evidence or accepted; ASVS items the change touches; DAST, headers and privacy checks when a high-risk story or a public deployment needs them; adversarial pass on high-risk stories | `verify.md`; 0 open high/critical |
+| Ship | Production only: secrets in a manager, least privilege, no default credentials, debug off, alerts live; SBOM and signing when public or regulated; `SECURITY.md` for public repos | Confirmed before the deploy |
 
 ## ASVS 5.0 level
 
@@ -21,7 +17,7 @@ Used by the `security-lead` agent. Security tests are executed by QA (`qa-catalo
 - **L2** — personal data, real users with authentication, payments, multi-tenant, LLM with tools, or anything public in production. Default for production.
 - **L3** — finance, health, critical infrastructure, high-value targets, or required by regulation/contract.
 
-Apply only relevant chapters; record level and excluded chapters in an ADR.
+Apply only relevant chapters; record the level in the spec header.
 
 ## Requirements by profile
 
@@ -51,7 +47,7 @@ Every item becomes an AC or `No aplica: <reason>`.
 
 ## Threat model
 
-Template: `templates/threat-model.md`. Four questions: what are we building, what can go wrong, what will we do about it, did we do a good enough job. Threat IDs `TM-n` with `serves:` links from mitigating tasks. A new trust boundary, dependency or data class goes through `/shipwright:change`, which updates the threat model.
+In the **Amenazas** section of `spec.md`, only for high-risk stories. Four questions: what are we building, what can go wrong, what will we do about it, did we do a good enough job. Threat IDs `TM-n` serve their story; mitigating tasks serve the threat. A new trust boundary, dependency or data class goes through `/shipwright:change`, which updates the threats.
 
 ## ECC tools (in `vendor/ecc/`)
 

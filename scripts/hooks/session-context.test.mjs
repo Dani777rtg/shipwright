@@ -16,12 +16,12 @@ test('no mission → no context; mission → phase, next command and open change
 
   mkdirSync(join(root, '.shipwright'));
   writeFileSync(join(root, '.shipwright', 'state.json'), JSON.stringify({
-    mission: 'Resumir reuniones', phase: 'build', size: 'S', docsDir: 'docs', tasksDone: ['T001', 'T002'],
+    mission: 'Resumir reuniones', phase: 'build', deadline: '2026-10-31', docsDir: 'docs', tasksDone: ['T001', 'T002'],
     change: { id: '003', files: ['docs/spec/requirements.md'] },
   }));
   const text = context(root);
   assert.match(text, /Resumir reuniones/);
-  assert.match(text, /size: S · .*next: \/shipwright:build/);
+  assert.match(text, /deadline: 2026-10-31 · .*next: \/shipwright:build/);
   assert.match(text, /Open change: 003/);
   assert.match(text, /Tasks done: 2/);
 

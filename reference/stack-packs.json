@@ -1,5 +1,5 @@
 {
-  "_note": "Stack keyword -> ECC packs installed at the Architect gate by `install-packs.mjs --stack`. A string value is an alias. rules/common is always added. Paths must exist in vendor/ecc.manifest.json (checked by install-packs.test.mjs).",
+  "_note": "Stack keyword -> ECC packs installed at the spec gate by `install-packs.mjs --stack`. A string value is an alias. rules/common is always added. Paths must exist in vendor/ecc.manifest.json (checked by install-packs.test.mjs).",
   "web": ["rules/web"],
   "typescript": ["rules/typescript", "agents/typescript-reviewer.md"],
   "javascript": "typescript",

@@ -1,9 +1,9 @@
 # QA catalog — test types, pertinence rules, tools, exit criteria
 
-Used by the `qa-lead` agent to build the Test Strategy (Architect) and the Test Plan (Plan), and to run the QA phase.
+Consulted when writing the **Pruebas** section of the spec and by `qa-lead` in Verify. Read only the rows you need.
 Framework: ISTQB CTFL 4.0 (levels and types), ISO/IEC 25010:2023 (quality characteristics), ISO/IEC/IEEE 29119-3 (strategy, plan, completion report), risk-based testing (likelihood × impact). Shape: test pyramid for backends, testing trophy (more integration) for frontends.
 
-**Rule:** every type below is evaluated for every mission. If its pertinence rule matches, it is mandatory and listed in the Test Strategy. The types that do not apply are recorded together in one line (`No aplica: <tipos> — <motivo>`), not one row each. Tools are defaults verified on 2026-10-14; the mission's stack and existing tooling win (for an existing system, reuse its tools first). Numeric thresholds marked *(guide)* are starting points, not standards: the Test Strategy states the mission's own values.
+**Rule:** every type below is evaluated for every mission. If its pertinence rule matches, it is mandatory and listed in the spec; heavy types (load, DAST, full authorization matrix, chaos, recovery, exploratory) only cover high-risk stories. The types that do not apply go together in one line (`No aplica: <tipos> — <motivo>`). Tools are defaults verified on 2026-10-14; the mission's stack and existing tooling win (for an existing system, reuse its tools first). Numeric thresholds marked *(guide)* are starting points, not standards: the spec states the mission's own values.
 
 Stacks: JS = JavaScript/TypeScript · Py = Python · JVM = Java/Kotlin · Go · NET = .NET · Mob = mobile.
 
@@ -65,27 +65,27 @@ Stacks: JS = JavaScript/TypeScript · Py = Python · JVM = Java/Kotlin · Go · 
 ## Policies
 
 **Test integrity (AI agents must not weaken tests)**
-1. The QA agent writes acceptance tests from the EARS criteria during Plan. Their paths go in `lockedPaths` (`.shipwright/state.json`); the hook blocks edits and `node scripts/lock.mjs record` stores their hashes.
-2. Holdout: a subset of acceptance tests is kept outside the repository (`~/.shipwright/holdout/<mission>/`) until the QA phase, so the builder cannot tailor code to them.
+1. Right after the spec gate, one QA agent per story writes its acceptance tests from the EARS criteria, in parallel. Their paths go in `lockedPaths` (`.shipwright/state.json`); the hook blocks edits and `node scripts/lock.mjs record` stores their hashes.
+2. Holdout: a subset of acceptance tests is kept outside the repository (`~/.shipwright/holdout/<mission>/`) until Verify, so the builder cannot tailor code to them.
 3. Builder prompts state: the specification and the acceptance tests are the source of truth; never modify, skip or delete a test to make it pass.
-4. Every task's test diff is reviewed by qa-lead: no deleted assertions, no `skip`/`only`/`xfail`, no changed expected values without a justification.
+4. Each batch's test diff is reviewed by qa-lead: no deleted assertions, no `skip`/`only`/`xfail`, no changed expected values without a justification.
 5. Coverage and mutation score never decrease.
-6. QA phase starts with `node scripts/lock.mjs verify`; any tampering is a blocker.
+6. Verify starts with `node scripts/lock.mjs verify`; any tampering is a blocker.
 
 **Flaky tests**: fails then passes on retry = flaky. Quarantine outside the gate but keep running and reporting it; owner and deadline (7 days *(guide)*), then fix, rewrite or delete. Zero flaky tests in the acceptance suite. Retries only for E2E, at most 2.
 
-**Bugs**: format in `templates/bug-report.md`. Severity (technical impact): S1 critical (crash, data loss, security, no workaround) · S2 major (key function broken, workaround exists) · S3 minor · S4 cosmetic. Priority (business urgency) P1–P4, independent of severity.
+**Bugs**: a row in the Bugs table of `verify.md`. Severity (technical impact): S1 critical (crash, data loss, security, no workaround) · S2 major (key function broken, workaround exists) · S3 minor · S4 cosmetic. Priority (business urgency) P1–P4, independent of severity.
 
 **Release exit criteria (QA gate)**
 1. 100% of acceptance tests green; locked files intact.
 2. Every pertinent test type executed, or `No aplica: <reason>` approved by the user.
 3. 0 open S1/S2 bugs.
 4. SAST, SCA, secrets and DAST without high/critical.
-5. Performance SLOs and every QS met with evidence.
+5. Performance targets of the spec met with evidence.
 6. Accessibility WCAG 2.2 AA without serious/critical.
 7. AI evals at or above threshold (AI missions).
 8. Rollback rehearsed (deployable deliverables).
-9. Test completion report (29119-3) with residual risks accepted by the user.
+9. `verify.md` with the verdict and residual risks accepted by the user.
 
 ## ECC tools for QA (in `vendor/ecc/`)
 `agents/tdd-guide.md`, `skills/tdd-workflow`, `skills/<stack>-testing`, `rules/<stack>/testing.md` · `agents/e2e-runner.md`, `skills/e2e-testing` · `skills/browser-qa` (smoke, interaction, visual, axe → SHIP/NO SHIP) · `agents/gan-evaluator.md` (independent evaluator on the live app) · `skills/benchmark` (performance baseline, not load) · `agents/performance-optimizer.md` · `skills/verification-loop`, `skills/<framework>-verification` · `agents/pr-test-analyzer.md`, `commands/test-coverage.md` · `skills/loop-design-check` (green and no weakened tests) · `skills/ai-regression-testing` · `skills/eval-harness`, `skills/agent-eval`, `agents/agent-evaluator.md`, `skills/santa-method` · `agents/rag-pipeline-reviewer.md` · `agents/security-reviewer.md`, `skills/security-review` · `agents/a11y-architect.md`, `skills/accessibility` · `skills/contract-first` · `skills/database-migrations` · `skills/canary-watch` · `skills/i18n-sync` · `skills/click-path-audit`.

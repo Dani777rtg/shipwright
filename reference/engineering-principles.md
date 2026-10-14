@@ -1,6 +1,6 @@
 # Engineering principles — every Shipwright agent
 
-Adapted from three MIT-licensed projects (see `THIRD_PARTY_NOTICES.md`): andrej-karpathy-skills (how to work), ponytail (how much to build), caveman (how agents report). Where they conflict with the Shipwright method, **the method wins**: the acceptance tests, QA test types, security baseline and gates are never simplified away.
+Adapted from three MIT-licensed projects (see `THIRD_PARTY_NOTICES.md`): andrej-karpathy-skills (how to work), ponytail (how much to build), caveman (how agents report). Where they conflict with the Shipwright method, **the method wins**: the acceptance tests, the pertinent test types, the security baseline and the two human gates are never simplified away.
 
 ## 1. Think before acting (Karpathy)
 - State assumptions; if several interpretations exist, say so — do not pick silently. Unclear → stop and ask (through the orchestrator).
@@ -37,11 +37,20 @@ Every message the user reads — questions, progress notes, gate summaries, the 
 ## 7. Reports between agents (caveman style)
 Subagent reports and orchestrator progress notes are terse: no pleasantries, no filler, no restating the task; fragments allowed; technical terms, paths, numbers, IDs and error strings exact; negations never dropped. Pattern: `[thing] [result] [reason]. [next].`
 
-**Not** terse: questions to the user, gate summaries, explanations of decisions, and every persisted artifact (requirements, architecture, ADRs, docs, commits, PRs, handover) — those are written in clear, complete prose in the deliverable language.
+**Not** terse: questions to the user, gate summaries, explanations of decisions, and every persisted artifact (spec, verification report, docs, commits, PRs, handover) — those are written in clear, complete prose in the deliverable language.
 
-## 8. Where mission artifacts go
-`<docsDir>` is the `docsDir` value in `.shipwright/state.json` (e.g. `docs/` for a new project, `docs/shipwright/<mission>/` in an existing system). Every Shipwright artifact (spec, architecture, ADRs, security, QA, ops, UX, plan, handover) goes under `<docsDir>`, never in a hard-coded `docs/` path. Only the delivered product's own documentation (README, tutorial, guides, configuration, user guide) lives where the repository keeps its docs.
+## 8. Speed (the method's first goal after the quality floor)
+- **Parallel by default.** Independent work runs at the same time: one QA agent per story, one builder per independent task in its own worktree, reviewers side by side. Waiting in series for something that does not depend on it is a defect.
+- **Infer, don't ask.** Read the brief, the repository and its docs first; ask only what blocks, all in one batch. Everything else is an assumption with an owner and a date.
+- **Minimal context.** Give each agent only what its task needs (its task block, criteria, tests, files), never whole documents.
+- **Write only what someone will use.** One spec, one verification report. A document no one executes, reviews or reads before deciding is not written.
+- **Light per task, full per batch.** Each task runs the tests of its area and the type checker; the full suite, linters and reviews run once per batch.
+- **Pace is visible.** After each batch: done/total, rate, estimated finish vs the deadline; propose a cut as soon as the estimate passes it.
+- **The quality floor is not negotiable for speed:** locked acceptance tests from EARS criteria by an independent agent, TDD, green suite/types/lint before integrating, security review of sensitive diffs and scans, human approval of the spec and of production.
 
-## 9. Models and sessions
-- Agents carry a default model for their role: judgment-heavy work on Opus (analyst, architecture-reviewer, security-lead, qa-lead), building and writing on Sonnet (builder, devops-lead, docs-lead, ux-lead), mechanical reporting on Haiku (status). Users override with `CLAUDE_CODE_SUBAGENT_MODEL` (+ `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` to ignore these defaults).
-- Everything a phase needs lives in files (`.shipwright/`, `docs/`), so each phase starts cleanly: at the end of a phase recommend `/clear` before the next command. Within a long phase (build, QA), recommend `/compact` when the conversation grows; the session-start hook restores the mission context after `/clear` or `/compact`. Only the user can run these commands.
+## 9. Where mission artifacts go
+`<docsDir>` is the `docsDir` value in `.shipwright/state.json` (`docs/` for a new project, `docs/shipwright/<mission>/` in an existing system). Process artifacts: `spec.md`, `review.md`, `verify.md`, `deploy.md` (only when deploying new infrastructure), `changes/`, `metrics.md`, `client/` — always under `<docsDir>`, never a hard-coded `docs/`. The delivered product's own documentation (README, configuration, API reference, guides) follows the repository's layout.
+
+## 10. Models and sessions
+- Default model per role: Opus for judgment (spec-reviewer, qa-lead, security-lead), Sonnet for building, documenting, deploying and batch code review (builder, docs-lead, devops-lead), Haiku for status. Users override with `CLAUDE_CODE_SUBAGENT_MODEL` (+ `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1`).
+- Phases chain without stopping except at the two human gates (spec, ship). Everything lives in files and the session-start hook restores the mission, so when a conversation grows long recommend `/compact` (only the user can run it).

@@ -7,9 +7,8 @@ import { join } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
 const NEXT = {
-  mission: '/shipwright:mission (confirm the mission card)', intake: '/shipwright:intake', architect: '/shipwright:architect',
-  plan: '/shipwright:plan', build: '/shipwright:build (resumes from the last finished task)', qa: '/shipwright:qa',
-  ship: '/shipwright:ship', retro: '/shipwright:retro', done: 'none — mission closed',
+  spec: '/shipwright:spec (resumes the spec)', build: '/shipwright:build (resumes from the last finished task)',
+  verify: '/shipwright:verify', ship: '/shipwright:ship', retro: '/shipwright:retro (optional)', done: 'none — mission closed',
 };
 
 export function context(root) {
@@ -19,7 +18,7 @@ export function context(root) {
   try { s = JSON.parse(readFileSync(path, 'utf8')); } catch { return null; }
   const lines = [
     `Shipwright mission active: ${s.mission ?? '(unnamed)'}`,
-    `Phase: ${s.phase ?? 'unknown'} · size: ${s.size ?? 'L'} · docs: ${s.docsDir ?? 'docs'} · next: ${NEXT[s.phase] ?? '/shipwright:status'}`,
+    `Phase: ${s.phase ?? 'unknown'} · deadline: ${s.deadline ?? 'none'} · docs: ${s.docsDir ?? 'docs'} · next: ${NEXT[s.phase] ?? '/shipwright:status'}`,
   ];
   if (s.change) lines.push(`Open change: ${s.change.id} (files: ${s.change.files.join(', ')}) — finish it with /shipwright:change.`);
   if (s.tasksDone?.length) lines.push(`Tasks done: ${s.tasksDone.length}`);

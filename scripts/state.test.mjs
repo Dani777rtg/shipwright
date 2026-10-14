@@ -7,7 +7,7 @@ import { run } from './state.mjs';
 
 test('init, get, set, add', () => {
   const root = mkdtempSync(join(tmpdir(), 'sw-'));
-  assert.throws(() => run(root, ['get']), /mission/);
+  assert.throws(() => run(root, ['get']), /spec/);
   run(root, ['init', '{"docsDir":"docs","phase":"mission"}']);
   assert.throws(() => run(root, ['init', '{}']), /exists/);
   assert.equal(run(root, ['get', 'phase']), 'mission');

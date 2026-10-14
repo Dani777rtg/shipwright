@@ -1,6 +1,6 @@
 # Git workflow — delivered repositories
 
-Applies to missions built from scratch. In an existing system, the team's conventions (branching, commit style, PR rules, CI) win; record them in `existing-system.md` and follow them.
+Applies to missions built from scratch. In an existing system, the team's conventions (branching, commit style, PR rules, CI) win; record them in the **Sistema actual** section of the spec and follow them.
 
 - **Branches:** trunk-based. `main` is always deployable and protected (PR + green CI required). One short-lived branch per task or small group of tasks: `<type>/<task-id>-<slug>` (e.g. `feat/T004-upload-audio`).
 - **Commits:** [Conventional Commits 1.0](https://www.conventionalcommits.org/) — `feat:`, `fix:`, `docs:`, `test:`, `refactor:`, `chore:`, `ci:`, `perf:`, `build:`; `!` or `BREAKING CHANGE:` for breaking changes. Footer `serves: <IDs>` (the traceability rule). Small, one logical change each.

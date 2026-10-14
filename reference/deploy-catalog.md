@@ -1,6 +1,6 @@
 # Deploy catalog — platforms and production readiness
 
-Used by the `devops-lead` agent (deployment strategy in Architect, delivery in Ship). Verified 2026-10-14; items marked [NV] come from secondary sources — confirm in the platform docs before relying on them. The user's platform wins; if none is imposed, pick by workload and record it in an ADR.
+Used by the `devops-lead` agent (staging in Verify, production in Ship) and when choosing a platform in the spec. Verified 2026-10-14; items marked [NV] come from secondary sources — confirm in the platform docs before relying on them. The user's platform wins; if none is imposed, pick by workload and record it in an ADR.
 
 ## Platform changes to know
 - **AWS App Runner** closed to new customers (2026-04-30): use **ECS Express Mode** or ECS Fargate.

@@ -1,10 +1,10 @@
 # Shipwright
 
-Plugin de Claude Code para construir software con IA **siguiendo un método**, no prompts sueltos: entiende el encargo, diseña, construye, prueba, asegura y despliega a producción, y mejora el propio método después de cada proyecto.
+Plugin de Claude Code para llevar un encargo a software funcionando **rápido y bien hecho**: una spec que apruebas, agentes que construyen en paralelo con tests primero, verificación independiente y entrega con tu aprobación.
 
-> Claude Code plugin: a spec-driven method that takes a brief to production — requirements, architecture, build, QA, security and deployment — with every task traced to an objective.
+> Claude Code plugin: brief → approved spec → parallel multi-agent build with locked acceptance tests → independent verification → delivery. Built on ECC's expert agents.
 
-**Estado:** v0.13 — las 8 fases, `change` y `status` están implementadas; falta validarlas en misiones reales antes de la v1.0 ([hoja de ruta](docs/METODO.md#hoja-de-ruta)).
+**Estado:** v1.0 — 4 fases, 2 aprobaciones. La versión de 8 fases sigue disponible en la etiqueta `v0.16.0`.
 
 ## Instalar
 
@@ -20,50 +20,35 @@ Son **dos comandos separados**: escribe el primero, pulsa Enter y espera a que t
    /plugin install shipwright@shipwright
    ```
 
-Comprueba escribiendo `/shipwright`: deben aparecer `/shipwright:mission`, `/shipwright:intake`… Si no, ejecuta `/reload-plugins`.
+Comprueba escribiendo `/shipwright`: deben aparecer `/shipwright:spec`, `/shipwright:build`… Si no, ejecuta `/reload-plugins`.
 
-Requisitos: git, Node 18+, Python 3.10+ con `pip install graphifyy`.
+Requisitos: git y Node 18+. Opcional: graphify (`pip install graphifyy`) para mapear sistemas existentes.
 
 ## Usar
 
 ```
-/shipwright:mission "app de IA que resume reuniones, hackatón de 24 h"
-/shipwright:intake
+/shipwright:spec "app de IA que resume reuniones, hackatón de 24 h"
 ```
 
-Si el encargo viene en documentos (PDF, notas, transcripciones), pasa su ruta: `/shipwright:mission "C:\carpeta\encargo.md"`. Shipwright lo lee entero y lo guarda en la carpeta de la misión.
-
-Sirve igual para crear algo **desde cero** que para cambiar un **sistema existente** (por ejemplo, "añade login con Google a nuestra app").
+Si el encargo viene en documentos (PDF, notas, transcripciones), pasa su ruta: `/shipwright:spec "C:\carpeta\encargo.md"`. Sirve igual para crear algo **desde cero** que para cambiar un **sistema existente**.
 
 ## Qué hace
 
-| Fase | Resultado |
-|---|---|
-| 1. Mission | Clasifica el encargo, explica el plan y pide confirmación |
-| 2. Intake | Entrevista completa → objetivos medibles y requisitos verificables |
-| 3. Architect | Arquitectura, decisiones, modelo de amenazas, estrategias de pruebas, despliegue y documentación, prototipo de interfaz |
-| 4. Plan | Tareas pequeñas; QA escribe y bloquea los tests de aceptación |
-| 5. Build | Un subagente por tarea, tests primero |
-| 6. QA | Todas las pruebas pertinentes (funcionales, carga, seguridad, accesibilidad, IA) → SHIP / NO SHIP |
-| 7. Ship | Despliegue a producción en tu plataforma, verificado y con rollback; repo documentado y documento de entrega |
-| 8. Retro | Lecciones → nueva versión del framework |
+| Fase | Qué pasa | Tú |
+|---|---|---|
+| 1. Spec | Lee el encargo y tu código, pregunta solo lo que bloquea, escribe una spec con historias, criterios verificables, riesgo, decisiones y tareas; un revisor la revisa | **Apruebas** |
+| 2. Build | Un agente de QA por historia escribe los tests de aceptación (bloqueados); builders en paralelo, tests primero; revisión por tanda; ritmo contra tu plazo; documentación del producto con quick start probado | — |
+| 3. Verify | Tests ocultos, suite completa, seguridad, revisión de código → SHIP / NO SHIP | Solo si algo falla |
+| 4. Ship | PR, despliegue con canario y rollback, o documento | **Apruebas** |
 
-Reglas que no se negocian:
-- **Todo tiene un para qué:** cada tarea y test cita el objetivo al que sirve; lo que no sirve se rechaza.
-- **Tú apruebas cada fase.**
-- **QA, seguridad, producción, documentación y UX** a cargo de agentes independientes de quien programa; los tests de aceptación no se pueden alterar.
-- **Listo = funcionando en producción y documentado**, no "compila en mi máquina".
+Las fases se encadenan solas. `/shipwright:status` te dice cómo va y si llega al plazo; `/shipwright:change` cambia lo aprobado con impacto y aprobación; `/shipwright:retro` (opcional) mejora el framework con lo aprendido.
 
-## Modelos, sesiones y complementos
-
-- Cada agente usa el modelo de su rol (Opus para juicio, Sonnet para construir, Haiku para reportes). Para forzar otro: variables `CLAUDE_CODE_SUBAGENT_MODEL` y `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1`.
-- Al cerrar cada fase, Shipwright te recomienda `/clear`: todo está en archivos y se restaura solo.
-- Complementos opcionales (caveman, ponytail, context7, playwright, Trail of Bits…): [reference/companions.md](reference/companions.md).
+Lo que no se negocia por velocidad: tests de aceptación escritos por un agente independiente que el builder no puede tocar, TDD, todo en verde antes de integrar, revisión de seguridad de lo sensible, tu aprobación de la spec y de producción.
 
 ## Documentación
 
-- [Método](docs/METODO.md) — cómo funciona cada fase
-- [Catálogo de pruebas](reference/qa-catalog.md) · [Catálogo de stack](docs/catalogo-stack.md)
+- [Método](docs/METODO.md) — fases, riesgo, presupuesto, agentes
+- [Expertos de ECC por fase](reference/using-ecc.md) · [Catálogo de pruebas](reference/qa-catalog.md) · [Catálogo de stack](docs/catalogo-stack.md)
 - [Investigación](docs/investigacion/) — fuentes de cada decisión
 - [Changelog](CHANGELOG.md)
 

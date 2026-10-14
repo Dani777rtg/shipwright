@@ -4,7 +4,7 @@ Used by the `docs-lead` agent. Structure follows **Diátaxis** (tutorials, how-t
 
 ## Required documents
 
-Each one exists or is marked `No aplica: <reason>` in `<docsDir>/qa/report.md`.
+Write only the ones whose "required when" holds; list the rest in one `No aplica` line of `verify.md`.
 
 | Document | Diátaxis | Required when | Content |
 |---|---|---|---|
@@ -13,29 +13,22 @@ Each one exists or is marked `No aplica: <reason>` in `<docsDir>/qa/report.md`.
 | `docs/guides/*.md` | how-to | Recurring tasks exist (configure X, add a Y, operate Z) | One task per guide |
 | API reference | reference | There is an API | Generated from the OpenAPI/AsyncAPI/GraphQL contract (never hand-written); errors and auth included |
 | `docs/configuration.md` | reference | There is configuration | Every env var: purpose, default, required, example; never real secrets |
-| `ARCHITECTURE.md` + `<docsDir>/adr/` | explanation | Always (from Architect) | arc42 + C4 + decisions |
+| `docs/architecture.md` | explanation | The repo will be maintained by others and its design is not obvious from the code | One page: components, data flow, key decisions (from the spec's Decisiones and Diseño) |
 | `<docsDir>/ops/runbook.md` | how-to | There is a deployment | Deploy, rollback, restore, rotate secrets, alerts |
 | `docs/user-guide.md` | how-to | There is a UI for end users | Main tasks with screenshots |
 | `CONTRIBUTING.md` | how-to | The repo will be maintained by others | Setup, conventions, branch/commit/PR rules, how to run checks |
 | `CHANGELOG.md` | reference | Always | Keep a Changelog, generated from Conventional Commits |
 | `SECURITY.md` | reference | Public repository or external users | How to report vulnerabilities, supported versions |
 | `LICENSE` | — | Public or delivered to a third party | Chosen with the user |
-| `<docsDir>/handover.md` | — | Always | Delivery document (template `templates/handover.md`) |
 | Docs site | — | Only when there are external users (public product, API for third parties) | MkDocs Material (Python projects) or Starlight/Docusaurus (JS projects), built in CI, deployed with the product |
 
-Existing systems: follow and extend the team's documentation layout; add only what is missing for the change, plus the handover.
+Existing systems: follow and extend the team's documentation layout; add only what is missing for the change.
 
-## Per phase
+## When
 
-| Phase | docs-lead |
-|---|---|
-| Architect | Documentation plan: which documents apply (table above), audiences, docs site yes/no, API reference generator |
-| Plan | Documentation tasks in `tasks.md` (`serves:` the AC/O they explain) |
-| Build | Docs updated in the same task as the code they describe (a task is not done if its docs are stale) |
-| QA | Docs verification (below) |
-| Ship | Final README, CHANGELOG for the release, handover; docs site published if applicable |
+Builders update the docs their change touches in the same task. At the end of Build, `docs-lead` makes one pass: writes what is still missing and proves the quick start on a clean clone. The CHANGELOG entry is written at Ship.
 
-## Verification (QA gate)
+## Verification (end of Build)
 
 | Check | Tool | Pass |
 |---|---|---|
