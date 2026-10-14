@@ -23,7 +23,8 @@ Filosofía: agent-first, TDD (80% cobertura), security-first, plan before execut
 |---|---|
 | Fork completo | Hereda 103 MB y 15 harnesses; diverge en semanas por el ritmo upstream |
 | Dependencia (instalar ECC + Shipwright encima) | Sin control de versión, colisiones de routing, ~29k tokens + hooks en cada turno |
-| **Cherry-pick adaptado (recomendado)** | Contexto mínimo, namespace propio, versionado nuestro; MIT solo exige conservar aviso |
+| Cherry-pick de 15–20 piezas | Contexto mínimo, pero deja fuera herramientas útiles |
+| **Catálogo completo en `vendor/` + índice bajo demanda (elegido en v0.4)** | Todas las herramientas de desarrollo disponibles, contexto limpio, sin colisiones; MIT solo exige conservar aviso |
 
 Atribución: `THIRD_PARTY_NOTICES.md` con licencia MIT y copyright de Affaan Mustafa + commit de origen de cada pieza.
 
