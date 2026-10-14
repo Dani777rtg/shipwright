@@ -1,7 +1,7 @@
 # Método Shipwright
 
 > Documento maestro. Define el camino completo desde "me llegan requisitos" hasta "software en producción, documentado y con lecciones aprendidas".
-> Versión del método: **v0.1.0** (borrador inicial, solo documentación).
+> Versión del método: **v0.2.0** (solo documentación; base de agentes: ECC).
 
 ---
 
@@ -205,22 +205,68 @@ Registro central de lecciones: `lessons/LESSONS.md` (una lección = síntoma, ca
 
 Ver [`catalogo-stack.md`](catalogo-stack.md). Se decide por proyecto en la fase 2 y se registra en un ADR.
 
-## 10. Hoja de ruta del framework
+**Carga solo de lo elegido:** el framework trae todos los packs de desarrollo (reglas, skills y revisores por lenguaje/framework, la mayoría vía ECC, ver §10), pero **nada de stack se carga globalmente**. Al aprobar la arquitectura, el ADR de stack dispara la instalación en el proyecto (`.claude/skills/`, `.claude/rules/`, `.claude/agents/`) **solo** de los packs del stack elegido. Ejemplo: Python + FastAPI + LlamaIndex → instala `python`, `fastapi`, `rag-pipeline-reviewer`; nada de Rust, Swift, etc. Si el stack cambia (nuevo ADR), se reinstala.
+
+## 10. ECC como base (upstream)
+
+[ECC](https://github.com/affaan-m/ecc) (MIT, © Affaan Mustafa) es la base de agentes y skills de Shipwright. Análisis completo: [`investigacion/ecc.md`](investigacion/ecc.md).
+
+### Principios de integración
+1. **No se hace fork ni se instala ECC completo.** Solo se usan las piezas listadas en `vendor/ecc.manifest.json` (agentes, skills, workflows, packs de stack).
+2. **La copia de ECC nunca se edita.** Vive tal cual en `vendor/ecc/`. Nuestras skills de fase la *referencian* y añaden encima nuestras reglas (EARS, gates, trazabilidad, graphify). Así cada actualización entra sin conflictos de merge.
+3. **Siempre actualizado, pero a releases:** se sigue la última **release etiquetada** de ECC, no cada commit.
+4. **Atribución:** `THIRD_PARTY_NOTICES.md` con la licencia MIT y la versión/commit de origen.
+
+### Sincronización automática
+Un GitHub Action en el repo de Shipwright:
+1. Revisa a diario si ECC publicó una release nueva.
+2. Descarga **solo** las rutas del manifiesto a `vendor/ecc/` y actualiza versión + commit en el manifiesto.
+3. Ejecuta las comprobaciones (si alguna falla, **no actualiza** y abre un issue con el motivo):
+   - Todas las rutas del manifiesto existen y su frontmatter es válido (detecta renombrados/eliminados upstream).
+   - Nuestras skills que referencian piezas de ECC siguen resolviendo.
+   - Filtro de seguridad: sin hooks nuevos, sin `npx -y` sin versión, sin URLs de red nuevas, sin llamadas `claude -p` ocultas, sin texto promocional.
+   - Evals de las fases afectadas (estructurales en v1; con LLM cuando existan, ver §8).
+4. Si todo pasa: commit automático `chore(ecc): sync to vX.Y.Z` + entrada en CHANGELOG + versión PATCH de Shipwright.
+
+Los usuarios reciben la actualización con la actualización normal del plugin. SETUP muestra la versión de ECC en uso.
+
+### Lo que se usa de ECC por fase
+
+| Fase | Pieza ECC | Lo que añade Shipwright encima |
+|---|---|---|
+| Esqueleto | `skills/orch-pipeline` (tamaños + gates) | 8 fases, modos, gate por fase |
+| Setup | `commands/project-init.md`, `rules/common` | Estructura de proyecto, graphify |
+| Intake | `commands/prp-prd.md`, `skills/intent-driven-development` | EARS, IDs REQ/AC, entrevista con opciones, glosario |
+| Architect | `agents/architect.md`, `skills/architecture-decision-records`, `skills/contract-first`, `skills/council` | arc42, MADR, C4, catálogo de stack |
+| Plan | `skills/blueprint`, `agents/planner.md` | Formato `T001 [P] [US]`, complejidad, enlace tarea→AC |
+| Build | `skills/tdd-workflow`, `agents/tdd-guide.md` | Subagente por tarea + worktree, graphify update |
+| Verify | `workflows/orch-review.workflow.js`, `agents/code-reviewer.md`, `agents/security-reviewer.md`, `agents/e2e-runner.md` | Matriz AC→test con gate que falla |
+| Ship | `skills/deployment-patterns`, `skills/docker-patterns`, `agents/doc-updater.md` | Docs desde artefactos, grafo global |
+| Retro | `commands/learn-eval.md`, `scripts/lib/skill-evolution/` | Retro de proceso → cambio al framework + semver |
+| Stack | `rules/<lenguaje>`, skills y revisores por framework, skills de IA (`eval-harness`, `agent-harness-construction`, `mcp-server-patterns`, `rag-pipeline-reviewer`…) | Criterios de selección, carga solo de lo elegido |
+
+### Lo que NO se usa de ECC
+GateGuard, observer de aprendizaje automático (instincts autoinyectados), hooks con `claude -p` oculto, `mcp-health-check`, configs MCP de patrocinadores, adaptadores multi-harness, `ecc2/`, instalador npm, skills de dominio ajeno al desarrollo.
+
+**Aprendizaje:** solo retro bajo demanda con diff visible y aprobación humana (§8). Nada aprende ni se inyecta solo.
+
+## 11. Hoja de ruta del framework
 
 | Versión | Contenido |
 |---|---|
-| v0.1 | Este documento, investigación, catálogo de stack *(actual)* |
-| v0.2 | Plugin Claude Code: `new` + `intake` funcionando, plantilla `requirements.md`, subagente analyst |
-| v0.3 | `architect` + plantillas arc42/MADR + reviewers |
-| v0.4 | `plan` + `build` (subagente por tarea, TDD, hooks) |
-| v0.5 | `verify` + `ship` |
-| v0.6 | `retro` + evals de skills + versionado automático |
+| v0.1 | Método, investigación, catálogo de stack |
+| v0.2 | Integración con ECC definida *(actual)* |
+| v0.3 | Esqueleto del plugin + `vendor/ecc` + manifiesto + sync automático; `new` + `intake` funcionando |
+| v0.4 | `architect` + plantillas arc42/MADR + instalación de packs de stack por proyecto |
+| v0.5 | `plan` + `build` (subagente por tarea, TDD, hooks) |
+| v0.6 | `verify` + `ship` |
+| v0.7 | `retro` + evals de skills + versionado automático |
 | v1.0 | Probado en ≥ 3 proyectos reales (≥ 1 hackatón, ≥ 1 cliente) |
 | v2.0 | Orquestador con Claude Agent SDK (+ LangGraph para estado y gates) que ejecuta las fases ya probadas de forma autónoma |
 
 Cada versión se construye y prueba paso a paso antes de pasar a la siguiente.
 
-## 11. Fuentes del método
+## 12. Fuentes del método
 
 Qué tomamos de cada referencia (detalle en [`investigacion/`](investigacion/)):
 
@@ -234,5 +280,6 @@ Qué tomamos de cada referencia (detalle en [`investigacion/`](investigacion/)):
 | Taskmaster | Puntuación de complejidad y división automática |
 | OpenSpec | Spec viva: cambios como deltas sobre la spec actual |
 | Compound Engineering | Paso de retro que modifica el propio sistema |
+| ECC | Base de agentes, skills y packs de stack (§10) |
 | Agent OS | Estándares cargados solo cuando son relevantes (skills, no CLAUDE.md gigante) |
 | arc42 / C4 / MADR | Formatos de arquitectura que los LLM manejan bien |

@@ -4,7 +4,9 @@ Método spec-driven para construir software con IA (Claude Code) en tiempo réco
 
 > Spec-driven AI development method for Claude Code: requirements interview → architecture → plan → build → verify → ship → retro. Self-improving through per-project retrospectives, evals and versioned releases.
 
-**Estado:** v0.1.0 — documentación del método. El plugin se construye fase por fase (ver hoja de ruta).
+**Estado:** v0.2.0 — documentación del método. El plugin se construye fase por fase (ver hoja de ruta).
+
+Construido sobre [ECC](https://github.com/affaan-m/ecc) (MIT): usa sus agentes y skills sin modificarlos, siempre sincronizados a su última release, y añade encima el método, las fases, los gates y la trazabilidad. Ver [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES.md).
 
 ## Pipeline
 
