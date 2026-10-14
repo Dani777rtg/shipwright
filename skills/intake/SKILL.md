@@ -53,13 +53,15 @@ Read `${CLAUDE_SKILL_DIR}/checklist.md`. Cover **every** section, in order, in b
 Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs" <docsDir> --phase intake`. Fix every problem and re-run until it prints OK. Never silence a problem by deleting a requirement; ask the user if a fix needs a decision.
 
 ### 6. Independent reviews
-Spawn in parallel:
+Spawn in parallel, in the foreground (never in the background: their findings exist only in their replies):
 - `shipwright:analyst` with the paths of mission.md, requirements.md, glossary.md, existing-system.md (if any) and `${CLAUDE_SKILL_DIR}/checklist.md`.
 - `shipwright:qa-lead` with task **A (testability review)** and the same paths. Store the project profile it proposes with `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set qaProfile '<json>'`; Architect uses it for the Test Strategy.
 - `shipwright:ux-lead` with task **A (key tasks)** when the mission has a user interface; otherwise record `No aplica: sin interfaz de usuario` for UX.
 - `shipwright:security-lead` with task **A (requirements)** and the same paths. Add the security and privacy criteria it lists (or their `No aplica`) to requirements.md, record the ASVS level it proposes for the user to approve at the gate, and write `<docsDir>/security/data-inventory.md` when there is personal data.
 
-Apply their findings; findings that need a decision go to the user via AskUserQuestion. Re-run step 5 after changes.
+Write the analyst's and the qa-lead's replies verbatim to `<docsDir>/spec/review.md` (one section each) before anything else. Apply their findings; findings that need a decision go to the user via AskUserQuestion. Record next to each finding what was done: `corregido`, `decidido por el usuario: <decisión>` or `abierto`. Re-run step 5 after changes.
+
+Do not present the gate until `<docsDir>/spec/review.md` exists and no blocking finding is `abierto`.
 
 ### 7. Gate
 Present:

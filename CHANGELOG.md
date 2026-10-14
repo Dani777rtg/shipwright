@@ -3,6 +3,15 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
+## [0.13.1] - 2026-10-14
+### Corregido
+Hallazgos del primer uso real (sistema-taller, encargo octubre 2026).
+- `/shipwright:mission` acepta archivos de material del cliente como brief y los copia a `client/`.
+- `/shipwright:mission` infiere la ficha de la misión desde el repo y solo pide confirmarla.
+- Todos los mensajes al usuario salen en su idioma (el resumen de cierre salía en inglés); nunca se adivina el nombre del usuario.
+- Los artefactos de la misión van siempre bajo `docsDir`, nunca a una ruta `docs/` fija (el inventario de datos caía en `docs/security/`).
+- Las revisiones independientes quedan en disco: intake escribe la del analyst y la de testabilidad del qa-lead en `<docsDir>/spec/review.md`, y architect la del architecture-reviewer en `<docsDir>/architecture/review.md`, con el estado de cada hallazgo. Los revisores corren en primer plano y la puerta no se presenta sin ese archivo ni con hallazgos bloqueantes abiertos (la revisión de arquitectura lanzada en segundo plano se perdió al cerrar la sesión).
+
 ## [0.13.0] - 2026-10-14
 ### Añadido
 - `reference/engineering-principles.md`: principios para todos los agentes, adaptados de andrej-karpathy-skills (pensar antes de actuar, cambios quirúrgicos), ponytail (lo mínimo que funciona, sin recortar tests ni seguridad), superpowers (evidencia antes de afirmar, depuración por causa raíz) y caveman (reportes breves solo entre agentes; preguntas y documentos en prosa clara).

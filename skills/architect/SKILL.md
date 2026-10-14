@@ -46,10 +46,13 @@ Spawn in one message (each gets the paths of the mission card, requirements, ARC
 Integrate their output: write the ADRs they propose, link their artifacts in ARCHITECTURE.md §9–10, add the documentation plan table, and resolve conflicts between them (ask the user when a conflict changes scope, cost or the QG order).
 
 ### 6. Review and traceability
-- Spawn `shipwright:architecture-reviewer` with all the artifacts; fix its findings (decisions go to the user).
+- Spawn `shipwright:architecture-reviewer` in the foreground (never in the background: its findings exist only in its reply) with all the artifacts.
+- Write its reply verbatim to `<docsDir>/architecture/review.md` before anything else, then fix its findings (decisions go to the user) and record next to each one what was done: `corregido`, `decidido por el usuario: <decisión>` or `abierto`. On a repeated review, append a new dated section.
 - `node "${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs" <docsDir> --phase architect` until OK.
 
 ### 7. Gate
+Do not present the gate until `<docsDir>/architecture/review.md` exists and no blocking finding is `abierto`.
+
 Present: the design in 5 lines; stack and platform with estimated monthly cost; the QS with their numbers; ASVS level and the top threats; the test types marked pertinent and the ones marked `No aplica`; the documentation plan; open `TBD`s and risks. If there is a prototype, ask the user to open `<docsDir>/ux/prototype/index.html` and walk each key task before answering.
 
 AskUserQuestion: Aprobar (Recomendado) / Pedir cambios / Volver a intake. Log with `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log architect gate-approved|gate-changes|gate-back "<note>"`.
