@@ -42,9 +42,18 @@ test('coverage: every O, US, AC and TM needs a child', () => {
 });
 
 test('risk: every story needs it, and threats only on high-risk stories', () => {
-  assert.ok(run([['spec.md', spec.replace(/riesgo: alto.*\r?\n/, '')]]).some((p) => p.includes('US-01 missing "riesgo:')));
+  assert.ok(run([['spec.md', spec.replace(/riesgo: alto.*\r?\n/, '')]]).some((p) => p.includes('US-01 missing "risk:')));
   const low = spec.replace('riesgo: alto — procesa audio con datos personales', 'riesgo: bajo — solo cambia un texto en pantalla');
   assert.ok(run([['spec.md', low]]).some((p) => p.includes('TM-1 threat on low-risk US-01')));
+});
+
+test('English keywords work the same as Spanish ones', () => {
+  const en = spec.replace('riesgo: alto — procesa audio con datos personales', 'risk: high — processes audio with personal data');
+  assert.deepEqual(run([['spec.md', en]]), []);
+  const low = spec.replace('riesgo: alto — procesa audio con datos personales', 'risk: low — only changes a label on screen');
+  assert.ok(run([['spec.md', low]]).some((p) => p.includes('TM-1 threat on low-risk US-01')));
+  const many = en + ['002', '003', '004', '005'].map((n) => `### T${n} [US-01] more\nserves: AC-01.1\n`).join('');
+  assert.ok(!run([['spec.md', many + '\nBudget exceeded: T — the bank integration needs separate steps\n']]).some((p) => p.includes('over budget')));
 });
 
 test('budget per story, waivable with a written reason', () => {

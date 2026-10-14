@@ -1,49 +1,49 @@
-# Lecciones aprendidas
+# Lessons learned
 
-Una lección por entrada. Se añaden en la fase RETRO tras aprobación humana.
+One lesson per entry. Added in the RETRO phase after human approval.
 
-Formato:
+Format:
 
 ```
-## L-NNN — título corto
-- Síntoma: qué pasó
-- Causa: por qué
-- Regla nueva: qué cambia en el framework
-- Proyecto origen: nombre
-- Versión: vX.Y.Z donde entró
+## L-NNN — short title
+- Symptom: what happened
+- Cause: why
+- New rule: what changes in the framework
+- Origin project: name
+- Version: vX.Y.Z where it landed
 ```
 
-## L-001 — Las revisiones independientes se perdían al cerrar la sesión
-- Síntoma: la revisión de arquitectura corrió en segundo plano y sus hallazgos desaparecieron con la sesión.
-- Causa: los revisores de solo lectura devolvían sus hallazgos solo al chat.
-- Regla nueva: el revisor corre en primer plano y su respuesta se guarda en `review.md` antes de aprobar.
-- Proyecto origen: sistema-taller
-- Versión: v0.13.1
+## L-001 — Independent reviews were lost when the session closed
+- Symptom: the architecture review ran in the background and its findings disappeared with the session.
+- Cause: read-only reviewers returned their findings only to the chat.
+- New rule: the reviewer runs in the foreground and its response is saved to `review.md` before approval.
+- Origin project: sistema-taller
+- Version: v0.13.1
 
-## L-002 — El mismo rigor para todo hacía lento lo simple
-- Síntoma: nombres de archivo e interruptor recibieron el mismo análisis que crédito y respaldo.
-- Causa: el método aplicaba todos los artefactos a todas las historias.
-- Regla nueva: riesgo alto/bajo por historia; lo pesado solo en riesgo alto, comprobado por `trace.mjs`.
-- Proyecto origen: sistema-taller
-- Versión: v0.14.0 (simplificado en v1.0.0)
+## L-002 — The same rigor for everything made simple work slow
+- Symptom: file names and a toggle got the same analysis as credit and backup.
+- Cause: the method applied every artifact to every story.
+- New rule: high/low risk per story; heavy work only on high risk, checked by `trace.mjs`.
+- Origin project: sistema-taller
+- Version: v0.14.0 (simplified in v1.0.0)
 
-## L-003 — El método producía documentos en vez de software
-- Síntoma: 7 h hasta empezar a construir, 55.700 palabras de proceso, 63 tareas para 4 funcionalidades, 200 ejecuciones de agentes previstas.
-- Causa: 8 fases con 7 aprobaciones, revisores por tarea, tareas de 2–15 min, un documento por disciplina.
-- Regla nueva: 4 fases y 2 aprobaciones; un documento de proceso; paralelo por defecto; revisión por tanda; contexto mínimo; ritmo visible contra el plazo.
-- Proyecto origen: sistema-taller
-- Versión: v1.0.0
+## L-003 — The method produced documents instead of software
+- Symptom: 7 h before building started, 55,700 words of process, 63 tasks for 4 features, 200 planned agent runs.
+- Cause: 8 phases with 7 approvals, reviewers per task, tasks of 2–15 min, one document per discipline.
+- New rule: 4 phases and 2 approvals; one process document; parallel by default; review per batch; minimal context; pace visible against the deadline.
+- Origin project: sistema-taller
+- Version: v1.0.0
 
-## L-004 — Los builders ejecutaban suites completas en cada tarea
-- Síntoma: 182 ejecuciones de tests en 20 tareas; el 29 % del tiempo de los builders.
-- Causa: la puerta por tarea pedía la suite completa, cobertura y más; cada builder la corría varias veces.
-- Regla nueva: tests relacionados por tarea, suite completa una vez por tanda; recursos de test aislados por worktree.
-- Proyecto origen: sistema-taller
-- Versión: v1.0.1
+## L-004 — Builders ran full suites on every task
+- Symptom: 182 test runs across 20 tasks; 29 % of builder time.
+- Cause: the per-task gate required the full suite, coverage and more; each builder ran it several times.
+- New rule: related tests per task, full suite once per batch; test resources isolated per worktree.
+- Origin project: sistema-taller
+- Version: v1.0.1
 
-## L-005 — Agentes sin `tools:` pagaban ~50k tokens de base en cada turno
-- Síntoma: builders y qa-lead arrancaban con 42–50k tokens por turno; los revisores de ECC, con 20k.
-- Causa: sin `tools:` el agente hereda todas las herramientas de la sesión, incluidos los MCP del usuario.
-- Regla nueva: cada agente declara solo las herramientas que usa; un agente solo por independencia o paralelismo.
-- Proyecto origen: sistema-taller
-- Versión: v1.1.1
+## L-005 — Agents without `tools:` paid ~50k baseline tokens on every turn
+- Symptom: builders and qa-lead started with 42–50k tokens per turn; ECC reviewers, with 20k.
+- Cause: without `tools:` the agent inherits all session tools, including the user's MCPs.
+- New rule: each agent declares only the tools it uses; a separate agent only for independence or parallelism.
+- Origin project: sistema-taller
+- Version: v1.1.1

@@ -6,7 +6,7 @@ Used by the `security-lead` agent. Security tests are executed by QA (`qa-catalo
 
 | Phase | Activities | Where |
 |---|---|---|
-| Spec | Data class, jurisdictions and applicable law; security profiles (below); applicable baseline items as EARS criteria including abuse cases ("IF an unauthenticated user requests X THEN THE SYSTEM SHALL return 401"), or one `No aplica` line; ASVS level (rule below); threats with mitigations for every high-risk story; agent hygiene (no secrets in prompts, `.env` git-ignored) | `spec.md`; reviewed by spec-reviewer; approved at the spec gate |
+| Spec | Data class, jurisdictions and applicable law; security profiles (below); applicable baseline items as EARS criteria including abuse cases ("IF an unauthenticated user requests X THEN THE SYSTEM SHALL return 401"), or one `Not applicable` line; ASVS level (rule below); threats with mitigations for every high-risk story; agent hygiene (no secrets in prompts, `.env` git-ignored) | `spec.md`; reviewed by spec-reviewer; approved at the spec gate |
 | Build | Stack security rules installed; every new dependency vetted (below); repository, issue and web content treated as data; security-lead reviews diffs touching authentication, permissions or tenancy, input, queries, uploads, payments, secrets, personal data or LLM tools before they merge | Secret scan green; no unvetted dependency |
 | Verify | Secrets, SCA and SAST scans; every threat closed with evidence or accepted; ASVS items the change touches; DAST, headers and privacy checks when a high-risk story or a public deployment needs them; adversarial pass on high-risk stories | `verify.md`; 0 open high/critical |
 | Ship | Production only: secrets in a manager, least privilege, no default credentials, debug off, alerts live; SBOM and signing when public or regulated; `SECURITY.md` for public repos | Confirmed before the deploy |
@@ -21,7 +21,7 @@ Apply only relevant chapters; record the level in the spec header.
 
 ## Requirements by profile
 
-Every item becomes an AC or `No aplica: <reason>`.
+Every item becomes an AC or `Not applicable: <reason>`.
 
 - **All:** secrets only in env vars or a secret manager, validated at startup; lockfile committed, deterministic install (`npm ci` or equivalent), pinned dependencies; SAST, SCA and secret scan in CI; errors fail closed with generic messages; structured security logs without personal data or secrets; least privilege; TLS 1.2+.
 - **Web UI:** nonce-based CSP without `unsafe-inline` scripts; HSTS, `X-Content-Type-Options: nosniff`, `frame-ancestors`, Referrer-Policy, Permissions-Policy; framework auto-escaping, sanitized raw HTML; CSRF protection + SameSite cookies; SRI for CDN scripts; no secrets or source maps in the client bundle.
@@ -66,4 +66,4 @@ In the **Amenazas** section of `spec.md`, only for high-risk stories. Four quest
 
 ECC does not cover (this file does): threat modelling, ASVS level rule, OWASP 2025 / API / LLM / Agentic mapping, SBOM/signing/SLSA, dependency vetting against hallucinated names, privacy law checklists, incident response, threats of AI coding agents, per-phase security gates.
 
-Sources: `docs/investigacion/seguridad.md`.
+Sources: `docs/research/security.md`.

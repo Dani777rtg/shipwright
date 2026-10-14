@@ -1,38 +1,38 @@
-# Despliegue — <misión>
+# Deployment — <mission>
 
-<!-- Solo cuando la misión crea o cambia infraestructura de producción. -->
+<!-- Only when the mission creates or changes production infrastructure. Write in the user's language. -->
 
-| Campo | Valor |
+| Field | Value |
 |---|---|
-| Plataforma y región | |
-| Coste mensual estimado | |
-| Secretos | <gestor> |
-| Base de datos y backups | <servicio, frecuencia, retención> |
-| Monitoreo y alertas | |
+| Platform and region | |
+| Estimated monthly cost | |
+| Secrets | <manager> |
+| Database and backups | <service, frequency, retention> |
+| Monitoring and alerts | |
 
-## Desplegar
-
-```
-<comandos exactos>
-```
-
-## Verificar
-
-<smoke tests, URL de salud, qué mirar durante el canario>
-
-## Revertir
+## Deploy
 
 ```
-<comandos exactos>
-```
-Ensayado: <fecha, minutos>
-
-## Restaurar datos
-
-```
-<pasos>
+<exact commands>
 ```
 
-## Incidentes
+## Verify
 
-<a quién avisar, cómo rotar un secreto expuesto>
+<smoke tests, health URL, what to watch during the canary>
+
+## Roll back
+
+```
+<exact commands>
+```
+Rehearsed: <date, minutes>
+
+## Restore data
+
+```
+<steps>
+```
+
+## Incidents
+
+<who to notify, how to rotate an exposed secret>

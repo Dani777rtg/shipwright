@@ -1,26 +1,28 @@
-# Cambio <NNN>: <título>
+# Change <NNN>: <title>
 
-| Campo | Valor |
+<!-- Write in the user's language. -->
+
+| Field | Value |
 |---|---|
-| Pedido por | |
-| Fecha | |
-| Estado | propuesto · aprobado · aplicado · rechazado |
+| Requested by | |
+| Date | |
+| Status | proposed · approved · applied · rejected |
 
-## Motivo
+## Reason
 
-<Qué cambió y por qué.>
+<What changed and why.>
 
 ## Delta
 
-| Parte | Añade | Modifica | Quita |
+| Part | Adds | Modifies | Removes |
 |---|---|---|---|
-| Spec (O, US, AC, TM, decisiones, tareas) | | | |
-| Tests de aceptación | | | |
-| Código ya construido | | | |
+| Spec (O, US, AC, TM, decisions, tasks) | | | |
+| Acceptance tests | | | |
+| Code already built | | | |
 
-## Impacto
+## Impact
 
-- Tareas a rehacer:
-- Plazo: <+/- horas>
-- Riesgos nuevos:
-- Archivos que se abrirán para edición:
+- Tasks to redo:
+- Deadline: <+/- hours>
+- New risks:
+- Files to open for editing:

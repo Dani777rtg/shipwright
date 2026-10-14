@@ -1,18 +1,18 @@
-## Qué cambia
+## What changes
 
-<1–3 líneas>
+<1–3 lines>
 
 serves: <AC-… / TM-…>
 
-## Cómo probarlo
+## How to test it
 
 1.
 
 ## Checklist
 
-- [ ] Tests (incluidos los de aceptación) en verde; tests bloqueados sin cambios
-- [ ] Lint, tipos y escaneos de seguridad en verde
-- [ ] `shipwright trace` sin problemas
-- [ ] Documentación actualizada en este mismo PR
-- [ ] Sin secretos, sin dependencias nuevas sin verificar
-- [ ] Capturas (si cambia la interfaz)
+- [ ] Tests (acceptance included) green; locked tests unchanged
+- [ ] Lint, types and security scans green
+- [ ] `shipwright trace` without problems
+- [ ] Docs updated in this same PR
+- [ ] No secrets, no unvetted new dependencies
+- [ ] Screenshots (if the UI changes)

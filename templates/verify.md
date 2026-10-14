@@ -1,40 +1,41 @@
-# Verificación — <misión>
+# Verification — <mission>
 
-## Veredicto
+<!-- Write in the user's language. -->
 
-**SHIP / NO SHIP** — <una frase con el motivo>
+## Verdict
 
-## Integridad
+**SHIP / NO SHIP** — <one sentence with the reason>
 
-- `lock.mjs verify`: <intacto / alterado: detalle>
-- Tests ocultos incorporados: <n> — <resultado>
-- `trace.mjs --phase verify`: <OK / problemas>
+## Integrity
 
-## Resultados
+- `lock.mjs verify`: <intact / changed: detail>
+- Hidden tests imported: <n> — <result>
+- `trace.mjs --phase verify`: <OK / problems>
 
-| Prueba | Resultado | Evidencia (comando y cifras) |
+## Results
+
+| Check | Result | Evidence (command and numbers) |
 |---|---|---|
-| Aceptación | | |
-| Suite completa (unitarias, integración) | | |
-| Lint y tipos | | |
-| `/code-review` | | |
-| Seguridad: secretos, dependencias, SAST, `/security-review` | | |
-| <tipos pertinentes de la spec> | | |
-| Documentación: quick start en un clon limpio | | |
+| Acceptance | | |
+| Full suite (unit, integration) | | |
+| Lint and types | | |
+| Security: secrets, dependencies, static analysis | | |
+| <pertinent types from the spec> | | |
+| Docs: quick start on a clean clone | | |
 
-## Amenazas
+## Threats
 
-<!-- Una fila por TM con "evidencia:" para que trace la reconozca. Tabla, no lista. -->
-| TM | Estado | Evidencia |
+<!-- One row per TM with "evidence:" so trace recognizes it. A table, not a list. -->
+| TM | Status | Evidence |
 |---|---|---|
-| TM-1 | mitigada | evidencia: <test o medida> |
+| TM-1 | mitigated | evidence: <test or measure> |
 
 ## Bugs
 
-| # | Qué pasa | Severidad (S1–S4) | Estado |
+| # | What happens | Severity (S1–S4) | Status |
 |---|---|---|---|
 | | | | |
 
-## Riesgos residuales (los acepta el usuario)
+## Residual risks (accepted by the user)
 
 -

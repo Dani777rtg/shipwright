@@ -40,6 +40,7 @@ Subagent reports and orchestrator progress notes are terse: no pleasantries, no 
 **Not** terse: questions to the user, gate summaries, explanations of decisions, and every persisted artifact (spec, verification report, docs, commits, PRs, handover) — those are written in clear, complete prose in the deliverable language.
 
 ## 8. Speed (the method's first goal after the quality floor)
+- **Act, don't deliberate.** Decide with what the spec and the experts already say; one short line per step; no restated plans, no options you will not take. Subagents run at effort `low` (spec-reviewer at `medium`): the thinking was done when the experts were consulted.
 - **Parallel by default.** Independent work runs at the same time: one QA agent per story, one builder per independent task in its own worktree, reviewers side by side. Waiting in series for something that does not depend on it is a defect.
 - **Infer, don't ask.** Read the brief, the repository and its docs first; ask only what blocks, all in one batch. Everything else is an assumption with an owner and a date.
 - **An agent only for independence or parallelism.** Independent judgment (QA, security, review) or work that can run at the same time justifies a subagent. Knowledge does not: it goes to the agent that works as a skill or rule it reads. Every subagent pays a fixed base context on every turn and a hand-back to the orchestrator.
@@ -55,5 +56,5 @@ Subagent reports and orchestrator progress notes are terse: no pleasantries, no 
 `<docsDir>` is the `docsDir` value in `.shipwright/state.json` (`docs/` for a new project, `docs/shipwright/<mission>/` in an existing system). Process artifacts: `spec.md`, `review.md`, `verify.md`, `deploy.md` (only when deploying new infrastructure), `changes/`, `metrics.md`, `client/` — always under `<docsDir>`, never a hard-coded `docs/`. The delivered product's own documentation (README, configuration, API reference, guides) follows the repository's layout.
 
 ## 10. Models and sessions
-- Default model per role: Opus for judgment with few runs (spec-reviewer, security-lead), Sonnet for building, testing, documenting, deploying and batch review (builder, qa-lead, docs-lead, devops-lead, ECC reviewers), Haiku for status. Users override with `CLAUDE_CODE_SUBAGENT_MODEL` (+ `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1`).
+- Default model per role: Opus for the one judgment call that shapes everything (spec-reviewer); Sonnet for everything that runs often (builder, qa-lead, security-lead, docs-lead, devops-lead, ECC reviewers); Haiku for status. Subagents run at effort `low`, the spec-reviewer at `medium`. Users override with `CLAUDE_CODE_SUBAGENT_MODEL` (+ `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1`).
 - Phases chain without stopping except at the two human gates (spec, ship). Everything lives in files and the session-start hook restores the mission, so when a conversation grows long recommend `/compact` (only the user can run it).

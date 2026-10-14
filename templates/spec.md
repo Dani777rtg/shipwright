@@ -1,94 +1,101 @@
 ---
 status: draft
 ---
-# <Misión: verbo + resultado, una frase>
+# <Mission: verb + result, one sentence>
 
-| Campo | Valor |
+<!-- Write this document in the user's language; headings and keywords may be translated
+     (risk/riesgo, Not applicable/No aplica, Budget exceeded/Presupuesto excedido are both accepted). -->
+
+| Field | Value |
 |---|---|
-| Entregable | app · funcionalidad · integración · arreglo · prueba de concepto · informe |
-| Punto de partida | desde cero · sobre lo existente (`<repo>`) |
-| Plazo | `<fecha y hora>` |
-| Idioma | `<idioma>` |
-| Datos y leyes | pública · interna · personal · pagos · salud — <ley aplicable, p. ej. Ley 1581> — ASVS <L1/L2/L3> |
-| Plataforma | <la que ya usa el proyecto · por decidir · no aplica (PR)> |
-| Confidencialidad | <se permite enviar el código a Claude: sí / parcial / local — autorizó `<quién>`> |
-| Aprueba | <quién> |
+| Deliverable | app · feature · integration · fix · proof of concept · report |
+| Starting point | from scratch · existing system (`<repo>`) |
+| Deadline | `<date and time>` |
+| Language | `<language>` |
+| Data and law | public · internal · personal · payments · health — <applicable law> — ASVS <L1/L2/L3> |
+| Platform | <the one the project uses · to decide · none (PR)> |
+| Confidentiality | <code may be sent to Claude: yes / partial / local — authorized by `<who>`> |
+| Approver | <who> |
 
-## Objetivos
+## Objectives
 
-<!-- Cuando <situación>, <actor> quiere <progreso> para <resultado> — medida: <número y cómo se mide>. -->
-- O-1: Cuando …, … quiere … para … — medida: …
+<!-- When <situation>, <actor> wants <progress> so that <outcome> — measure: <number and how it is measured>. -->
+- O-1: When …, … wants … so that … — measure: …
 
-## Prioridades de calidad
+## Quality priorities
 
-1. <atributo> — <por qué va primero>
+1. <attribute> — <why it ranks first>
 2.
 3.
 
-## Sistema actual
+## Current system
 
-<!-- Solo sobre lo existente; si no, borra la sección. Hechos con su archivo, no opiniones.
-     Stack, cómo se prueba, convenciones (archivo:línea), lo que no puede cambiar, puntos de integración.
-     Mapa del código: graphify-out/GRAPH_REPORT.md -->
+<!-- Existing systems only; otherwise delete. Facts with their file, not opinions: stack, how tests run,
+     conventions (file:line), what must not change, integration points. Code map: graphify-out/GRAPH_REPORT.md -->
 
-## Historias y criterios
+## Stories and criteria
 
-<!-- MoSCoW. riesgo: alto si toca dinero, datos personales, permisos o aislamiento, una integración externa u
-     operaciones masivas o irreversibles sobre datos; si no, bajo. Ante la duda, alto.
-     Criterios EARS: WHEN <evento> / IF <condición> THEN / WHILE <estado> … THE SYSTEM SHALL <respuesta verificable>.
-     Cada historia Must: al menos un criterio del camino feliz y uno de comportamiento no deseado. -->
+<!-- MoSCoW. risk: high if it touches money, personal data, permissions or isolation, an external integration, or bulk
+     or irreversible data operations; otherwise low. When in doubt, high.
+     EARS criteria: WHEN <event> / IF <condition> THEN / WHILE <state> … THE SYSTEM SHALL <verifiable response>.
+     Every Must story: at least one happy-path criterion and one unwanted-behaviour criterion. -->
 
-### US-01 <título> (Must)
-Como <rol>, quiero <capacidad> para <beneficio>.
+### US-01 <title> (Must)
+As a <role>, I want <capability> so that <benefit>.
 serves: O-1
-riesgo: bajo — <motivo>
+risk: low — <reason>
 
-- **AC-01.1** WHEN <evento> THE SYSTEM SHALL <respuesta verificable>
+- **AC-01.1** WHEN <event> THE SYSTEM SHALL <verifiable response>
   serves: US-01
-- **AC-01.2** IF <condición no deseada> THEN THE SYSTEM SHALL <respuesta>
+- **AC-01.2** IF <unwanted condition> THEN THE SYSTEM SHALL <response>
   serves: US-01
 
-## Decisiones
+## Expert input (ECC)
 
-<!-- Solo las que cambian algo: stack, datos, autenticación, integración, despliegue, toda dependencia nueva. -->
-| Decisión | Alternativa descartada | Por qué |
+<!-- One line per area: which ECC expert or skill was consulted and what it decided.
+     Architecture: agents/architect.md (+ skills/api-design, agents/database-reviewer.md when relevant).
+     Development: the stack skills that will be installed. QA: skills/tdd-workflow, skills/e2e-testing. -->
+
+## Decisions
+
+<!-- Only those that change something: stack, data, authentication, integration, deployment, every new dependency. -->
+| Decision | Rejected alternative | Why |
 |---|---|---|
 | | | |
 
-## Diseño
+## Design
 
-<!-- Lo mínimo para que los builders no choquen: componentes y flujo clave (≤ 15 líneas o un diagrama Mermaid),
-     modelo de datos que cambia, contratos (ruta del OpenAPI si hay API). Nada que ninguna historia necesite. -->
+<!-- The minimum so builders do not collide: components and key flow (≤ 15 lines or one Mermaid diagram),
+     data model changes, contracts (path of the OpenAPI file if there is an API). Nothing no story needs. -->
 
-## Amenazas
+## Threats
 
-<!-- Solo para historias de riesgo alto; si no hay, borra la sección. Cada amenaza con su mitigación como criterio
-     o tarea (la tarea lleva serves: TM-n). Cada amenaza es un elemento de lista con este contenido:
-     TM-1: <activo> · <qué puede salir mal> · mitigación: <AC o tarea> — serves: US-NN -->
+<!-- High-risk stories only; otherwise delete. Each threat with its mitigation as a criterion or a task
+     (the task carries serves: TM-n). Each threat is a list item with this content:
+     TM-1: <asset> · <what can go wrong> · mitigation: <AC or task> — serves: US-NN -->
 
+## Tests
 
-## Pruebas
+- Acceptance tests: `<path, e.g. tests/acceptance/>` (written by QA, locked).
+- Pertinent: <type — reason, one line each; heavy types only for high-risk stories>.
+- Not applicable: <other types> — <reason>.
 
-- Tests de aceptación: `<ruta, p. ej. tests/acceptance/>` (escritos por QA, bloqueados).
-- Pertinentes: <tipo — motivo, una línea por tipo; los pesados solo para historias de riesgo alto>.
-- No aplica: <resto de tipos> — <motivo>.
+## Tasks
 
-## Tareas
+<!-- Vertical slices: 1–3 tasks per story. [P] = touches different files and depends on no open task. -->
 
-<!-- Cortes verticales: 1–3 tareas por historia. [P] = toca archivos distintos y no depende de otra tarea abierta. -->
-
-### T001 [P] [US-01] <título>
+### T001 [P] [US-01] <title>
 serves: AC-01.1, AC-01.2
-- Archivos: `<rutas>`
-- Verificación: `<comando o test>`
+- Files: `<paths>`
+- Check: `<command or test>`
 - depends: —
 
-## Supuestos y preguntas abiertas
+## Assumptions and open questions
 
-| Supuesto | Dueño | Confirmar antes de |
+| Assumption | Owner | Confirm before |
 |---|---|---|
 | | | |
 
-## Fuera de alcance
+## Out of scope
 
 -

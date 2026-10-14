@@ -13,6 +13,6 @@ Messages in the user's language. Scripts from the project root as `node "${CLAUD
 
 1. **Delta.** If the request is empty, ask for it. Write `<docsDir>/changes/<NNN>-<slug>.md` from `${CLAUDE_PLUGIN_ROOT}/templates/change.md` (NNN = next number): motive; what each part adds, modifies or removes, with IDs.
 2. **Impact.** Affected IDs (`trace.mjs`), code already built, tasks to redo, effect on the deadline, new risks. A new trust boundary, dependency or data class → `shipwright:security-lead` task **A** on it.
-3. **Gate.** AskUserQuestion: Aprobar (Recomendado) / Ajustar / Rechazar. Rejected → mark the delta `rechazado` and stop.
-4. **Apply.** `change.mjs open <NNN> <file>...` (exactly the listed files); edit them — a new or changed story carries `riesgo:` and gets the rigor of its level; acceptance-test changes are written by `shipwright:qa-lead` task **A**; `trace.mjs <docsDir>` until OK; `change.mjs close` (re-fingerprints locked tests); mark the delta `aplicado`; remove tasks to redo from `tasksDone` (`state.mjs set tasksDone '<json array>'`).
+3. **Gate.** AskUserQuestion (labels in the user's language): Approve (Recommended) / Adjust / Reject. Rejected → mark the delta `rejected` and stop.
+4. **Apply.** `change.mjs open <NNN> <file>...` (exactly the listed files); edit them — a new or changed story carries `risk:` and gets the rigor of its level; acceptance-test changes are written by `shipwright:qa-lead` task **A**; `trace.mjs <docsDir>` until OK; `change.mjs close` (re-fingerprints locked tests); mark the delta `applied`; remove tasks to redo from `tasksDone` (`state.mjs set tasksDone '<json array>'`).
 5. Tell the user what changed and which phase continues.

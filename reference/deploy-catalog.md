@@ -42,7 +42,7 @@ Used by the `devops-lead` agent (staging in Verify, production in Ship) and when
 - **Kubernetes** — probes, requests/limits, PodDisruptionBudget, HPA; External Secrets or Sealed Secrets (base64 is not encryption); cert-manager; databases managed outside the cluster.
 - **Mobile** — EAS build profiles map to update channels; Fastlane `deliver`/`supply`/`match` with store API keys as CI secrets.
 
-## Production readiness (Ship gate — "done" means all met or `No aplica: <reason>` approved)
+## Production readiness (Ship gate — "done" means all met or `Not applicable: <reason>` approved)
 
 | # | Area | Requirement | Evidence |
 |---|---|---|---|
@@ -66,4 +66,4 @@ Used by the `devops-lead` agent (staging in Verify, production in Ship) and when
 
 ECC does not cover (this catalog does): per-platform specifics, OIDC deploys, IaC per cloud, SLOs and error budgets, OpenTelemetry setup, restore drills, cost alerts, DNS/TLS, data residency, mobile store delivery, incident templates.
 
-Sources: `docs/investigacion/despliegue.md`.
+Sources: `docs/research/deployment.md`.

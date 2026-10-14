@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Vendors the ECC pieces listed in vendor/ecc.manifest.json from a local ECC checkout,
-// regenerates vendor/ecc.index.md and writes a review report (METODO.md §10).
+// regenerates vendor/ecc.index.md and writes a review report (METHOD.md §4).
 // Usage: node scripts/ecc-sync.mjs <ecc-checkout> --release <tag> --commit <sha> [--report <file>]
 // Exit 0 = synced and clean, 1 = synced with findings for the human reviewer, 2 = cannot sync.
 import { readFileSync, writeFileSync, existsSync, rmSync, cpSync, readdirSync, statSync, mkdirSync } from 'node:fs';

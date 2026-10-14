@@ -109,13 +109,13 @@ export function render({ sessions, agents, builderTools }) {
   const idle = sessions.reduce((n, s) => n + s.idle, 0);
   const M = (n) => (n / 1e6).toFixed(1);
   const K = (n) => Math.round(n / 1e3);
-  const lines = ['# Dónde se fue el tiempo', '', `Activo: ${minutes(active)} min · inactivo (pausas > ${IDLE_MIN} min): ${minutes(idle)} min`, '',
-    '| Sesión | Inicio (UTC) | Activo (min) | Inactivo (min) | Mensajes del usuario | Turnos | Contexto leído (M tokens) |', '|---|---|---|---|---|---|---|',
+  const lines = ['# Where the time went', '', `Active: ${minutes(active)} min · idle (gaps > ${IDLE_MIN} min): ${minutes(idle)} min`, '',
+    '| Session | Start (UTC) | Active (min) | Idle (min) | User messages | Turns | Context read (M tokens) |', '|---|---|---|---|---|---|---|',
     ...sessions.sort((a, b) => a.start.localeCompare(b.start)).map((s) => `| ${s.id} | ${s.start.slice(0, 16)} | ${minutes(s.active)} | ${minutes(s.idle)} | ${s.prompts} | ${s.turns} | ${M(s.tokens)} |`),
-    '', '| Subagente | Veces | Minutos | Turnos | Contexto leído (M tokens) | Base por turno (k tokens) |', '|---|---|---|---|---|---|',
+    '', '| Subagent | Runs | Minutes | Turns | Context read (M tokens) | Base per turn (k tokens) |', '|---|---|---|---|---|---|',
     ...Object.entries(agents).sort((a, b) => b[1].tokens - a[1].tokens).map(([k, v]) => `| ${k} | ${v.count} | ${minutes(v.ms)} | ${v.turns} | ${M(v.tokens)} | ${K(v.firstTurn / v.count)} |`)];
   const total = Object.values(builderTools).reduce((n, v) => n + v.ms, 0);
-  if (total) lines.push('', '| Builders: herramienta | Llamadas | Minutos | % del tiempo en herramientas |', '|---|---|---|---|',
+  if (total) lines.push('', '| Builders: tool | Calls | Minutes | % of tool time |', '|---|---|---|---|',
     ...Object.entries(builderTools).sort((a, b) => b[1].ms - a[1].ms).map(([k, v]) => `| ${k} | ${v.calls} | ${minutes(v.ms)} | ${Math.round((100 * v.ms) / total)} % |`));
   return lines.join('\n');
 }

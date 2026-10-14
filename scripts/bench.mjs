@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Scores a finished Shipwright mission so framework versions can be compared (METODO.md §7).
+// Scores a finished Shipwright mission so framework versions can be compared (METHOD.md §7).
 // Usage:
 //   node bench.mjs score <projectDir> [--out <file.json>]
 //   node bench.mjs compare <before.json> <after.json>

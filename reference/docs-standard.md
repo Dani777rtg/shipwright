@@ -4,7 +4,7 @@ Used by the `docs-lead` agent. Structure follows **Diátaxis** (tutorials, how-t
 
 ## Required documents
 
-Write only the ones whose "required when" holds; list the rest in one `No aplica` line of `verify.md`.
+Write only the ones whose "required when" holds; list the rest in one `Not applicable` line of `verify.md`.
 
 | Document | Diátaxis | Required when | Content |
 |---|---|---|---|

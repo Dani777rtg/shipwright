@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// shipwright trace — deterministic traceability and proportionality check (METODO.md §3).
+// shipwright trace — deterministic traceability and proportionality check (METHOD.md §3).
 // Usage: node trace.mjs [docsDir=docs] [--phase spec|verify] [--tests <dir>]...
 // Exit 0 = ok, 1 = problems (printed), 2 = usage error.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
@@ -9,9 +9,11 @@ import { pathToFileURL } from 'node:url';
 const ID = String.raw`(?:O-\d+|US-\d+|AC-\d+\.\d+|TM-\d+|T\d{3,})`;
 const DEF_RE = new RegExp(String.raw`^\s*(?:#{1,6}\s+|[-*]\s+)(?:\*\*)?(${ID})\b`);
 const SERVES_RE = /serves:\s*([^\n—]*)/i;
-const RISK_RE = /^\s*riesgo:\s*(alto|bajo)\s+(?:—|--)\s+\S.{9,}/im;
+// Artifacts are written in the user's language: keywords are accepted in English and Spanish.
+const RISK_RE = /^\s*(?:risk|riesgo):\s*(high|low|alto|bajo)\s+(?:—|--)\s+\S.{9,}/im;
+const RISK_LEVEL = { high: 'high', alto: 'high', low: 'low', bajo: 'low' };
 const NOT_APPLICABLE_RE = /no aplica:|not applicable:|riesgo aceptado:|accepted risk:/i;
-const WAIVER_RE = /presupuesto excedido:\s*([A-Z]+)\s+(?:—|--)\s+\S.{9,}/gi;
+const WAIVER_RE = /(?:budget exceeded|presupuesto excedido):\s*([A-Z]+)\s+(?:—|--)\s+\S.{9,}/gi;
 
 const kindOf = (id) => id.match(/^[A-Z]+/)[0];
 
@@ -22,7 +24,7 @@ const ALLOWED = { US: ['O'], AC: ['US'], TM: ['US'], T: ['AC', 'TM'] };
 const COVERAGE = [['O', ['US']], ['US', ['AC']], ['AC', ['T']], ['TM', ['T']]];
 
 // Proportionality: limits per story (and per mission for stories). Exceeding one needs a written waiver line
-// "Presupuesto excedido: <KIND> — <reason>" in any mission document, shown to the user at the gate.
+// "Budget exceeded: <KIND> — <reason>" in any mission document, shown to the user at the gate.
 export const BUDGET = { US: 12, AC_PER_US: 6, T_PER_US: 3, TM_PER_HIGH_US: 4 };
 
 export function collectFiles(dir) {
@@ -58,7 +60,7 @@ export function parse(files) {
   for (const it of items.values()) {
     const text = it.body.join('\n');
     it.na = NOT_APPLICABLE_RE.test(text);
-    it.risk = text.match(RISK_RE)?.[1]?.toLowerCase() ?? null;
+    it.risk = RISK_LEVEL[text.match(RISK_RE)?.[1]?.toLowerCase()] ?? null;
     const s = text.match(SERVES_RE);
     it.serves = s ? s[1].split(/[,\s]+/).map((r) => r.replace(/[[\]`*]/g, '')).filter(Boolean) : null;
   }
@@ -99,7 +101,7 @@ export function overBudget(items, texts) {
     if (tasks.length > BUDGET.T_PER_US && !waived.has('T')) out.push(`${us.id}: ${tasks.length} T (max ${BUDGET.T_PER_US})`);
     if (tms.length > BUDGET.TM_PER_HIGH_US && !waived.has('TM')) out.push(`${us.id}: ${tms.length} TM (max ${BUDGET.TM_PER_HIGH_US})`);
   }
-  return out.map((p) => `over budget: ${p} — reduce it, or add "Presupuesto excedido: <KIND> — <why>"`);
+  return out.map((p) => `over budget: ${p} — reduce it, or add "Budget exceeded: <KIND> — <why>"`);
 }
 
 export function check({ items, errors, texts = [] }, phase = 'spec', testIds = null) {
@@ -107,14 +109,14 @@ export function check({ items, errors, texts = [] }, phase = 'spec', testIds = n
   const where = (it) => `${it.path}:${it.line} ${it.id}`;
   for (const it of items.values()) {
     const allowed = ALLOWED[it.kind];
-    if (it.kind === 'US' && !it.risk) out.push(`${where(it)} missing "riesgo: alto|bajo — <why>" (METODO.md §3)`);
+    if (it.kind === 'US' && !it.risk) out.push(`${where(it)} missing "risk: high|low — <why>" (METHOD.md §3)`);
     if (!allowed) continue;
     if (!it.serves?.length) { out.push(`${where(it)} orphan: missing "serves: <ID>"`); continue; }
     for (const ref of it.serves) {
       const target = items.get(ref);
       if (!target) out.push(`${where(it)} serves unknown ID ${ref}`);
       else if (!allowed.includes(target.kind)) out.push(`${where(it)} cannot serve ${ref} (${it.kind} may serve: ${allowed.join(', ')})`);
-      else if (it.kind === 'TM' && target.risk === 'bajo') out.push(`${where(it)} threat on low-risk ${ref}: threats are written only for riesgo alto stories`);
+      else if (it.kind === 'TM' && target.risk === 'low') out.push(`${where(it)} threat on low-risk ${ref}: threats are written only for high-risk stories`);
     }
   }
   const covered = new Map();

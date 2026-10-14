@@ -1,214 +1,222 @@
 # Changelog
 
-Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
-Cada entrada originada por una retro cita el proyecto de origen.
+Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: semver (see `docs/METHOD.md`).
+Every entry that comes from a retro cites its origin project.
+
+## [1.2.0] - 2026-10-14
+### Changed
+- **One goal:** a problem comes in, ECC's experts say how to solve it (architecture, development, QA), agents build it in parallel, brief checks, it ships. The spec phase now consults ECC explicitly — `architect` (plus `api-design` and `database-reviewer` when relevant), the stack skills, `tdd-workflow` and `e2e-testing`, `planner` — and records it in a new **Expert input** section.
+- **Act, don't deliberate:** subagents are spawned at effort `low` (the spec-reviewer at `medium`); the thinking happens once, when the experts are consulted.
+- **Brief checks:** the spec-reviewer reports blockers and majors only (at most 8); the security-lead runs on Sonnet with an 8-line report and looks only for what ECC's rules and the batch review miss. Verify no longer re-reviews the code (`/code-review`, `/security-review` and silent-failure-hunter removed there): it was already reviewed batch by batch.
+- **English documentation:** README, method (`docs/METHOD.md`), stack catalog (`docs/stack-catalog.md`), research (`docs/research/`), lessons, benchmark guide, templates and changelog. Mission artifacts are still written in the user's language; `trace.mjs` accepts the keywords in English (`risk: high|low`, `Budget exceeded:`) and Spanish.
+- Script output (`metrics.md` header, `session-report`) in English.
 
 ## [1.1.1] - 2026-10-14
-### Cambiado
-- **Herramientas mínimas por agente.** builder, qa-lead, security-lead, docs-lead y devops-lead declaran `tools:`. Sin esa lista heredaban todas las herramientas de la sesión (incluidos los MCP del usuario) y arrancaban con ~50k tokens de base por turno, frente a 9–21k de los agentes restringidos; en el taller fue el 58 % del contexto de los builders.
-- **Una sola revisión por tanda:** el revisor del lenguaje (o code-reviewer) con la comprobación de integridad de tests añadida. qa-lead ya no revisa diffs (era 5 veces más caro por revisión que un revisor de ECC) y pasa a Sonnet.
-- Los agentes de Shipwright ya no lanzan agentes de ECC anidados: leen su archivo y aplican su método.
-- Informes con tope de líneas y comandos con salida resumida: todo lo que llega al orquestador se relee en cada turno (~250k tokens por turno en el build del taller).
-- `install-packs.mjs` no instala las reglas de proceso de ECC (`agents`, `development-workflow`, `git-workflow`, `code-review`): se cargaban siempre y contradicen el método.
-- Principio nuevo: un agente solo por independencia o paralelismo; el conocimiento va como skill.
+### Changed
+- **Minimal tools per agent.** builder, qa-lead, security-lead, docs-lead and devops-lead now declare `tools:`. Without that list they inherited every tool in the session (including the user's MCPs) and started with a ~50k-token base per turn, against 9–21k for the restricted agents; in the taller project it was 58 % of the builders' context.
+- **One review per batch:** the language reviewer (or code-reviewer) with the test integrity check added. qa-lead no longer reviews diffs (it was 5 times more expensive per review than an ECC reviewer) and moves to Sonnet.
+- Shipwright agents no longer launch nested ECC agents: they read its file and apply its method.
+- Reports with a line cap and commands with summarized output: everything that reaches the orchestrator is re-read on every turn (~250k tokens per turn in the taller build).
+- `install-packs.mjs` does not install ECC's process rules (`agents`, `development-workflow`, `git-workflow`, `code-review`): they were always loaded and contradict the method.
+- New principle: an agent only for independence or parallelism; knowledge goes in as a skill.
 
-### Añadido
-- `session-report.mjs` mide también turnos, contexto leído y base por turno de cada tipo de agente.
-- `docs/investigacion/ecc-uso.md`: estudio con datos de cómo se usaba ECC y dónde se gastaban tiempo y tokens.
+### Added
+- `session-report.mjs` also measures turns, context read and base per turn for each agent type.
+- `docs/research/ecc-usage.md`: data-driven study of how ECC was used and where time and tokens went.
 
 ## [1.1.0] - 2026-10-14
-### Añadido
-- `scripts/session-report.mjs`: lee las transcripciones de Claude Code del proyecto (solo lectura) y mide tiempo activo e inactivo, mensajes del usuario, tiempo por tipo de subagente y tiempo de los builders por familia de herramienta (tests, typecheck, instalaciones, git). La retro lo usa como evidencia.
+### Added
+- `scripts/session-report.mjs`: reads the project's Claude Code transcripts (read-only) and measures active and idle time, user messages, time per subagent type and builder time by tool family (tests, typecheck, installs, git). The retro uses it as evidence.
 
-### Cambiado
-- **ECC por rol.** ECC está pensado para que el hilo principal programe: de sus 62 agentes, unos 33 solo revisan, 12 arreglan errores de build y pocos escriben; el conocimiento de construcción está en sus 191 skills y 22 paquetes de reglas. Ahora cada builder recibe las skills del stack (patrones y testing) que corresponden a sus archivos; los errores de build, compilación o tipos van al resolvedor del lenguaje instalado en vez de repetir el builder; database-reviewer revisa las tandas que cambian el esquema y performance-optimizer las tareas de rendimiento de riesgo alto; qa-lead escribe tests end-to-end para criterios que solo se ven en la interfaz.
+### Changed
+- **ECC by role.** ECC is designed for the main thread to write code: of its 62 agents, about 33 only review, 12 fix build errors and few write; build knowledge lives in its 191 skills and 22 rule packs. Now each builder receives the stack skills (patterns and testing) that match its files; build, compile or type errors go to the installed language resolver instead of repeating the builder; database-reviewer reviews batches that change the schema and performance-optimizer handles high-risk performance tasks; qa-lead writes end-to-end tests for criteria that are only visible in the interface.
 
-Origen: análisis de sistema-taller — los 26 builders no leyeron ninguna de las skills de ECC instaladas (patrones de backend, Postgres, Prisma, testing de React); en Build, ECC solo se usó como revisor.
+Origin: analysis of sistema-taller — the 26 builders read none of the installed ECC skills (backend patterns, Postgres, Prisma, React testing); in Build, ECC was only used as a reviewer.
 
 ## [1.0.1] - 2026-10-14
-### Cambiado
-- Los builders ejecutan solo los tests relacionados con su cambio (modo related/changed del runner) y los de aceptación de su tarea; la suite completa corre una vez por tanda.
-- Antes de la primera tanda, cada worktree recibe recursos de test aislados (base de datos o esquema, puerto, carpeta temporal) y las dependencias se instalan en modo rápido.
-- Las tareas listas arrancan sin esperar a las revisiones de tareas anteriores.
+### Changed
+- Builders run only the tests related to their change (the runner's related/changed mode) and their task's acceptance tests; the full suite runs once per batch.
+- Before the first batch, each worktree gets isolated test resources (database or schema, port, temp folder) and dependencies are installed in fast mode.
+- Ready tasks start without waiting for reviews of earlier tasks.
 
-Origen: análisis de las transcripciones de sistema-taller. En Build, los builders pasaron el 29 % de su tiempo ejecutando tests (182 ejecuciones, 58 de 199 minutos), muchas veces suites amplias. Además, 45 minutos se perdieron esperando que el usuario lanzara la fase siguiente y 31 minutos en un solo agente escribiendo 146 tests de aceptación, dos cosas que la 1.0 ya resuelve encadenando fases y con un qa-lead por historia.
+Origin: analysis of the sistema-taller transcripts. In Build, builders spent 29 % of their time running tests (182 runs, 58 of 199 minutes), often broad suites. In addition, 45 minutes were lost waiting for the user to launch the next phase and 31 minutes on a single agent writing 146 acceptance tests, two things 1.0 already solves by chaining phases and with one qa-lead per story.
 
 ## [1.0.0] - 2026-10-14
-Reescritura orientada a velocidad sin bajar el suelo de calidad. Rompe compatibilidad: las misiones empezadas con 0.x siguen con la etiqueta `v0.16.0`.
+Rewrite aimed at speed without lowering the quality floor. Breaking: missions started with 0.x stay on the `v0.16.0` tag.
 
-### Cambiado
-- **4 fases y 2 aprobaciones humanas:** `spec` (reúne mission, intake, architect y plan) → `build` → `verify` → `ship`, encadenadas solas. Tú apruebas la spec con el plan y la entrega. `retro` pasa a ser opcional.
-- **Un solo documento de proceso**, `spec.md`, más `verify.md`. El producto entregado sí se documenta: README con quick start probado en un clon limpio, configuración, API.
-- **Paralelo por defecto:** un qa-lead por historia escribe los tests de aceptación a la vez; builders en worktrees para todas las tareas independientes; revisión de código y del diff de tests por tanda, no por tarea; puerta por tarea ligera (tests del área y tipos), suite completa por tanda.
-- **Deducir antes que preguntar:** una sola tanda de preguntas; lo demás son supuestos con dueño y fecha.
-- **Contexto mínimo** para cada builder: su tarea, criterios, tests y archivos.
-- **Ritmo visible:** tras cada tanda, hora estimada contra el plazo y propuesta de recorte en cuanto no se llega.
-- **Expertos de ECC nombrados por fase** (explorador de código, planner, revisores de código, base de datos y seguridad, e2e, accesibilidad, fallos silenciosos, documentación, despliegue); los packs del stack se instalan al aprobar la spec, antes del primer commit.
-- Trazabilidad simplificada: O → US → AC → T → test, más TM solo para historias de riesgo alto; `serves:` solo con IDs. Presupuesto por historia en lugar de tamaños S/M/L.
-- `bench.mjs` penaliza también las palabras de proceso.
+### Changed
+- **4 phases and 2 human approvals:** `spec` (gathers mission, intake, architect and plan) → `build` → `verify` → `ship`, chained automatically. You approve the spec with the plan, and the delivery. `retro` becomes optional.
+- **A single process document**, `spec.md`, plus `verify.md`. The delivered product is documented: README with a quick start tested on a clean clone, configuration, API.
+- **Parallel by default:** one qa-lead per story writes the acceptance tests at the same time; builders in worktrees for all independent tasks; code review and test-diff review per batch, not per task; light per-task gate (area tests and types), full suite per batch.
+- **Deduce before asking:** a single round of questions; everything else is assumptions with an owner and a date.
+- **Minimal context** for each builder: its task, criteria, tests and files.
+- **Visible pace:** after each batch, estimated time against the deadline and a cut proposal as soon as it will not be met.
+- **ECC experts named per phase** (code explorer, planner, code, database and security reviewers, e2e, accessibility, silent failures, documentation, deployment); the stack packs are installed when the spec is approved, before the first commit.
+- Simplified traceability: O → US → AC → T → test, plus TM only for high-risk stories; `serves:` only with IDs. Budget per story instead of S/M/L sizes.
+- `bench.mjs` also penalizes process words.
 
-### Eliminado
-- Fases `mission`, `intake`, `architect`, `plan`, `qa` (ahora `spec` y `verify`); tamaños S/M/L.
-- Agentes `analyst`, `architecture-reviewer` (ahora `spec-reviewer`) y `ux-lead` (expertos de ECC cuando hay interfaz).
-- Plantillas de arquitectura arc42, ADR, modelo de amenazas, estrategia y plan de pruebas, requisitos, glosario, sistema existente, tareas, UX, informes de QA y seguridad, plan de despliegue, runbook y handover (ahora `spec.md`, `verify.md` y `deploy.md`).
-- Escenarios QS, metas de calidad QG, KR, ADR y componentes como IDs trazados.
+### Removed
+- Phases `mission`, `intake`, `architect`, `plan`, `qa` (now `spec` and `verify`); S/M/L sizes.
+- Agents `analyst`, `architecture-reviewer` (now `spec-reviewer`) and `ux-lead` (ECC experts when there is an interface).
+- Templates for arc42 architecture, ADR, threat model, test strategy and plan, requirements, glossary, existing system, tasks, UX, QA and security reports, deployment plan, runbook and handover (now `spec.md`, `verify.md` and `deploy.md`).
+- QS scenarios, QG quality goals, KR, ADR and components as traced IDs.
 
-### Añadido
-- `scripts/refs.test.mjs`: toda herramienta de ECC y todo archivo de Shipwright que nombran skills y agentes existe; una sincronización de ECC que la quite rompe el CI.
+### Added
+- `scripts/refs.test.mjs`: every ECC tool and every Shipwright file that names skills and agents exists; an ECC sync that removes one breaks the CI.
 
-Origen: primer uso real (sistema-taller): 7 h hasta empezar a construir, 55.700 palabras de documentos y 63 tareas para 4 funcionalidades.
+Origin: first real use (sistema-taller): 7 h until construction started, 55,700 words of documents and 63 tasks for 4 features.
 
 ## [0.16.0] - 2026-10-14
-### Añadido
-- **Tamaño de misión S / M / L** (`docs/METODO.md` §2), deducido en `/shipwright:mission` y confirmado por el usuario. Decide el recorrido: S no tiene fase Architect, entrevista solo 5 secciones, QA, Ship y Retro ligeros; M aplica el rigor según riesgo; L es el método completo. Una historia de riesgo alto sube una misión S a M; el tamaño nunca baja en silencio.
-- **Presupuesto por tamaño** comprobado por `trace.mjs --size` (por defecto, el tamaño de `state.json`): historias, criterios, tareas, ADR, amenazas y QS. Pasarse exige `Presupuesto excedido: <TIPO> — <motivo>`, visible en el gate.
-- **Banco:** misión 04 (filtro pequeño sobre la API de tareas) que debe salir S y dentro de presupuesto. `bench.mjs` puntúa los artefactos obligatorios del tamaño y el presupuesto excedido; `compare` marca peor una versión que infla la misión o cambia su tamaño, en lugar de premiar más artefactos.
-- El contexto de sesión muestra el tamaño.
+### Added
+- **Mission size S / M / L** (`docs/METHOD.md` §2), deduced in `/shipwright:mission` and confirmed by the user. It decides the path: S has no Architect phase, interviews only 5 sections, and has light QA, Ship and Retro; M applies rigor according to risk; L is the full method. A high-risk story raises an S mission to M; the size never goes down silently.
+- **Budget per size** checked by `trace.mjs --size` (by default, the size in `state.json`): stories, criteria, tasks, ADRs, threats and QS. Exceeding it requires `Budget exceeded: <TYPE> — <reason>`, visible at the gate.
+- **Benchmark:** mission 04 (small filter over the tasks API) that must come out S and within budget. `bench.mjs` scores the size's required artifacts and any exceeded budget; `compare` marks as worse a version that inflates the mission or changes its size, instead of rewarding more artifacts.
+- The session context shows the size.
 
-### Cambiado
-- Principio 1: de "método completo siempre" a "método proporcional".
-- Lo que no aplica se registra en una línea, no elemento por elemento: la estrategia de pruebas lista solo los tipos pertinentes y la entrevista solo las secciones del tamaño.
+### Changed
+- Principle 1: from "full method always" to "proportional method".
+- What does not apply is recorded in one line, not item by item: the test strategy lists only the relevant types and the interview only the sections of the size.
 
-Origen: primer uso real (sistema-taller). Con presupuesto M, su arquitectura excede los 6 límites (16 historias, 83 criterios, 63 tareas, 14 ADR, 36 amenazas, 14 QS).
-
- - 2026-10-14
-### Añadido
-- **Registro de uso de ECC.** Hook `PostToolUse` (`scripts/hooks/ecc-used.mjs`): cada agente, skill o comando de ECC leído durante una misión queda en `metrics.md` como evento `ecc`, una vez por fase. `metrics.mjs summary` lo lista por fase y la retro lo usa.
-- **Packs del stack deterministas.** `reference/stack-packs.json` mapea palabras clave de stack (con alias) a reglas, skills y revisores de ECC; `install-packs.mjs --stack <palabras> [--dry-run]` los resuelve y añade siempre `rules/common`. El mismo stack instala siempre los mismos packs. Un test comprueba que cada ruta del mapa existe en el manifest y en disco.
-- **Búsqueda en todo el catálogo.** `scripts/ecc-find.mjs <palabras> --phase <fase>` busca en las 324 piezas; las de la fase actual salen primero, pero las de otras fases ya no quedan ocultas.
+Origin: first real use (sistema-taller). With an M budget, its architecture exceeds all 6 limits (16 stories, 83 criteria, 63 tasks, 14 ADRs, 36 threats, 14 QS).
 
  - 2026-10-14
-### Añadido
-- **Rigor según riesgo** (`docs/METODO.md` §3). Cada historia lleva `riesgo: alto|bajo — <motivo>`: es alta si toca dinero, datos personales, permisos o aislamiento, una integración externa u operaciones masivas o irreversibles sobre datos. Las de riesgo alto llevan QS, amenazas, ADR y pruebas pesadas propias; las de riesgo bajo, criterios EARS con tests de aceptación y unitarios. El usuario confirma la clasificación en el gate de Intake.
-- `trace.mjs --phase intake` rechaza historias sin `riesgo:`.
-- analyst, security-lead, qa-lead y architecture-reviewer aplican la regla; el revisor marca como sobreingeniería el rigor pesado en historias de riesgo bajo y deja de reportar diferencias de redacción entre documentos que no cambian lo que se construye o se prueba.
-- La puerta de Plan muestra la estimación separada por riesgo.
+### Added
+- **ECC usage log.** `PostToolUse` hook (`scripts/hooks/ecc-used.mjs`): every ECC agent, skill or command read during a mission is recorded in `metrics.md` as an `ecc` event, once per phase. `metrics.mjs summary` lists it by phase and the retro uses it.
+- **Deterministic stack packs.** `reference/stack-packs.json` maps stack keywords (with aliases) to ECC rules, skills and reviewers; `install-packs.mjs --stack <keywords> [--dry-run]` resolves them and always adds `rules/common`. The same stack always installs the same packs. A test checks that every path in the map exists in the manifest and on disk.
+- **Search across the whole catalog.** `scripts/ecc-find.mjs <keywords> --phase <phase>` searches all 324 pieces; those for the current phase come first, but those for other phases are no longer hidden.
 
-Origen: primer uso real (sistema-taller, encargo octubre 2026). Para 4 funcionalidades en un sistema existente, el método produjo 82 criterios, 14 ADR, 36 amenazas y 63 tareas; nombres de archivo y un interruptor recibieron el mismo rigor que crédito y respaldo.
+ - 2026-10-14
+### Added
+- **Rigor by risk** (`docs/METHOD.md` §3). Each story carries `risk: high|low — <reason>` (`riesgo: alto|bajo — <motivo>`): it is high if it touches money, personal data, permissions or isolation, an external integration, or bulk or irreversible operations on data. High-risk stories get their own QS, threats, ADRs and heavy tests; low-risk ones get EARS criteria with acceptance and unit tests. The user confirms the classification at the Intake gate.
+- `trace.mjs --phase intake` rejects stories without `riesgo:`.
+- analyst, security-lead, qa-lead and architecture-reviewer apply the rule; the reviewer flags heavy rigor on low-risk stories as over-engineering and stops reporting wording differences between documents that do not change what is built or tested.
+- The Plan gate shows the estimate split by risk.
+
+Origin: first real use (sistema-taller, October 2026 engagement). For 4 features in an existing system, the method produced 82 criteria, 14 ADRs, 36 threats and 63 tasks; file names and a toggle received the same rigor as credit and backup.
 
 ## [0.13.1] - 2026-10-14
-### Corregido
-Hallazgos del primer uso real (sistema-taller, encargo octubre 2026).
-- `/shipwright:mission` acepta archivos de material del cliente como brief y los copia a `client/`.
-- `/shipwright:mission` infiere la ficha de la misión desde el repo y solo pide confirmarla.
-- Todos los mensajes al usuario salen en su idioma (el resumen de cierre salía en inglés); nunca se adivina el nombre del usuario.
-- Los artefactos de la misión van siempre bajo `docsDir`, nunca a una ruta `docs/` fija (el inventario de datos caía en `docs/security/`).
-- Las revisiones independientes quedan en disco: intake escribe la del analyst y la de testabilidad del qa-lead en `<docsDir>/spec/review.md`, y architect la del architecture-reviewer en `<docsDir>/architecture/review.md`, con el estado de cada hallazgo. Los revisores corren en primer plano y la puerta no se presenta sin ese archivo ni con hallazgos bloqueantes abiertos (la revisión de arquitectura lanzada en segundo plano se perdió al cerrar la sesión).
+### Fixed
+Findings from the first real use (sistema-taller, October 2026 engagement).
+- `/shipwright:mission` accepts client material files as the brief and copies them to `client/`.
+- `/shipwright:mission` infers the mission card from the repo and only asks for confirmation.
+- All messages to the user are in their language (the closing summary came out in English); the user's name is never guessed.
+- Mission artifacts always go under `docsDir`, never to a fixed `docs/` path (the data inventory landed in `docs/security/`).
+- Independent reviews are kept on disk: intake writes the analyst's and the qa-lead's testability review to `<docsDir>/spec/review.md`, and architect writes the architecture-reviewer's to `<docsDir>/architecture/review.md`, with the status of each finding. Reviewers run in the foreground and the gate is not presented without that file or with blocking findings open (the architecture review launched in the background was lost when the session closed).
 
 ## [0.13.0] - 2026-10-14
-### Añadido
-- `reference/engineering-principles.md`: principios para todos los agentes, adaptados de andrej-karpathy-skills (pensar antes de actuar, cambios quirúrgicos), ponytail (lo mínimo que funciona, sin recortar tests ni seguridad), superpowers (evidencia antes de afirmar, depuración por causa raíz) y caveman (reportes breves solo entre agentes; preguntas y documentos en prosa clara).
-- `vendor/superpowers/`: `systematic-debugging` y `verification-before-completion` (MIT), usados por el builder y en el ciclo de corrección de QA.
-- Modelo por rol en cada agente (Opus: analyst, architecture-reviewer, security-lead, qa-lead; Sonnet: builder, devops-lead, docs-lead, ux-lead; Haiku: status), sobreescribible con variables de entorno.
-- Hook `SessionStart` (inicio, `/clear`, `/compact`, reanudar) que restaura misión, fase y siguiente comando; cada fase recomienda `/clear` al cerrar y `/compact` si se alarga.
-- Revisiones integradas de Claude Code: `/code-review` y `/security-review` en QA, `/simplify` al final de Build.
-- `reference/companions.md`: complementos opcionales recomendados.
+### Added
+- `reference/engineering-principles.md`: principles for all agents, adapted from andrej-karpathy-skills (think before acting, surgical changes), ponytail (the minimum that works, without cutting tests or security), superpowers (evidence before claims, root-cause debugging) and caveman (short reports only between agents; questions and documents in clear prose).
+- `vendor/superpowers/`: `systematic-debugging` and `verification-before-completion` (MIT), used by the builder and in the QA fix cycle.
+- Model per role in each agent (Opus: analyst, architecture-reviewer, security-lead, qa-lead; Sonnet: builder, devops-lead, docs-lead, ux-lead; Haiku: status), overridable with environment variables.
+- `SessionStart` hook (start, `/clear`, `/compact`, resume) that restores mission, phase and next command; each phase recommends `/clear` on closing and `/compact` if it runs long.
+- Built-in Claude Code reviews: `/code-review` and `/security-review` in QA, `/simplify` at the end of Build.
+- `reference/companions.md`: recommended optional companions.
 
 ## [0.12.0] - 2026-10-14
-### Añadido
-- `/shipwright:retro`: evidencia (métricas, puntuación, bugs, incidentes, cambios), análisis de qué fase debió atrapar cada defecto escapado, retrospectiva guiada, lecciones convertidas en diffs concretos al framework, aplicación con aprobación en un clon local de Shipwright con tests, evals, comparación contra el banco y nueva versión; memoria con graphify.
-- Banco de 3 misiones de referencia (`benchmarks/`): app de IA desde cero, API con datos y roles desde cero, y cambio sobre un repo existente con tests.
-- `scripts/bench.mjs`: puntúa una misión terminada y compara dos versiones (sale con error si algo empeora).
+### Added
+- `/shipwright:retro`: evidence (metrics, score, bugs, incidents, changes), analysis of which phase should have caught each escaped defect, guided retrospective, lessons turned into concrete diffs to the framework, applied with approval in a local clone of Shipwright with tests, evals, comparison against the benchmark and a new version; memory with graphify.
+- Benchmark of 3 reference missions (`benchmarks/`): AI app from scratch, API with data and roles from scratch, and a change on an existing repo with tests.
+- `scripts/bench.mjs`: scores a finished mission and compares two versions (exits with an error if anything gets worse).
 
 ## [0.11.0] - 2026-10-14
-### Añadido
-- `/shipwright:qa`: despliegue a staging, verificación de tests bloqueados, incorporación de los tests ocultos, todos los tipos de prueba pertinentes, informe de seguridad, verificación de documentación y de interfaz, ciclo de corrección con builders, trazabilidad `--phase qa` y veredicto SHIP / NO SHIP.
-- `/shipwright:ship`: preparación de la release (versión, CHANGELOG, SBOM, firma, runbook, documentación, documento de entrega), checklist de producción, despliegue solo con aprobación, canario con rollback inmediato; PR para sistemas existentes; entrega de informe o PoC.
-- `lock.mjs holdout`: incorpora los tests ocultos a la ruta bloqueada y registra su huella.
-### Cambiado
-- `devops-lead`: staging en QA (B1), preparación y producción en Ship (B2).
-### Corregido
-- La descripción de `devops-lead` tenía YAML inválido: el agente cargaba sin descripción desde la v0.7.
+### Added
+- `/shipwright:qa`: deployment to staging, verification of locked tests, incorporation of the hidden tests, all relevant test types, security report, documentation and interface verification, fix cycle with builders, `--phase qa` traceability and SHIP / NO SHIP verdict.
+- `/shipwright:ship`: release preparation (version, CHANGELOG, SBOM, signing, runbook, documentation, handover document), production checklist, deployment only with approval, canary with immediate rollback; PR for existing systems; delivery of a report or PoC.
+- `lock.mjs holdout`: moves the hidden tests into the locked path and records their fingerprint.
+### Changed
+- `devops-lead`: staging in QA (B1), preparation and production in Ship (B2).
+### Fixed
+- The `devops-lead` description had invalid YAML: the agent loaded without a description since v0.7.
 
 ## [0.10.0] - 2026-10-14
-### Añadido
-- `/shipwright:plan`: tareas pequeñas trazadas (incluidas mitigaciones de amenazas, infraestructura, documentación e interfaz), tests de aceptación escritos por qa-lead, bloqueados y con huella, conjunto oculto (holdout) fuera del repo, plan de pruebas.
-- `/shipwright:build`: un subagente `builder` por tarea (en paralelo con worktrees aislados), revisiones de código, integridad de tests, seguridad e interfaz antes de integrar; reanudable; las desviaciones se detienen y pasan por `change`.
-- `/shipwright:change`: delta, análisis de impacto, aprobación y apertura controlada de exactamente los archivos afectados (`scripts/change.mjs`).
-- `scripts/state.mjs`: único escritor de `.shipwright/state.json`.
-### Cambiado
-- El hook bloquea siempre `.shipwright/` (estado y huellas), para que nadie pueda quitar el bloqueo de los tests editando el estado.
-- El hook solo actúa en proyectos con misión activa (`.shipwright/state.json`); nunca interfiere en otros repos.
+### Added
+- `/shipwright:plan`: small traced tasks (including threat mitigations, infrastructure, documentation and interface), acceptance tests written by qa-lead, locked and fingerprinted, hidden (holdout) set outside the repo, test plan.
+- `/shipwright:build`: one `builder` subagent per task (in parallel with isolated worktrees), code, test integrity, security and interface reviews before integrating; resumable; deviations stop and go through `change`.
+- `/shipwright:change`: delta, impact analysis, approval and controlled opening of exactly the affected files (`scripts/change.mjs`).
+- `scripts/state.mjs`: sole writer of `.shipwright/state.json`.
+### Changed
+- The hook always blocks `.shipwright/` (state and fingerprints), so nobody can remove the test lock by editing the state.
+- The hook only acts in projects with an active mission (`.shipwright/state.json`); it never interferes with other repos.
 
 ## [0.9.0] - 2026-10-14
-### Añadido
-- `/shipwright:architect`: escenarios de calidad medibles confirmados con el usuario, stack y ADRs, `ARCHITECTURE.md` (arc42 + C4), y en paralelo modelo de amenazas, estrategia de pruebas, plan de despliegue, plan de documentación y prototipo navegable. Gate con recorrido del prototipo; al aprobar instala los packs del stack.
-- Agente `architecture-reviewer`; plantillas `architecture.md` y `adr.md` (MADR con `serves:`).
-- `scripts/install-packs.mjs`: instala en el proyecto solo las reglas, skills y agentes de ECC del stack elegido.
-### Cambiado
-- Los ADR aceptados quedan protegidos igual que los artefactos aprobados; un ADR puede servir a una amenaza (`TM-n`).
+### Added
+- `/shipwright:architect`: measurable quality scenarios confirmed with the user, stack and ADRs, `ARCHITECTURE.md` (arc42 + C4), and in parallel threat model, test strategy, deployment plan, documentation plan and clickable prototype. Gate with a prototype walkthrough; on approval it installs the stack packs.
+- `architecture-reviewer` agent; `architecture.md` and `adr.md` templates (MADR with `serves:`).
+- `scripts/install-packs.mjs`: installs into the project only the ECC rules, skills and agents for the chosen stack.
+### Changed
+- Accepted ADRs are protected like approved artifacts; an ADR can serve a threat (`TM-n`).
 
 ## [0.8.0] - 2026-10-14
-### Añadido
-- **Documentación de los repositorios entregados** con agente `docs-lead`: estándar Diátaxis por tipo de proyecto, documentación verificada en QA (quick start en máquina limpia, ejemplos ejecutables, enlaces, desfase con el código), sitio de docs solo con usuarios externos, documento de entrega.
-- **UX/UI** con agente `ux-lead`: tareas clave, flujos, estados de cada pantalla, prototipo navegable aprobado por el usuario, sistema de diseño, revisión heurística.
-- **Flujo git** de los repos entregados: ramas cortas, Conventional Commits con `serves:`, plantilla de PR, semver, CHANGELOG automático.
-- `/shipwright:status`: reporte de una pantalla para quien pidió el trabajo.
-### Cambiado
-- §5 de `METODO.md` resumido en una tabla de cinco disciplinas; el detalle por fase vive en cada referencia.
+### Added
+- **Documentation of delivered repositories** with the `docs-lead` agent: Diátaxis standard by project type, documentation verified in QA (quick start on a clean machine, runnable examples, links, drift from the code), docs site only with external users, handover document.
+- **UX/UI** with the `ux-lead` agent: key tasks, flows, states of each screen, clickable prototype approved by the user, design system, heuristic review.
+- **Git flow** for delivered repos: short branches, Conventional Commits with `serves:`, PR template, semver, automatic CHANGELOG.
+- `/shipwright:status`: one-screen report for whoever requested the work.
+### Changed
+- §5 of `METHOD.md` condensed into a table of five disciplines; the per-phase detail lives in each reference.
 
 ## [0.7.0] - 2026-10-14
-### Añadido
-- **Seguridad obligatoria** con agente independiente `security-lead`: clase de datos y jurisdicciones (Mission), requisitos EARS y nivel ASVS (Intake), modelo de amenazas STRIDE + LLM/agentes (Architect), verificación de dependencias contra paquetes inventados por IA (Build), informe ASVS (QA), SBOM y firma (Ship). Referencia `reference/security-baseline.md`; plantillas de modelo de amenazas e informe de seguridad.
-- **Producción en cualquier plataforma** con agente `devops-lead`: Azure, AWS, GCP, Render, Railway, Fly.io, Vercel, Netlify, Cloudflare, DigitalOcean, servidor propio, Kubernetes, tiendas móviles. Checklist de producción de 14 puntos, plan de despliegue y runbook. Ningún despliegue a producción sin aprobación del usuario.
-- Trazabilidad de amenazas (`TM-n`): mitigación en Plan, evidencia en QA, "Riesgo aceptado" como excepción explícita.
-### Cambiado
-- README y `METODO.md` reescritos: más cortos y directos (METODO de ~460 a ~160 líneas).
-- El índice de ECC ya no lista piezas pendientes de release.
+### Added
+- **Mandatory security** with an independent `security-lead` agent: data class and jurisdictions (Mission), EARS requirements and ASVS level (Intake), STRIDE + LLM/agent threat model (Architect), dependency verification against AI-invented packages (Build), ASVS report (QA), SBOM and signing (Ship). `reference/security-baseline.md` reference; threat model and security report templates.
+- **Production on any platform** with the `devops-lead` agent: Azure, AWS, GCP, Render, Railway, Fly.io, Vercel, Netlify, Cloudflare, DigitalOcean, own server, Kubernetes, mobile stores. 14-point production checklist, deployment plan and runbook. No production deployment without user approval.
+- Threat traceability (`TM-n`): mitigation in Plan, evidence in QA, "Accepted risk" as an explicit exception.
+### Changed
+- README and `METHOD.md` rewritten: shorter and more direct (METODO from ~460 to ~160 lines).
+- The ECC index no longer lists pieces pending release.
 
 ## [0.6.0] - 2026-10-14
-### Añadido
-- Disciplina **QA** transversal con agente independiente `qa-lead`: testabilidad en Intake, estrategia de pruebas en Architect, tests de aceptación desde EARS en Plan, revisión del diff de tests en Build, fase QA completa con veredicto SHIP / NO SHIP, smoke y canario en Ship, análisis de bugs escapados en Retro.
-- `reference/qa-catalog.md`: más de 40 tipos de prueba (funcionales, no funcionales con carga, estrés, pico, soak y escalabilidad, seguridad, accesibilidad, IA) con regla de pertinencia, herramientas por stack y criterio de salida; políticas de integridad, flaky, bugs y salida de release.
-- Plantillas: estrategia de pruebas, informe de cierre (ISO 29119-3), reporte de bug.
-- Tests de aceptación bloqueados: `lockedPaths` + hook que bloquea edición y escritura por consola + `scripts/lock.mjs` (huellas SHA-256).
-- `shipwright trace --phase qa`: todo AC con un test que lo cite, todo QS con evidencia.
-### Cambiado
-- La fase VERIFY pasa a llamarse **QA** (`/shipwright:qa`).
+### Added
+- Cross-cutting **QA** discipline with an independent `qa-lead` agent: testability in Intake, test strategy in Architect, acceptance tests from EARS in Plan, test-diff review in Build, full QA phase with SHIP / NO SHIP verdict, smoke and canary in Ship, escaped-bug analysis in Retro.
+- `reference/qa-catalog.md`: more than 40 test types (functional, non-functional with load, stress, spike, soak and scalability, security, accessibility, AI) with a relevance rule, tools per stack and exit criterion; integrity, flaky, bug and release-exit policies.
+- Templates: test strategy, closing report (ISO 29119-3), bug report.
+- Locked acceptance tests: `lockedPaths` + hook that blocks editing and console writing + `scripts/lock.mjs` (SHA-256 fingerprints).
+- `shipwright trace --phase qa`: every AC with a test that cites it, every QS with evidence.
+### Changed
+- The VERIFY phase is renamed **QA** (`/shipwright:qa`).
 
 ## [0.5.0] - 2026-10-13
-### Añadido
-- Plugin instalable de Claude Code (`.claude-plugin/plugin.json` + marketplace).
-- `/shipwright:mission`: clasificación desde cero / sobre lo existente, confidencialidad, comprobación de herramientas, tarjeta de misión y explicación al usuario.
-- `/shipwright:intake`: análisis del sistema y del material con graphify, checklist de entrevista completa (15 secciones), investigación de respuestas "no sé", objetivos y requisitos EARS trazados, revisión por el agente `analyst` y gate.
-- Plantillas: misión, requisitos, sistema existente, glosario.
-- `scripts/trace.mjs` (trazabilidad por fase), `scripts/metrics.mjs` + hook de inicio de fase, hook que protege artefactos aprobados.
-- ECC v2.2.3 vendorizado: 324 piezas (16 pendientes de release), índice por fase, `reference/using-ecc.md`.
-- `scripts/ecc-sync.mjs` + workflow diario con PR y revisión por IA; CI con tests en Windows, macOS y Linux.
+### Added
+- Installable Claude Code plugin (`.claude-plugin/plugin.json` + marketplace).
+- `/shipwright:mission`: classification from scratch / on existing, confidentiality, tool check, mission card and explanation to the user.
+- `/shipwright:intake`: analysis of the system and material with graphify, full interview checklist (15 sections), research of "I don't know" answers, traced objectives and EARS requirements, review by the `analyst` agent and gate.
+- Templates: mission, requirements, existing system, glossary.
+- `scripts/trace.mjs` (traceability per phase), `scripts/metrics.mjs` + phase-start hook, hook that protects approved artifacts.
+- ECC v2.2.3 vendored: 324 pieces (16 pending release), index by phase, `reference/using-ecc.md`.
+- `scripts/ecc-sync.mjs` + daily workflow with PR and AI review; CI with tests on Windows, macOS and Linux.
 
 ## [0.4.0] - 2026-10-13
-### Cambiado
-- **Un solo método, siempre completo**: se eliminan tamaños, presets y recortes. Todas las fases, gates, preguntas y artefactos siempre; lo que no aplica se marca `No aplica: <motivo>`.
-- Única distinción: desde cero / sobre lo existente.
-- ECC: todo el catálogo de desarrollo, cargado bajo demanda mediante un índice de herramientas por fase (antes: solo 15–20 piezas).
-- Sincronización de ECC: rama + revisión por IA + pull request con merge humano (antes: merge automático).
-### Añadido
-- Checklist de entrevista completa y respuesta "no sé" con investigación y fuentes.
-- `/shipwright:change` (cambios como delta) y `/shipwright:status`.
-- Pregunta de confidencialidad antes de analizar código existente; idioma de entregables.
-- Revisión semántica de `serves:` además del script.
-- Registro automático de métricas y banco de misiones de referencia para medir cada versión.
-- Requisitos técnicos (hooks solo Node; instalación de rules).
+### Changed
+- **One method, always complete**: sizes, presets and cuts are removed. All phases, gates, questions and artifacts always; what does not apply is marked `Not applicable: <reason>`.
+- The only distinction: from scratch / on existing.
+- ECC: the whole development catalog, loaded on demand through a per-phase tool index (before: only 15–20 pieces).
+- ECC sync: branch + AI review + pull request with human merge (before: automatic merge).
+### Added
+- Full interview checklist and "I don't know" answer with research and sources.
+- `/shipwright:change` (changes as a delta) and `/shipwright:status`.
+- Confidentiality question before analyzing existing code; deliverables language.
+- Semantic review of `serves:` in addition to the script.
+- Automatic metrics logging and a benchmark of reference missions to measure each version.
+- Technical requirements (Node-only hooks; rules installation).
 
 ## [0.3.0] - 2026-10-13
-### Cambiado
-- Los modos `hackathon`/`client` se reemplazan por **misiones**: una sola filosofía ("lo mejor posible en el menor tiempo posible") con profundidad automática según tipo (crear / integrar), tamaño y riesgo, y tipo de entregable. `hackathon` y `client` quedan como presets.
-- La fase SETUP pasa a ser MISSION (`/shipwright:mission`), con explicación al usuario y confirmación.
-### Añadido
-- Cadena de objetivos (misión → O → KR → QG → QS → ADR → componente → historia/AC → tarea → test) con `serves:` obligatorio y rechazo de trabajo huérfano (`shipwright trace`).
-- Objetivo de la arquitectura definido como cumplir los objetivos de calidad ordenados mediante escenarios medibles.
-- Tarjeta de misión `docs/mission.md` y ejemplos crear/integrar.
+### Changed
+- The `hackathon`/`client` modes are replaced by **missions**: a single philosophy ("the best possible in the least time possible") with automatic depth by type (create / integrate), size and risk, and deliverable type. `hackathon` and `client` remain as presets.
+- The SETUP phase becomes MISSION (`/shipwright:mission`), with explanation to the user and confirmation.
+### Added
+- Objective chain (mission → O → KR → QG → QS → ADR → component → story/AC → task → test) with mandatory `serves:` and rejection of orphan work (`shipwright trace`).
+- Architecture goal defined as meeting the ordered quality goals through measurable scenarios.
+- Mission card `docs/mission.md` and create/integrate examples.
 
 ## [0.2.0] - 2026-10-13
-### Añadido
-- ECC (affaan-m/ecc, MIT) como base de agentes y skills: integración por piezas sin editar (`vendor/ecc/`), sincronización automática a cada release con comprobaciones de seguridad y evals (`docs/METODO.md` §10).
-- Packs de stack: solo se instalan en el proyecto los del stack elegido en ARCHITECT (§9).
-- Análisis de ECC (`docs/investigacion/ecc.md`) y `THIRD_PARTY_NOTICES.md`.
-### Cambiado
-- Hoja de ruta reordenada (§11).
+### Added
+- ECC (affaan-m/ecc, MIT) as the base of agents and skills: piece-by-piece integration without editing (`vendor/ecc/`), automatic sync on every release with security checks and evals (`docs/METHOD.md` §10).
+- Stack packs: only those for the stack chosen in ARCHITECT are installed in the project (§9).
+- ECC analysis (`docs/research/ecc.md`) and `THIRD_PARTY_NOTICES.md`.
+### Changed
+- Roadmap reordered (§11).
 
 ## [0.1.0] - 2026-10-13
-### Añadido
-- Documento maestro del método (`docs/METODO.md`): 8 fases, gates, modos hackathon/client, uso de graphify, bucle de automejora, hoja de ruta.
-- Catálogo de stack (`docs/catalogo-stack.md`).
-- Investigación de base: frameworks de agentes, metodologías spec-driven, graphify.
+### Added
+- Master method document (`docs/METHOD.md`): 8 phases, gates, hackathon/client modes, graphify usage, self-improvement loop, roadmap.
+- Stack catalog (`docs/stack-catalog.md`).
+- Base research: agent frameworks, spec-driven methodologies, graphify.

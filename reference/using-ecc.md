@@ -5,7 +5,7 @@ Shipwright ships ECC's software-development catalog unmodified in `${CLAUDE_PLUG
 1. **Find the tool.** First the experts each phase already names (table below). For anything else, search the whole catalog: `node "${CLAUDE_PLUGIN_ROOT}/scripts/ecc-find.mjs" <words>... --phase <spec|build|verify|ship>` (e.g. `postgres`, `security review`, `accessibility`). Items tagged for the current phase are listed first, but tools tagged for other phases still appear. `${CLAUDE_PLUGIN_ROOT}/vendor/ecc.index.md` is the same catalog grouped by phase, for browsing. For stack packs use `install-packs.mjs --stack` (spec gate), not a search.
 2. **Run an ECC agent** (`vendor/ecc/agents/<name>.md`): read the file, then spawn a `general-purpose` subagent whose prompt is:
    ```
-   Sirves a <ID>: <text of the objective/criterion this work serves>
+   Serves <ID>: <text of the objective/criterion this work serves>
 
    <body of the ECC agent file, without its frontmatter>
 
