@@ -19,7 +19,7 @@ export function context(root) {
   try { s = JSON.parse(readFileSync(path, 'utf8')); } catch { return null; }
   const lines = [
     `Shipwright mission active: ${s.mission ?? '(unnamed)'}`,
-    `Phase: ${s.phase ?? 'unknown'} · docs: ${s.docsDir ?? 'docs'} · next: ${NEXT[s.phase] ?? '/shipwright:status'}`,
+    `Phase: ${s.phase ?? 'unknown'} · size: ${s.size ?? 'L'} · docs: ${s.docsDir ?? 'docs'} · next: ${NEXT[s.phase] ?? '/shipwright:status'}`,
   ];
   if (s.change) lines.push(`Open change: ${s.change.id} (files: ${s.change.files.join(', ')}) — finish it with /shipwright:change.`);
   if (s.tasksDone?.length) lines.push(`Tasks done: ${s.tasksDone.length}`);

@@ -11,7 +11,7 @@ disable-model-invocation: true
 Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3–§5. State changes only through `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" …` run from the project root.
 
 ## Preconditions
-`state.mjs get` → `phase` must be `plan` and `ARCHITECTURE.md` must have `status: approved`; otherwise say which phase to run and stop. Read the mission card, requirements, ARCHITECTURE.md, ADRs, threat model, test strategy, deploy plan, documentation plan and UX spec.
+`state.mjs get` → `phase` must be `plan` and `ARCHITECTURE.md` must have `status: approved` (size S: `requirements.md` approved instead; there is no architecture, threat model or test strategy to read); otherwise say which phase to run and stop. Read the mission card, requirements, ARCHITECTURE.md, ADRs, threat model, test strategy, deploy plan, documentation plan and UX spec.
 
 ## Steps
 
@@ -20,6 +20,7 @@ From `${CLAUDE_PLUGIN_ROOT}/templates/tasks.md` (ECC `skills/blueprint` and `age
 - Every task: `### T<NNN> [P?] [US-NN] <title>` + `serves: <AC/QS/TM> — <how>`, files, what it does, verification, complexity 1–10 (> 6 → split), `depends`.
 - Group 1: walking skeleton (desde cero: repo structure, test runner, CI, empty deploy to staging) or safe preparation (sobre lo existente: feature flag, characterization tests).
 - Then vertical slices per story by MoSCoW priority. Mark `[P]` only when tasks touch disjoint files and have no dependency between them.
+- Size S: no walking skeleton, CI or infrastructure tasks unless the change needs them; existing tooling is reused.
 - Include tasks for: every threat mitigation (`serves: TM-n`), infrastructure and CI from the deploy plan, documentation from the docs plan, UI screens and states from the UX spec.
 
 ### 2. Acceptance tests and test plan (independent QA)

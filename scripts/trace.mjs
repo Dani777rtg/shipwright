@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // shipwright trace — deterministic objective-traceability check (METODO.md §3).
-// Usage: node trace.mjs [docsDir=docs] [--phase intake|architect|plan|qa] [--tests <dir>]...
+// Usage: node trace.mjs [docsDir=docs] [--phase intake|architect|plan|qa] [--size S|M|L] [--tests <dir>]...
 // Exit 0 = ok, 1 = violations (printed), 2 = usage error.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
@@ -28,6 +28,16 @@ const COVERAGE = {
   qa: [],
 };
 const PHASES = Object.keys(COVERAGE);
+
+// Mission size (METODO.md §2): S skips Architect, so it has no QS coverage and may not hold high-risk stories.
+// Budgets cap how many items of each kind a mission may produce; exceeding one needs a written waiver line
+// "Presupuesto excedido: <KIND> — <reason>" in any mission document.
+export const BUDGETS = {
+  S: { US: 3, AC: 12, T: 10, ADR: 1, TM: 0, QS: 0 },
+  M: { US: 10, AC: 50, T: 40, ADR: 6, TM: 15, QS: 8 },
+  L: {},
+};
+const WAIVER_RE = /presupuesto excedido:\s*([A-Z]+)\s+(?:—|--)\s+\S.{9,}/gi;
 
 export function collectFiles(dir) {
   const out = [];
@@ -89,13 +99,24 @@ export function collectTestIds(dirs) {
 const evidenced = (texts) => new Set(texts.flatMap((t) => t.split(/\r?\n/))
   .flatMap((l) => /evidencia:|evidence:/i.test(l) ? [...l.matchAll(/(?<![A-Za-z0-9])(?:QS|TM)-\d+(?![0-9])/g)].map((m) => m[0]) : []));
 
-export function check({ items, errors, texts = [] }, phase = 'intake', testIds = null) {
+export function overBudget(items, texts, size) {
+  const limits = BUDGETS[size] ?? {};
+  const waived = new Set(texts.flatMap((t) => [...t.matchAll(WAIVER_RE)].map((m) => m[1].toUpperCase())));
+  const count = {};
+  for (const it of items.values()) count[it.kind] = (count[it.kind] ?? 0) + 1;
+  return Object.entries(limits)
+    .filter(([kind, max]) => (count[kind] ?? 0) > max && !waived.has(kind))
+    .map(([kind, max]) => `over budget for size ${size}: ${count[kind]} ${kind} (max ${max}) — reduce it, raise the size, or add "Presupuesto excedido: ${kind} — <why>"`);
+}
+
+export function check({ items, errors, texts = [] }, phase = 'intake', testIds = null, size = null) {
   const out = [...errors];
   const where = (it) => `${it.path}:${it.line} ${it.id}`;
   for (const it of items.values()) {
     const allowed = ALLOWED[it.kind];
     if (!allowed) continue;
     if (phase === 'intake' && it.kind === 'US' && !RISK_RE.test(it.body.join('\n'))) out.push(`${where(it)} missing "riesgo: alto|bajo — <why>" (METODO.md §3)`);
+    if (size === 'S' && it.kind === 'US' && /^\s*riesgo:\s*alto/im.test(it.body.join('\n'))) out.push(`${where(it)} is riesgo alto: size S cannot hold high-risk stories — raise the mission to M`);
     if (!it.serves) { out.push(`${where(it)} orphan: missing "serves: <ID> — <how>"`); continue; }
     if (it.reason.length < 10) out.push(`${where(it)} serves needs a reason: "serves: <ID> — <how it serves it>"`);
     for (const ref of it.serves) {
@@ -118,6 +139,7 @@ export function check({ items, errors, texts = [] }, phase = 'intake', testIds =
     }
   }
   for (const p of PHASES.slice(0, PHASES.indexOf(phase) + 1)) {
+    if (size === 'S' && p === 'architect') continue;
     for (const [parent, kinds] of COVERAGE[p]) {
       for (const it of items.values()) {
         if (it.kind !== parent || it.na) continue;
@@ -135,6 +157,7 @@ export function check({ items, errors, texts = [] }, phase = 'intake', testIds =
       if ((it.kind === 'QS' || it.kind === 'TM') && !tested.has(it.id) && !withEvidence.has(it.id)) out.push(`${where(it)} no evidence: cite ${it.id} in a test or in a QA report line with "evidencia:"`);
     }
   }
+  if (size) out.push(...overBudget(items, texts, size));
   if (![...items.values()].some((it) => it.kind === 'O')) out.push('no objectives (O-n) defined');
   if (![...items.values()].some((it) => it.kind === 'QG')) out.push('no quality goals (QG-n) defined');
   return out;
@@ -144,17 +167,20 @@ function main(argv) {
   const args = argv.slice(2);
   const pi = args.indexOf('--phase');
   const phase = pi >= 0 ? args.splice(pi, 2)[1] : 'intake';
+  const si = args.indexOf('--size');
+  const statePath = join('.shipwright', 'state.json');
+  const size = si >= 0 ? args.splice(si, 2)[1] : existsSync(statePath) ? JSON.parse(readFileSync(statePath, 'utf8')).size ?? null : null;
   const testDirs = [];
   for (let ti; (ti = args.indexOf('--tests')) >= 0;) testDirs.push(args.splice(ti, 2)[1]);
   if (phase === 'qa' && !testDirs.length) testDirs.push('tests');
   const dir = args[0] ?? 'docs';
-  if (!PHASES.includes(phase) || !existsSync(dir)) {
-    console.error(`usage: trace.mjs [docsDir] [--phase ${PHASES.join('|')}] [--tests <dir>]...`);
+  if (!PHASES.includes(phase) || !existsSync(dir) || (size && !BUDGETS[size])) {
+    console.error(`usage: trace.mjs [docsDir] [--phase ${PHASES.join('|')}] [--size S|M|L] [--tests <dir>]...  (size defaults to .shipwright/state.json)`);
     return 2;
   }
   const files = collectFiles(dir).map((p) => ({ path: relative(process.cwd(), p), text: readFileSync(p, 'utf8') }));
   const parsed = parse(files);
-  const problems = check(parsed, phase, phase === 'qa' ? collectTestIds(testDirs) : null);
+  const problems = check(parsed, phase, phase === 'qa' ? collectTestIds(testDirs) : null, size);
   if (problems.length) {
     console.log(`shipwright trace (${phase}): ${problems.length} problem(s)`);
     for (const p of problems) console.log(`  - ${p}`);

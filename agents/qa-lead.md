@@ -16,7 +16,7 @@ For every AC: one observable, measurable response; a test can decide pass/fail w
 ## B. Test Strategy (Architect) → `<docsDir>/qa/test-strategy.md`
 Fill `${CLAUDE_PLUGIN_ROOT}/templates/test-strategy.md`:
 1. Project profile and risk register (likelihood × impact per risk, linked to QG/QS/AC).
-2. Every test type from the catalog: pertinent (why, which risk/QS/AC it covers) or `No aplica: <reason>`. Never omit a type. Heavy types (DAST, load, full authorization matrix, exploratory, chaos, recovery) cover the high-risk stories only (`riesgo: alto`, `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3); low-risk stories get unit and acceptance tests.
+2. Every test type from the catalog is evaluated: the pertinent ones are listed (why, which risk/QS/AC they cover); the rest go together in one line `No aplica: <tipos> — <motivo>`. Heavy types (DAST, load, full authorization matrix, exploratory, chaos, recovery) cover the high-risk stories only (`riesgo: alto`, `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3); low-risk stories get unit and acceptance tests.
 3. Levels and shape (pyramid or trophy), tools per stack (reuse the existing system's tools first), environments, test data, thresholds.
 4. How each QS will be demonstrated (test type, tool, measure).
 5. Entry and exit criteria for the QA phase.

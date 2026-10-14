@@ -1,6 +1,6 @@
 # Intake interview checklist
 
-Every section is covered in every mission. A question may be answered from the brief, the client material or the system analysis — then confirm it instead of asking open-ended. A section that truly does not apply is recorded as `No aplica: <reason>` and shown at the gate.
+Which sections are covered depends on the mission size (`docs/METODO.md` §2): S → sections 1, 3, 5, 12 and 15; M → the sections the stories touch; L → every section. The others are recorded together in one line. A question may be answered from the brief, the client material or the system analysis — then confirm it instead of asking open-ended. A section that truly does not apply is recorded as `No aplica: <reason>` and shown at the gate.
 
 Each question maps to where its answer lands (→).
 

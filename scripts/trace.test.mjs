@@ -19,7 +19,7 @@ riesgo: alto — procesa audio con datos personales
 - **AC-01.1** WHEN the user uploads audio THE SYSTEM SHALL show a summary
   serves: US-01 — criterio verificable de la historia
 `;
-const run = (files, phase, testIds) => check(parse(files.map(([path, text]) => ({ path, text }))), phase, testIds);
+const run = (files, phase, testIds, size) => check(parse(files.map(([path, text]) => ({ path, text }))), phase, testIds, size);
 
 test('valid intake passes', () => {
   assert.deepEqual(run([['mission.md', mission], ['req.md', reqs]], 'intake'), []);
@@ -91,4 +91,18 @@ test('threats: TM needs a mitigating task at plan and evidence at qa; accepted r
   assert.ok(!run([...base, ['tm.md', tm], ['tasks.md', t], sec], 'qa', new Set(['AC-01.1'])).some((x) => x.includes('TM-1')));
   const accepted = '- TM-1: login · fuerza bruta · Riesgo aceptado: demo sin usuarios reales\n';
   assert.ok(!run([...base, ['tm.md', accepted]], 'plan').some((x) => x.includes('TM-1')));
+});
+
+test('size S: no high-risk story, no architecture coverage, budget enforced unless waived', () => {
+  const low = reqs.replace('riesgo: alto — procesa audio con datos personales', 'riesgo: bajo — solo cambia un texto en pantalla');
+  const files = [['mission.md', mission], ['req.md', low]];
+  assert.deepEqual(run(files, 'intake', null, 'S'), []);
+  assert.ok(run([['mission.md', mission], ['req.md', reqs]], 'intake', null, 'S').some((p) => p.includes('US-01 is riesgo alto: size S')));
+  assert.ok(!run(files, 'plan', null, 'S').some((p) => p.includes('QG-1 not covered')));
+  assert.ok(run(files, 'plan', null, 'M').some((p) => p.includes('QG-1 not covered')));
+  const adrs = '- ADR-1: a — serves: QS-1 — decide algo importante\n- ADR-2: b — serves: QS-1 — decide otra cosa\n- QS-1: x — serves: QG-1 — mide la fiabilidad\n';
+  assert.ok(run([...files, ['adr.md', adrs]], 'intake', null, 'S').some((p) => p.includes('over budget for size S: 2 ADR (max 1)')));
+  const waiver = ['mission.md', mission + '\nPresupuesto excedido: ADR — el cliente exige dos proveedores distintos\n'];
+  assert.ok(!run([waiver, ['req.md', low], ['adr.md', adrs]], 'intake', null, 'S').some((p) => p.includes('ADR (max')));
+  assert.ok(!run([...files, ['adr.md', adrs]], 'intake', null, 'L').some((p) => p.includes('over budget')));
 });

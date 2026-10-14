@@ -1,11 +1,11 @@
 # Método Shipwright
 
-Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.15.0**.
+Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.16.0**.
 
 ## 1. Principios
 
-1. **Método completo siempre.** Todas las fases y preguntas; lo que no aplica se marca `No aplica: <motivo>`, nunca se omite en silencio. La profundidad de cada historia depende de su riesgo (§3).
-2. **Velocidad por paralelismo**, no por recortes.
+1. **Método proporcional.** El tamaño de la misión (§2) decide qué fases y documentos existen, y el riesgo de cada historia (§3) cuánto rigor lleva. Nada se omite en silencio, pero lo que no aplica se registra en una línea, no elemento por elemento. Lo pequeño se hace en pequeño: producir más documentos no es trabajar mejor.
+2. **Velocidad por paralelismo y por tamaño justo**, nunca recortando tests, seguridad ni requisitos aprobados.
 3. **Todo tiene un para qué.** Cada decisión, tarea y test cita el objetivo al que sirve (§3).
 4. **Spec antes que código.**
 5. **El humano aprueba cada fase.**
@@ -28,6 +28,18 @@ Todo empieza con `/shipwright:mission "<encargo>"`. Una única distinción, dete
 | Calidad propuesta | Tiempo de entrega · fiabilidad · usabilidad | No romper nada · seguridad · consistencia con el equipo |
 | Entrega típica | Producto en producción + demo | Pull request + pruebas + nota de impacto |
 
+**Tamaño.** Se deduce del encargo y del repositorio, y el usuario lo confirma:
+
+| | S | M | L |
+|---|---|---|---|
+| Cuándo | Arreglo o cambio pequeño; todas las historias de riesgo bajo | Funcionalidad sobre lo existente; alguna historia de riesgo alto | Producto nuevo o cambio grande |
+| Fases | Mission → Intake → Plan → Build → QA ligero → Ship → Retro breve (sin Architect) | Todas; rigor según el riesgo de cada historia | Todas, completas |
+| Entrevista | Secciones 1, 3, 5, 12 y 15 de la checklist | Las secciones que tocan las historias | Checklist completa |
+| Documentos obligatorios | mission, requirements, tasks, informe de QA | + ARCHITECTURE, amenazas, estrategia de pruebas, informe de seguridad | + plan de despliegue, documento de entrega |
+| Presupuesto | ≤ 3 historias, 12 criterios, 10 tareas, 1 ADR, 0 amenazas, 0 QS | ≤ 10 historias, 50 criterios, 40 tareas, 6 ADR, 15 amenazas, 8 QS | Sin tope |
+
+`trace.mjs` comprueba el presupuesto en cada gate. Pasarse no está prohibido: exige la línea `Presupuesto excedido: <TIPO> — <motivo>` en un documento de la misión, y el usuario la ve en el gate. Una historia de riesgo alto en una misión S la sube a M; el tamaño nunca baja en silencio.
+
 Además se fijan: tipo de entregable (app, funcionalidad, integración, arreglo, PoC, informe), plazo, idioma de los entregables, clase de datos, jurisdicciones, plataforma de despliegue y —si hay código existente— si se permite enviarlo a Claude. Antes de empezar, el agente explica el plan y espera confirmación. Tarjeta: [`templates/mission.md`](../templates/mission.md).
 
 ## 3. Cadena de objetivos
@@ -40,7 +52,7 @@ Misión → **O** objetivos de usuario → **KR** métricas → **QG** 3 objetiv
   - Toda historia: criterios EARS, un test de aceptación por AC, tests unitarios, revisión de código y los controles base de seguridad del sistema.
   - Solo las de riesgo alto: escenarios QS, amenazas TM y ADR propios; tipos de prueba pesados (DAST, carga, matriz completa de autorización, exploratoria, caos, recuperación); revisión de diff sensible por security-lead.
   - Una historia de riesgo bajo que añade una dependencia o un patrón nuevo sigue necesitando ADR.
-- `scripts/trace.mjs` lo comprueba en cada gate (`--phase intake|architect|plan|qa`): huérfanos, IDs inválidos, historias sin `riesgo:` (en Intake), cobertura (todo O con KR y AC, todo QG con QS, todo AC/QS/TM con tarea, y en QA todo AC con test y todo QS/TM con evidencia). Un revisor valida además que cada justificación tenga sentido.
+- `scripts/trace.mjs` lo comprueba (con `--size`, también el presupuesto del tamaño) en cada gate (`--phase intake|architect|plan|qa`): huérfanos, IDs inválidos, historias sin `riesgo:` (en Intake), cobertura (todo O con KR y AC, todo QG con QS, todo AC/QS/TM con tarea, y en QA todo AC con test y todo QS/TM con evidencia). Un revisor valida además que cada justificación tenga sentido.
 
 ## 4. Fases
 
@@ -153,7 +165,7 @@ Nada aprende ni se inyecta solo.
 | Referencias | `reference/engineering-principles.md`, `companions.md`, `qa-catalog.md`, `security-baseline.md`, `deploy-catalog.md`, `docs-standard.md`, `ux-standard.md`, `git-workflow.md`, `using-ecc.md`, `stack-packs.json` |
 | Plantillas | `templates/` |
 | Scripts | `scripts/state.mjs` (único que escribe el estado), `trace.mjs` (trazabilidad), `lock.mjs` (huellas), `change.mjs` (abre/cierra un cambio aprobado), `install-packs.mjs` (packs del stack), `ecc-find.mjs` (busca en ECC), `metrics.mjs`, `bench.mjs` (puntúa misiones), `ecc-sync.mjs` |
-| Hooks | Contexto de la misión al iniciar, tras `/clear` o `/compact`; protección de `.shipwright/`, artefactos aprobados y tests bloqueados (edición y consola), salvo archivos abiertos por un cambio aprobado; inicio de fase y herramientas de ECC usadas en métricas |
+| Hooks | Contexto de la misión (fase, tamaño, siguiente comando) al iniciar, tras `/clear` o `/compact`; protección de `.shipwright/`, artefactos aprobados y tests bloqueados (edición y consola), salvo archivos abiertos por un cambio aprobado; inicio de fase y herramientas de ECC usadas en métricas |
 | Tests | `node --test "scripts/**/*.test.mjs"` — CI en Windows, macOS y Linux |
 
 ## Hoja de ruta

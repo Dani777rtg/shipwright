@@ -35,6 +35,7 @@ Mission brief: $ARGUMENTS
    - user jurisdictions (country, from currency, tax IDs, language, docs) and the data-protection law that applies;
    - deployment platform (from config files) — or for desde cero, ask (Azure, AWS, GCP, Render, Railway, Fly.io, Vercel, Netlify, Cloudflare, DigitalOcean, own server/VPS, Kubernetes, app stores, or "decide in Architect");
    - deliverable language (from the brief and docs);
+   - **mission size** S / M / L per `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §2: S when the change is small and every likely story is low risk (no money, personal data, permissions or isolation, external integration, bulk or irreversible data operation); L for a new product or a large change; otherwise M. Show the reason in one line;
    - notable facts that change the method (e.g. no automated tests, production with real data, legal e-invoicing, money flows).
    Show everything inferred in one short block with the evidence for each item (file names), then ONE AskUserQuestion call: confirm the inferences (Correcto (Recomendado) / Corregir algo) plus only the questions that nothing answered — typically the deadline. Ask follow-ups only for what the user marks as wrong.
 
@@ -43,7 +44,7 @@ Mission brief: $ARGUMENTS
    - sobre lo existente → docs at `docs/shipwright/<mission-slug>/` (ask if the team prefers another location).
    Create the state at the project root (`.shipwright/` is written only by Shipwright scripts; the hook blocks direct edits):
    ```
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" init '{ "docsDir": "<docs path>", "phase": "mission", "startingPoint": "desde-cero|existente", "deliverable": "<type>", "language": "<lang>", "mission": "<one line>", "confidentiality": "si|parcial|local", "allowedPaths": [], "shipwright": "0.13.0" }'
+   node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" init '{ "docsDir": "<docs path>", "phase": "mission", "startingPoint": "desde-cero|existente", "deliverable": "<type>", "size": "S|M|L", "language": "<lang>", "mission": "<one line>", "confidentiality": "si|parcial|local", "allowedPaths": [], "shipwright": "0.13.0" }'
    ```
    Then log the start: `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log mission start`.
    Run this and every later Shipwright script from the project root (the folder that holds `.shipwright/`).
@@ -67,7 +68,8 @@ Mission brief: $ARGUMENTS
    Entregable: <tipo> → <qué recibirás>
    Plazo: <plazo>
 
-   Qué voy a hacer (método completo, con tu aprobación al final de cada fase):
+   Tamaño: <S | M | L> — <motivo en una línea>
+   Qué voy a hacer (con tu aprobación al final de cada fase; para tamaño S, sin la fase ARCHITECT y con QA y RETRO ligeros):
     1. MISSION    Este resumen
     2. INTAKE     [existente: analizar tu sistema con graphify y extraer sus convenciones;]
                   analizar el material del encargo y entrevistarte con la checklist completa
@@ -80,7 +82,7 @@ Mission brief: $ARGUMENTS
 
    Prioridades de calidad propuestas: 1º … · 2º … · 3º …
    ```
-   Ask with AskUserQuestion: Sí, empezar (Recomendado) / Cambiar punto de partida o entregable / Cambiar prioridades. Loop until confirmed.
+   Ask with AskUserQuestion: Sí, empezar (Recomendado) / Cambiar tamaño / Cambiar punto de partida o entregable / Cambiar prioridades. A size change updates the state with `state.mjs set size <S|M|L>`. Loop until confirmed.
 
 9. **Close the phase.** On confirmation:
    - `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log mission gate-approved`

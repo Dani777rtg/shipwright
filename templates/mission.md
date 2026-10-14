@@ -6,6 +6,7 @@ status: draft
 | Campo | Valor |
 |---|---|
 | Entregable | app · funcionalidad · integración · arreglo · prueba de concepto · informe |
+| Tamaño | S · M · L — <motivo en una línea> (`docs/METODO.md` §2 del plugin) |
 | Punto de partida | desde cero · sobre lo existente (`<repo/sistema>`, convenciones: `<docsDir>/spec/existing-system.md`) |
 | Confidencialidad | ¿Se permite enviar el código a Claude? sí / no / parcial — autorizado por `<quién>` |
 | Plazo | `<fecha/hora>` |

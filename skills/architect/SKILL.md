@@ -11,7 +11,7 @@ disable-model-invocation: true
 Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3–§5. Every step runs; what does not apply becomes `No aplica: <reason>`. The architecture's only objective is to meet the ordered quality goals (QG) with the fewest pieces — no component, dependency or pattern without a scenario, story or decision that needs it. Rigor follows each story's `riesgo:` (`${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3): scenarios, threats, ADRs and heavy test types are written for high-risk stories and for the system as a whole, never per low-risk story. Pass this rule to every specialist.
 
 ## Preconditions
-Read the state (`node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" get`). Continue only if `phase` is `architect` and `<docsDir>/mission.md` and `<docsDir>/spec/requirements.md` have `status: approved`; otherwise say which phase to run and stop. Read the mission card, requirements, glossary and `existing-system.md` (if any).
+Read the state (`node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" get`). Size S has no Architect phase: say so and point to `/shipwright:plan`. Size M: write only the ARCHITECTURE.md sections the high-risk stories and the change need, and record the rest in one line. Continue only if `phase` is `architect` and `<docsDir>/mission.md` and `<docsDir>/spec/requirements.md` have `status: approved`; otherwise say which phase to run and stop. Read the mission card, requirements, glossary and `existing-system.md` (if any).
 
 ## Rules
 - Ask only through AskUserQuestion (≤ 4 questions per call, recommended option first).

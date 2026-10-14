@@ -3,7 +3,20 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
-## [0.15.0] - 2026-10-14
+## [0.16.0] - 2026-10-14
+### Añadido
+- **Tamaño de misión S / M / L** (`docs/METODO.md` §2), deducido en `/shipwright:mission` y confirmado por el usuario. Decide el recorrido: S no tiene fase Architect, entrevista solo 5 secciones, QA, Ship y Retro ligeros; M aplica el rigor según riesgo; L es el método completo. Una historia de riesgo alto sube una misión S a M; el tamaño nunca baja en silencio.
+- **Presupuesto por tamaño** comprobado por `trace.mjs --size` (por defecto, el tamaño de `state.json`): historias, criterios, tareas, ADR, amenazas y QS. Pasarse exige `Presupuesto excedido: <TIPO> — <motivo>`, visible en el gate.
+- **Banco:** misión 04 (filtro pequeño sobre la API de tareas) que debe salir S y dentro de presupuesto. `bench.mjs` puntúa los artefactos obligatorios del tamaño y el presupuesto excedido; `compare` marca peor una versión que infla la misión o cambia su tamaño, en lugar de premiar más artefactos.
+- El contexto de sesión muestra el tamaño.
+
+### Cambiado
+- Principio 1: de "método completo siempre" a "método proporcional".
+- Lo que no aplica se registra en una línea, no elemento por elemento: la estrategia de pruebas lista solo los tipos pertinentes y la entrevista solo las secciones del tamaño.
+
+Origen: primer uso real (sistema-taller). Con presupuesto M, su arquitectura excede los 6 límites (16 historias, 83 criterios, 63 tareas, 14 ADR, 36 amenazas, 14 QS).
+
+ - 2026-10-14
 ### Añadido
 - **Registro de uso de ECC.** Hook `PostToolUse` (`scripts/hooks/ecc-used.mjs`): cada agente, skill o comando de ECC leído durante una misión queda en `metrics.md` como evento `ecc`, una vez por fase. `metrics.mjs summary` lo lista por fase y la retro lo usa.
 - **Packs del stack deterministas.** `reference/stack-packs.json` mapea palabras clave de stack (con alias) a reglas, skills y revisores de ECC; `install-packs.mjs --stack <palabras> [--dry-run]` los resuelve y añade siempre `rules/common`. El mismo stack instala siempre los mismos packs. Un test comprueba que cada ruta del mapa existe en el manifest y en disco.

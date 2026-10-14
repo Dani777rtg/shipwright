@@ -6,24 +6,26 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { collectFiles, parse, check, collectTestIds } from './trace.mjs';
+import { collectFiles, parse, check, collectTestIds, overBudget } from './trace.mjs';
 import { summarize } from './metrics.mjs';
 import { verify } from './lock.mjs';
 
-const ARTIFACTS = [
-  'mission.md', 'spec/requirements.md', 'architecture/ARCHITECTURE.md', 'security/threat-model.md',
-  'qa/test-strategy.md', 'ops/deploy-plan.md', 'plan/tasks.md', 'qa/report.md', 'security/report.md', 'handover.md',
-];
+// Artifacts each mission size must produce (METODO.md §2). More than required is not better.
+const S_ARTIFACTS = ['mission.md', 'spec/requirements.md', 'plan/tasks.md', 'qa/report.md'];
+const M_ARTIFACTS = [...S_ARTIFACTS, 'architecture/ARCHITECTURE.md', 'security/threat-model.md', 'qa/test-strategy.md', 'security/report.md'];
+export const ARTIFACTS = { S: S_ARTIFACTS, M: M_ARTIFACTS, L: [...M_ARTIFACTS, 'ops/deploy-plan.md', 'handover.md'] };
 
 export function score(root) {
   const state = JSON.parse(readFileSync(join(root, '.shipwright', 'state.json'), 'utf8'));
   const docs = join(root, state.docsDir ?? 'docs');
-  const present = ARTIFACTS.filter((a) => existsSync(join(docs, a)));
+  const size = state.size ?? 'L';
+  const required = ARTIFACTS[size];
+  const present = required.filter((a) => existsSync(join(docs, a)));
   const parsed = parse(collectFiles(docs).map((p) => ({ path: p, text: readFileSync(p, 'utf8') })));
   const kinds = {};
   for (const it of parsed.items.values()) kinds[it.kind] = (kinds[it.kind] ?? 0) + 1;
   const tests = collectTestIds([join(root, 'tests')]);
-  const traceProblems = check(parsed, 'qa', tests).length;
+  const traceProblems = check(parsed, 'qa', tests, size).length;
   const locks = join(root, '.shipwright', 'locks.json');
   const tampered = existsSync(locks) && state.lockedPaths?.length
     ? verify(root, state.lockedPaths, JSON.parse(readFileSync(locks, 'utf8'))).length : null;
@@ -32,8 +34,10 @@ export function score(root) {
   const hours = Object.values(metrics).reduce((h, p) => h + p.hours, 0);
   const gateRounds = Object.values(metrics).reduce((n, p) => n + p.gateRounds, 0);
   return {
-    artifacts: `${present.length}/${ARTIFACTS.length}`,
-    missing: ARTIFACTS.filter((a) => !present.includes(a)),
+    size,
+    artifacts: `${present.length}/${required.length}`,
+    missing: required.filter((a) => !present.includes(a)),
+    overBudget: overBudget(parsed.items, parsed.texts, size).length,
     ids: kinds,
     traceProblems,
     lockedTampered: tampered,
@@ -44,14 +48,18 @@ export function score(root) {
   };
 }
 
-// Better = fewer hours, fewer gate rounds, fewer trace problems, more artifacts, SHIP verdict.
+// Better = fewer hours, gate rounds, trace problems and budget overruns; every required artifact; SHIP verdict.
+// A bigger mission (more items than its size allows) is worse, never better.
 export function compare(a, b) {
-  const num = (s) => Number(String(s).split('/')[0]);
+  const missing = (s) => { const [have, need] = String(s).split('/').map(Number); return need - have; };
+  const fewer = (k) => [a[k] ?? 0, b[k] ?? 0, (b[k] ?? 0) <= (a[k] ?? 0) ? 'better-or-equal' : 'worse'];
   return {
-    hours: [a.hours, b.hours, b.hours <= a.hours ? 'better-or-equal' : 'worse'],
-    gateRounds: [a.gateRounds, b.gateRounds, b.gateRounds <= a.gateRounds ? 'better-or-equal' : 'worse'],
-    traceProblems: [a.traceProblems, b.traceProblems, b.traceProblems <= a.traceProblems ? 'better-or-equal' : 'worse'],
-    artifacts: [a.artifacts, b.artifacts, num(b.artifacts) >= num(a.artifacts) ? 'better-or-equal' : 'worse'],
+    size: [a.size, b.size, a.size === b.size ? 'better-or-equal' : 'worse'],
+    hours: fewer('hours'),
+    gateRounds: fewer('gateRounds'),
+    traceProblems: fewer('traceProblems'),
+    overBudget: fewer('overBudget'),
+    artifacts: [a.artifacts, b.artifacts, missing(b.artifacts) <= missing(a.artifacts) ? 'better-or-equal' : 'worse'],
     verdict: [a.verdict, b.verdict, b.verdict === 'SHIP' || a.verdict !== 'SHIP' ? 'better-or-equal' : 'worse'],
   };
 }

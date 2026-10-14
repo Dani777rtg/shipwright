@@ -17,6 +17,9 @@ Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §4–§5; readiness checklist: `
 
 ## Steps
 
+### Size S
+Skip steps 1 and 2: no SBOM, signing, runbook or 14-point checklist unless the change needs them. Deliver through step 3 (usually the PR with a short impact note and how to revert), then step 4 without the readiness evidence.
+
 ### 1. Release preparation, in parallel
 - `shipwright:devops-lead` task **B2-prep**: final IaC/config and CI/CD, health endpoints, alerts, runbook (`templates/runbook.md`), the exact production commands and their cost.
 - `shipwright:security-lead` task **E**: SBOM, artifact signing/provenance, production secrets in a manager, hardening, `SECURITY.md` when public.

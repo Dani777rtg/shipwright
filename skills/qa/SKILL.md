@@ -24,6 +24,9 @@ Spawn `shipwright:devops-lead` task **B1**: deploy to staging from the deploy pl
 ### 3. Holdout
 `node "${CLAUDE_PLUGIN_ROOT}/scripts/lock.mjs" holdout <acceptance path>/holdout` (path from the test strategy). Then run the full acceptance suite.
 
+### Size S
+Steps 1, 3, 5, 6 and 7 only, plus: run the project's full test suite and linters; `shipwright:qa-lead` task **E** limited to acceptance, unit and regression tests; `/code-review high` and, with an `origin` remote, `/security-review`; secrets and dependency scan of the diff. Staging, DAST, load, docs and UX reviews: `No aplica: tamaño S` in one line of the report, unless the change touches them. A finding that needs more rigor raises the size to M.
+
 ### 4. Verification, in parallel
 - `shipwright:qa-lead` task **E**: every pertinent test type of the strategy against staging (functional, regression, performance/load against the SLOs, accessibility, exploratory with a browser, AI evals…), bugs filed under `<docsDir>/qa/bugs/`, draft of `<docsDir>/qa/report.md`.
 - `shipwright:security-lead` task **D**: `<docsDir>/security/report.md` (ASVS checklist, threats closed with evidence, SAST/SCA/secrets/DAST/headers, privacy tests, adversarial pass).

@@ -34,8 +34,8 @@ For desde cero record `No aplica: misión desde cero` for this step.
 ### 2. Analyze the client material
 If `<docsDir>/client/` has files, invoke the `graphify` skill on it with `--mode deep`. From `GRAPH_REPORT.md` take: central entities (candidate glossary terms and modules), communities (candidate capabilities) and every `AMBIGUOUS` edge (each becomes an interview question). If the folder is empty, record that the brief is the only source.
 
-### 3. Interview — complete checklist
-Read `${CLAUDE_SKILL_DIR}/checklist.md`. Cover **every** section, in order, in batches of up to 4 questions:
+### 3. Interview — checklist by size
+Read `${CLAUDE_SKILL_DIR}/checklist.md`. Cover the sections the mission size requires (`${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §2): **S** → sections 1, 3, 5, 12 and 15 only, the rest recorded in one line `No aplica: tamaño S`; **M** → the sections the stories touch, the rest in one line; **L** → every section. In order, in batches of up to 4 questions:
 - Start each batch with one line saying which section you are on and how many remain.
 - Prefer concrete options built from the material (e.g. three plausible KR targets) over open questions.
 - **"No sé" answers:** research before moving on — web search, the sponsor's or client's docs, the graph of past missions (`graphify` global graph / `lessons/LESSONS.md` of the plugin if present). Come back with 2–4 grounded options, each with its source, and ask again. If still unresolved, record it as an assumption with an owner and a "confirm before" date.
@@ -48,7 +48,8 @@ Read `${CLAUDE_SKILL_DIR}/checklist.md`. Cover **every** section, in order, in b
    - Every story has `riesgo: alto — <why>` or `riesgo: bajo — <why>` per the criteria in `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3. When in doubt, alto.
    - Every Must story has at least one happy-path AC and one unwanted-behaviour AC (IF … THEN).
    - Every AC is verifiable by an automated test or a stated manual check.
-3. `<docsDir>/spec/glossary.md` from `${CLAUDE_PLUGIN_ROOT}/templates/glossary.md`.
+3. `<docsDir>/spec/glossary.md` from `${CLAUDE_PLUGIN_ROOT}/templates/glossary.md` — size M and L only; for S, define the few domain terms inline in requirements.md.
+4. **Size check.** A story rated `riesgo: alto` in a size S mission raises it to M: tell the user why and run `state.mjs set size M`. Never lower the size without asking.
 
 ### 5. Traceability check
 Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs" <docsDir> --phase intake`. Fix every problem and re-run until it prints OK. Never silence a problem by deleting a requirement; ask the user if a fix needs a decision.
@@ -57,7 +58,7 @@ Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs" <docsDir> --phase intake`. F
 Spawn in parallel, in the foreground (never in the background: their findings exist only in their replies):
 - `shipwright:analyst` with the paths of mission.md, requirements.md, glossary.md, existing-system.md (if any) and `${CLAUDE_SKILL_DIR}/checklist.md`.
 - `shipwright:qa-lead` with task **A (testability review)** and the same paths. Store the project profile it proposes with `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set qaProfile '<json>'`; Architect uses it for the Test Strategy.
-- `shipwright:ux-lead` with task **A (key tasks)** when the mission has a user interface; otherwise record `No aplica: sin interfaz de usuario` for UX.
+- `shipwright:ux-lead` with task **A (key tasks)** when the mission adds or changes screens; otherwise record `No aplica: sin interfaz de usuario` for UX.
 - `shipwright:security-lead` with task **A (requirements)** and the same paths (it also checks the risk classification). Add the security and privacy criteria it lists (or their `No aplica`) to requirements.md, record the ASVS level it proposes for the user to approve at the gate, and write `<docsDir>/security/data-inventory.md` when there is personal data.
 
 Write the analyst's and the qa-lead's replies verbatim to `<docsDir>/spec/review.md` (one section each) before anything else. Apply their findings; findings that need a decision go to the user via AskUserQuestion. Record next to each finding what was done: `corregido`, `decidido por el usuario: <decisión>` or `abierto`. Re-run step 5 after changes.
@@ -67,7 +68,7 @@ Do not present the gate until `<docsDir>/spec/review.md` exists and no blocking 
 ### 7. Gate
 Present:
 - 5-line summary of the problem and the objectives
-- Counts: objectives, KRs, stories (by MoSCoW), ACs, assumptions, open questions
+- Mission size and its budget; counts: objectives, KRs, stories (by MoSCoW), ACs, assumptions, open questions; any `Presupuesto excedido` line with its reason
 - The ordered quality goals and the proposed ASVS level
 - Each story with its risk (alto/bajo) and reason, and what that means: high-risk stories get their own scenarios, threats, ADRs and heavy tests; low-risk ones get acceptance and unit tests only. The user may raise or lower any of them.
 - Everything marked `No aplica` and every open assumption
@@ -77,7 +78,7 @@ Ask with AskUserQuestion: Aprobar (Recomendado) / Pedir cambios / Volver a la mi
 - Log the outcome: `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log intake gate-approved|gate-changes|gate-back "<short note>"`.
 - Pedir cambios → apply them, repeat steps 5–7.
 - Volver a la misión → `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set phase mission` and tell the user to run `/shipwright:mission`.
-- Aprobar → set `status: approved` in the frontmatter of mission.md and requirements.md (from now on they change only through `/shipwright:change`), run `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set phase architect`, and tell the user the next step is `/shipwright:architect`.
+- Aprobar → set `status: approved` in the frontmatter of mission.md and requirements.md (from now on they change only through `/shipwright:change`), run `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set phase architect` and tell the user the next step is `/shipwright:architect` — or, for size S, `state.mjs set phase plan` and next step `/shipwright:plan` (S has no Architect phase).
 
 ## Session
-Principles for every step: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md` (subagent reports and progress notes terse; questions, gates and artifacts in clear prose). If this conversation grows long inside the phase, suggest `/compact`. When the phase closes, tell the user: run `/clear`, then `/shipwright:architect` — everything the next phase needs is in files, and the session-start hook restores the mission context.
+Principles for every step: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md` (subagent reports and progress notes terse; questions, gates and artifacts in clear prose). If this conversation grows long inside the phase, suggest `/compact`. When the phase closes, tell the user: run `/clear`, then `/shipwright:architect` (`/shipwright:plan` for size S) — everything the next phase needs is in files, and the session-start hook restores the mission context.

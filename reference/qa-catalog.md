@@ -3,7 +3,7 @@
 Used by the `qa-lead` agent to build the Test Strategy (Architect) and the Test Plan (Plan), and to run the QA phase.
 Framework: ISTQB CTFL 4.0 (levels and types), ISO/IEC 25010:2023 (quality characteristics), ISO/IEC/IEEE 29119-3 (strategy, plan, completion report), risk-based testing (likelihood × impact). Shape: test pyramid for backends, testing trophy (more integration) for frontends.
 
-**Rule:** every type below is evaluated for every mission. If its pertinence rule matches, it is mandatory. If not, it is recorded as `No aplica: <reason>` in the Test Strategy. Tools are defaults verified on 2026-10-14; the mission's stack and existing tooling win (for an existing system, reuse its tools first). Numeric thresholds marked *(guide)* are starting points, not standards: the Test Strategy states the mission's own values.
+**Rule:** every type below is evaluated for every mission. If its pertinence rule matches, it is mandatory and listed in the Test Strategy. The types that do not apply are recorded together in one line (`No aplica: <tipos> — <motivo>`), not one row each. Tools are defaults verified on 2026-10-14; the mission's stack and existing tooling win (for an existing system, reuse its tools first). Numeric thresholds marked *(guide)* are starting points, not standards: the Test Strategy states the mission's own values.
 
 Stacks: JS = JavaScript/TypeScript · Py = Python · JVM = Java/Kotlin · Go · NET = .NET · Mob = mobile.
 

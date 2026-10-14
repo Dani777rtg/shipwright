@@ -27,7 +27,7 @@ status: draft
 
 ## 3. Tipos de prueba
 
-<!-- TODOS los tipos del catálogo aparecen aquí: pertinente con motivo, o "No aplica: <motivo>". -->
+<!-- Solo los tipos pertinentes, con su motivo. Los demás tipos del catálogo, en UNA línea bajo la tabla: "No aplica: <tipos> — <motivo>". -->
 
 | Tipo | Pertinente | Motivo / riesgo / ID que cubre | Herramienta | Umbral de salida |
 |---|---|---|---|---|

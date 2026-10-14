@@ -20,6 +20,9 @@ Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §9. State only through `node "${
 - `node "${CLAUDE_PLUGIN_ROOT}/scripts/bench.mjs" score .` — the mission's score.
 - Bugs (`<docsDir>/qa/bugs/`), security findings, production incidents, change requests (`<docsDir>/changes/`), `No aplica` items, open assumptions that turned out wrong.
 
+### Size S
+Evidence (step 1), then one question: what was slower or heavier than the change deserved. Turn only real lessons into framework diffs.
+
 ### 2. Escape analysis
 For every bug, vulnerability, incident and change request: the phase that should have caught or prevented it, and why it didn't (missing question, test type marked `No aplica`, weak test, review gap, wrong estimate…). Table: item · found in · should have been caught in · cause.
 
