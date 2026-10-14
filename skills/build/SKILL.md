@@ -29,4 +29,4 @@ Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §4–§5; git rules: `${CLAUDE_P
 6. **Progress:** after each group, a 3-line update (done/total, blockers, next).
 
 ## End
-All tasks done → full test suite, `lock.mjs verify`, `trace.mjs --phase plan`; `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log build end`; `state.mjs set phase qa`; tell the user the next step is `/shipwright:qa` (available in a later Shipwright version).
+All tasks done → full test suite, `lock.mjs verify`, `trace.mjs --phase plan`; `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log build end`; `state.mjs set phase qa`; tell the user the next step is `/shipwright:qa`.

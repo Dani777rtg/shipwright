@@ -3,6 +3,16 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
+## [0.11.0] - 2026-10-14
+### Añadido
+- `/shipwright:qa`: despliegue a staging, verificación de tests bloqueados, incorporación de los tests ocultos, todos los tipos de prueba pertinentes, informe de seguridad, verificación de documentación y de interfaz, ciclo de corrección con builders, trazabilidad `--phase qa` y veredicto SHIP / NO SHIP.
+- `/shipwright:ship`: preparación de la release (versión, CHANGELOG, SBOM, firma, runbook, documentación, documento de entrega), checklist de producción, despliegue solo con aprobación, canario con rollback inmediato; PR para sistemas existentes; entrega de informe o PoC.
+- `lock.mjs holdout`: incorpora los tests ocultos a la ruta bloqueada y registra su huella.
+### Cambiado
+- `devops-lead`: staging en QA (B1), preparación y producción en Ship (B2).
+### Corregido
+- La descripción de `devops-lead` tenía YAML inválido: el agente cargaba sin descripción desde la v0.7.
+
 ## [0.10.0] - 2026-10-14
 ### Añadido
 - `/shipwright:plan`: tareas pequeñas trazadas (incluidas mitigaciones de amenazas, infraestructura, documentación e interfaz), tests de aceptación escritos por qa-lead, bloqueados y con huella, conjunto oculto (holdout) fuera del repo, plan de pruebas.

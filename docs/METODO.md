@@ -1,6 +1,6 @@
 # Método Shipwright
 
-Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.10.0**.
+Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.11.0**.
 
 ## 1. Principios
 
@@ -62,9 +62,9 @@ Misión → **O** objetivos de usuario → **KR** métricas → **QG** 3 objetiv
 
 **Build.** Subagente nuevo por tarea con su objetivo en la primera línea. TDD para tests internos; los de aceptación no se tocan. La documentación se actualiza en la misma tarea que el código. Tras cada tarea: revisión de código, del diff de tests (qa-lead), de dependencias nuevas y diffs sensibles (security-lead), de la interfaz contra el prototipo (ux-lead), PR con Conventional Commits y `graphify update`. Desviación de la arquitectura → `/shipwright:change`.
 
-**QA.** Huellas intactas, tests ocultos incorporados, todos los tipos de prueba pertinentes, verificación de amenazas y nivel ASVS, exploración con IA, bugs con severidad, documentación verificada (quick start en máquina limpia, ejemplos, enlaces) y revisión UX. Criterios de salida en [`reference/qa-catalog.md`](../reference/qa-catalog.md).
+**QA.** Despliegue a staging, huellas intactas, tests ocultos incorporados, todos los tipos de prueba pertinentes, verificación de amenazas y nivel ASVS, exploración con IA, bugs con severidad, documentación verificada (quick start en máquina limpia, ejemplos, enlaces) y revisión UX. Criterios de salida en [`reference/qa-catalog.md`](../reference/qa-catalog.md).
 
-**Ship.** Staging → smoke → rollback ensayado → **aprobación del usuario** → producción → canario ≥ 15 min. Checklist de producción de 14 puntos con evidencia, runbook, SBOM y firma, tag de versión con CHANGELOG, documentación final y documento de entrega.
+**Ship.** Preparación de la release → checklist → **aprobación del usuario** → producción → canario ≥ 15 min (rollback inmediato si empeora). En sistemas existentes: PR con nota de impacto; en informes o PoC: entrega del documento o demo. Checklist de producción de 14 puntos con evidencia, runbook, SBOM y firma, tag de versión con CHANGELOG, documentación final y documento de entrega.
 
 **Retro.** §9.
 
@@ -160,8 +160,8 @@ Nada aprende ni se inyecta solo.
 | v0.7 | Seguridad obligatoria, producción en cualquier plataforma, documentación concisa |
 | v0.8 | Documentación de los repos entregados, UX/UI, flujo git, `status` |
 | v0.9 | `architect` |
-| **v0.10** | `plan` + `build` + `change` *(actual)* |
-| v0.11 | `qa` + `ship` |
+| v0.10 | `plan` + `build` + `change` |
+| **v0.11** | `qa` + `ship` *(actual)* |
 | v0.12 | `retro`, evals de skills, banco de misiones |
 | v1.0 | Probado en ≥ 3 misiones reales |
 | v2.0 | Orquestador autónomo con Claude Agent SDK |

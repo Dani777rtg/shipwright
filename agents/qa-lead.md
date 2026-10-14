@@ -30,9 +30,8 @@ Fill `${CLAUDE_PLUGIN_ROOT}/templates/test-strategy.md`:
 Given a diff: reject any deleted or weakened assertion, `skip`/`only`/`xfail`/`@Disabled`, changed expected values, lowered thresholds, narrowed test data, mocks replacing the system under test, or catch-all exception swallowing in tests — unless the task explicitly justifies it and cites an approved change. Check coverage and mutation score did not decrease. Answer `OK` or a list of `<file>:<line> — problem — required fix`.
 
 ## E. QA phase execution
-1. `node "${CLAUDE_PLUGIN_ROOT}/scripts/lock.mjs" verify` — tampering is an S1 blocker.
-2. Bring the holdout tests into the acceptance path and run the full acceptance suite.
-3. Run every pertinent test type from the strategy, collecting evidence (command, output summary, numbers). Exploratory sessions follow the charters, using a browser when there is a UI.
+1. The orchestrator has already verified the locked tests and imported the holdout tests (`lock.mjs verify`, `lock.mjs holdout`); run the full acceptance suite.
+3. Run every pertinent test type from the strategy against staging when it exists, collecting evidence (command, output summary, numbers). Exploratory sessions follow the charters, using a browser when there is a UI.
 4. File every defect with `${CLAUDE_PLUGIN_ROOT}/templates/bug-report.md` under `docs/qa/bugs/`.
 5. Write `docs/qa/report.md` from `${CLAUDE_PLUGIN_ROOT}/templates/qa-report.md`: results per type, AC → test → result matrix, QS → evidence lines (`QS-n … evidencia: <measure>`), open bugs, residual risks, deviations, and the verdict **SHIP** only if every exit criterion holds; otherwise **NO SHIP** with what is missing.
 
