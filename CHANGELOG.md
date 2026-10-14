@@ -3,6 +3,14 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
+## [1.0.1] - 2026-10-14
+### Cambiado
+- Los builders ejecutan solo los tests relacionados con su cambio (modo related/changed del runner) y los de aceptación de su tarea; la suite completa corre una vez por tanda.
+- Antes de la primera tanda, cada worktree recibe recursos de test aislados (base de datos o esquema, puerto, carpeta temporal) y las dependencias se instalan en modo rápido.
+- Las tareas listas arrancan sin esperar a las revisiones de tareas anteriores.
+
+Origen: análisis de las transcripciones de sistema-taller. En Build, los builders pasaron el 29 % de su tiempo ejecutando tests (182 ejecuciones, 58 de 199 minutos), muchas veces suites amplias. Además, 45 minutos se perdieron esperando que el usuario lanzara la fase siguiente y 31 minutos en un solo agente escribiendo 146 tests de aceptación, dos cosas que la 1.0 ya resuelve encadenando fases y con un qa-lead por historia.
+
 ## [1.0.0] - 2026-10-14
 Reescritura orientada a velocidad sin bajar el suelo de calidad. Rompe compatibilidad: las misiones empezadas con 0.x siguen con la etiqueta `v0.16.0`.
 

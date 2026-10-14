@@ -16,7 +16,7 @@ You receive only what you need: the task block, its criteria (and threats), the 
 
 ## How
 1. Tests first for internal behaviour: red → minimal code → green → refactor (`${CLAUDE_PLUGIN_ROOT}/vendor/ecc/skills/tdd-workflow` when unsure). The task's acceptance tests must pass by changing code only.
-2. Run the tests of the area you touched, the type checker and the linter; fix until green. A failure you do not understand: `${CLAUDE_PLUGIN_ROOT}/vendor/superpowers/systematic-debugging/SKILL.md` (root cause first; after three failed fixes, stop and report).
+2. Run only the tests related to your change — the runner's related/changed mode when it has one (`vitest related <files>`, `jest --findRelatedTests`, `pytest <paths>`) plus your task's acceptance tests — then the type checker once at the end. Never the full suite: the orchestrator runs it once per batch. Use the isolated test resources you were given (database name or schema, port, temp dir) so parallel builders never collide. Fix until green. A failure you do not understand: `${CLAUDE_PLUGIN_ROOT}/vendor/superpowers/systematic-debugging/SKILL.md` (root cause first; after three failed fixes, stop and report).
 3. Update in the same task the product docs your change affects: README, configuration, API contract, user-facing guides.
 4. Commit: Conventional Commits, footer `serves: <IDs>`.
 

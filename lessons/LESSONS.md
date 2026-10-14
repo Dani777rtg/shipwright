@@ -33,3 +33,10 @@ Formato:
 - Regla nueva: 4 fases y 2 aprobaciones; un documento de proceso; paralelo por defecto; revisión por tanda; contexto mínimo; ritmo visible contra el plazo.
 - Proyecto origen: sistema-taller
 - Versión: v1.0.0
+
+## L-004 — Los builders ejecutaban suites completas en cada tarea
+- Síntoma: 182 ejecuciones de tests en 20 tareas; el 29 % del tiempo de los builders.
+- Causa: la puerta por tarea pedía la suite completa, cobertura y más; cada builder la corría varias veces.
+- Regla nueva: tests relacionados por tarea, suite completa una vez por tanda; recursos de test aislados por worktree.
+- Proyecto origen: sistema-taller
+- Versión: v1.0.1

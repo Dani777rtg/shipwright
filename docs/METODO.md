@@ -1,6 +1,6 @@
 # Método Shipwright
 
-Cómo Shipwright lleva un encargo hasta software funcionando, rápido y sin bajar la calidad. Versión **v1.0.0**.
+Cómo Shipwright lleva un encargo hasta software funcionando, rápido y sin bajar la calidad. Versión **v1.0.1**.
 
 ## 1. Principios
 

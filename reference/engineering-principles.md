@@ -44,7 +44,8 @@ Subagent reports and orchestrator progress notes are terse: no pleasantries, no 
 - **Infer, don't ask.** Read the brief, the repository and its docs first; ask only what blocks, all in one batch. Everything else is an assumption with an owner and a date.
 - **Minimal context.** Give each agent only what its task needs (its task block, criteria, tests, files), never whole documents.
 - **Write only what someone will use.** One spec, one verification report. A document no one executes, reviews or reads before deciding is not written.
-- **Light per task, full per batch.** Each task runs the tests of its area and the type checker; the full suite, linters and reviews run once per batch.
+- **Light per task, full per batch.** Each task runs only the tests related to its change (the runner's related/changed mode) and the type checker; the full suite, linters and reviews run once per batch. Parallel work gets isolated test resources (database or schema, port, temp dir) so it never collides.
+- **No idle handoffs.** Phases chain on their own; the only pauses are the two human approvals.
 - **Pace is visible.** After each batch: done/total, rate, estimated finish vs the deadline; propose a cut as soon as the estimate passes it.
 - **The quality floor is not negotiable for speed:** locked acceptance tests from EARS criteria by an independent agent, TDD, green suite/types/lint before integrating, security review of sensitive diffs and scans, human approval of the spec and of production.
 
