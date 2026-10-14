@@ -11,10 +11,10 @@ Reference: `${CLAUDE_PLUGIN_ROOT}/reference/security-baseline.md` (per-phase act
 Do only the task you are given.
 
 ## A. Mission / Intake — requirements
-Given the mission card and requirements: confirm the data class, security profiles and jurisdictions; propose the ASVS level with its reason; list every baseline item for the applicable profiles as an EARS criterion (`AC-…`, including abuse cases) or `No aplica: <reason>`; write `<docsDir>/security/data-inventory.md` when there is personal data. Report gaps as `<severity> <file>:<line> — problem — fix`.
+Given the mission card and requirements: confirm the data class, security profiles and jurisdictions; propose the ASVS level with its reason; check each story's `riesgo:` against `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3 and report any story that should be alto; list every baseline item for the applicable profiles as an EARS criterion (`AC-…`, including abuse cases) or `No aplica: <reason>`; write `<docsDir>/security/data-inventory.md` when there is personal data. Report gaps as `<severity> <file>:<line> — problem — fix`.
 
 ## B. Architect — threat model → `<docsDir>/security/threat-model.md`
-From `${CLAUDE_PLUGIN_ROOT}/templates/threat-model.md`: assets, actors, trust boundaries over the C4 diagrams, threats `TM-n` (STRIDE + LLM/agentic categories) with likelihood × impact, mitigation linked to AC/QS/ADR, status. Propose security ADRs (authentication, sessions, secrets, crypto, tenancy, logging, supply chain). Every High threat needs a mitigation or an explicit user acceptance (`Riesgo aceptado: <who, why>`).
+From `${CLAUDE_PLUGIN_ROOT}/templates/threat-model.md`: assets, actors, trust boundaries over the C4 diagrams, threats `TM-n` (STRIDE + LLM/agentic categories) for the system's surfaces and the high-risk stories only — low-risk stories rely on the baseline controls, with likelihood × impact, mitigation linked to AC/QS/ADR, status. Propose security ADRs (authentication, sessions, secrets, crypto, tenancy, logging, supply chain). Every High threat needs a mitigation or an explicit user acceptance (`Riesgo aceptado: <who, why>`).
 
 ## C. Build — dependency vetting and sensitive-diff review
 - Dependency: verify it exists in the official registry, is not a near-typo of a popular package, has reasonable age/downloads, a real maintainer and repository, and a compatible license. Answer `OK` or `REJECT — reason`.

@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 **Language:** every message to the user (questions, progress, gate summary, closing message) and every artifact is in the user's language — Spanish if the user writes in Spanish. Instructions in this file are in English; your output is not.
 
-Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3–§5. Every step runs; what does not apply becomes `No aplica: <reason>`. The architecture's only objective is to meet the ordered quality goals (QG) with the fewest pieces — no component, dependency or pattern without a scenario, story or decision that needs it.
+Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3–§5. Every step runs; what does not apply becomes `No aplica: <reason>`. The architecture's only objective is to meet the ordered quality goals (QG) with the fewest pieces — no component, dependency or pattern without a scenario, story or decision that needs it. Rigor follows each story's `riesgo:` (`${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3): scenarios, threats, ADRs and heavy test types are written for high-risk stories and for the system as a whole, never per low-risk story. Pass this rule to every specialist.
 
 ## Preconditions
 Read the state (`node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" get`). Continue only if `phase` is `architect` and `<docsDir>/mission.md` and `<docsDir>/spec/requirements.md` have `status: approved`; otherwise say which phase to run and stop. Read the mission card, requirements, glossary and `existing-system.md` (if any).
@@ -30,7 +30,7 @@ For each QG write one or more QS (fuente · estímulo · entorno · artefacto ·
 ### 3. Stack and decisions
 - Desde cero: shortlist from `${CLAUDE_PLUGIN_ROOT}/docs/catalogo-stack.md` against the QG order, constraints and the user's deployment platform; ask the user to choose (recommended first, with trade-offs).
 - Sobre lo existente: the current stack; any new dependency or pattern needs its own ADR.
-- Write one ADR per significant decision in `<docsDir>/adr/NNNN-<slug>.md` from `${CLAUDE_PLUGIN_ROOT}/templates/adr.md` (`serves: QS-n` or `TM-n`, real alternatives, consequences). Stack, data store, authentication, integration style and deployment always get an ADR.
+- Write one ADR per significant decision in `<docsDir>/adr/NNNN-<slug>.md` from `${CLAUDE_PLUGIN_ROOT}/templates/adr.md` (`serves: QS-n` or `TM-n`, real alternatives, consequences). Stack, data store, authentication, integration style and deployment always get an ADR. A low-risk story gets an ADR only if it adds a dependency or a pattern.
 
 ### 4. Architecture document
 Write `<docsDir>/architecture/ARCHITECTURE.md` from `${CLAUDE_PLUGIN_ROOT}/templates/architecture.md`: scenarios, constraints, C4 L1–L2 (Mermaid), components `C-n` with `serves:`, data model, contracts (write the OpenAPI/AsyncAPI/schema file when there is an API), 2–3 key sequence flows, cross-cutting decisions, risks and the traceability table. Existing system: current state first, then the change. Unknowns are `TBD` with an owner and a question.

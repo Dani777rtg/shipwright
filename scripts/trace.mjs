@@ -9,7 +9,8 @@ import { pathToFileURL } from 'node:url';
 const ID = String.raw`(?:O-\d+|KR-\d+|QG-\d+|QS-\d+|TM-\d+|ADR-\d+|C-\d+|US-\d+|AC-\d+\.\d+|T\d{3,})`;
 const DEF_RE = new RegExp(String.raw`^\s*(?:#{1,6}\s+|[-*]\s+)(?:\*\*)?(${ID})\b`);
 const SERVES_RE = /serves:\s*([^\n]*)/i;
-const NOT_APPLICABLE_RE = /no aplica:|not applicable:|riesgo aceptado:|accepted risk:/i;
+const RISK_RE = /^\s*riesgo:\s*(alto|bajo)\s+(?:—|--)\s+\S.{9,}/im; // METODO.md §3: decides how much rigor a story gets
+const NOT_APPLICABLE_RE =/no aplica:|not applicable:|riesgo aceptado:|accepted risk:/i;
 
 const kindOf = (id) => id.match(/^[A-Z]+/)[0];
 
@@ -94,6 +95,7 @@ export function check({ items, errors, texts = [] }, phase = 'intake', testIds =
   for (const it of items.values()) {
     const allowed = ALLOWED[it.kind];
     if (!allowed) continue;
+    if (phase === 'intake' && it.kind === 'US' && !RISK_RE.test(it.body.join('\n'))) out.push(`${where(it)} missing "riesgo: alto|bajo — <why>" (METODO.md §3)`);
     if (!it.serves) { out.push(`${where(it)} orphan: missing "serves: <ID> — <how>"`); continue; }
     if (it.reason.length < 10) out.push(`${where(it)} serves needs a reason: "serves: <ID> — <how it serves it>"`);
     for (const ref of it.serves) {

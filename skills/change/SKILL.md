@@ -18,7 +18,7 @@ State only through `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" …` from the
 3. **Gate.** Present the delta and impact. AskUserQuestion: Aprobar (Recomendado) / Ajustar / Rechazar. Rejected → mark the delta `rechazado` and stop.
 4. **Apply** (only after approval):
    - `node "${CLAUDE_PLUGIN_ROOT}/scripts/change.mjs" open <NNN> <file>...` (exactly the files listed).
-   - Edit those files; new ADRs supersede old ones (`Estado: reemplazada por ADR-m`), never silently rewrite history. Acceptance-test changes are written by `shipwright:qa-lead`.
+   - Edit those files; a new or changed story carries `riesgo: alto|bajo — <why>` (`${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3) and gets the rigor of its level. New ADRs supersede old ones (`Estado: reemplazada por ADR-m`), never silently rewrite history. Acceptance-test changes are written by `shipwright:qa-lead`.
    - `node "${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs" <docsDir> --phase <current phase if intake|architect|plan|qa, else plan>` until OK.
    - `node "${CLAUDE_PLUGIN_ROOT}/scripts/change.mjs" close` (re-fingerprints locked tests).
    - Mark the delta `aplicado`; add affected tasks back to the plan (remove them from `tasksDone` with `state.mjs set tasksDone '<json array>'` when they must be redone).

@@ -10,6 +10,7 @@ status: draft
 ## Historias de usuario
 
 <!-- Prioridad MoSCoW: Must · Should · Could · Won't.
+     Riesgo alto o bajo según docs/METODO.md §3 del plugin: decide cuánto rigor lleva la historia.
      Criterios en EARS, cada uno con ID AC-<historia>.<n> y serves.
      Patrones EARS:
        Ubicuo:        THE SYSTEM SHALL <respuesta>
@@ -22,6 +23,7 @@ status: draft
 ### US-01 <título> (Must)
 Como <rol>, quiero <capacidad> para <beneficio>.
 serves: O-1 — <cómo contribuye al objetivo>
+riesgo: bajo — <por qué; alto si toca dinero, datos personales, permisos o aislamiento, una integración externa u operaciones masivas o irreversibles sobre datos>
 
 - **AC-01.1** WHEN <disparador> THE SYSTEM SHALL <respuesta verificable>
   serves: US-01 — <qué parte de la historia verifica>

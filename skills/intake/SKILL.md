@@ -45,6 +45,7 @@ Read `${CLAUDE_SKILL_DIR}/checklist.md`. Cover **every** section, in order, in b
 ### 4. Write the artifacts
 1. `<docsDir>/mission.md`: complete objectives `O-n`, metrics `KR-n` (each `serves: O-n — <how>`), the ordered `QG-1..3` (each `serves:` an O or KR with the reason), restrictions, Definition of Done, out of scope / parking, assumptions with owner, and the `No aplica` list.
 2. `<docsDir>/spec/requirements.md` from `${CLAUDE_PLUGIN_ROOT}/templates/requirements.md`: context; user stories `US-NN` with MoSCoW and `serves: O-n — <how>`; acceptance criteria `AC-NN.M` in EARS with `serves: US-NN — <what it verifies>`; measurable non-functional requirements; out of scope; assumptions; open questions.
+   - Every story has `riesgo: alto — <why>` or `riesgo: bajo — <why>` per the criteria in `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3. When in doubt, alto.
    - Every Must story has at least one happy-path AC and one unwanted-behaviour AC (IF … THEN).
    - Every AC is verifiable by an automated test or a stated manual check.
 3. `<docsDir>/spec/glossary.md` from `${CLAUDE_PLUGIN_ROOT}/templates/glossary.md`.
@@ -57,7 +58,7 @@ Spawn in parallel, in the foreground (never in the background: their findings ex
 - `shipwright:analyst` with the paths of mission.md, requirements.md, glossary.md, existing-system.md (if any) and `${CLAUDE_SKILL_DIR}/checklist.md`.
 - `shipwright:qa-lead` with task **A (testability review)** and the same paths. Store the project profile it proposes with `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set qaProfile '<json>'`; Architect uses it for the Test Strategy.
 - `shipwright:ux-lead` with task **A (key tasks)** when the mission has a user interface; otherwise record `No aplica: sin interfaz de usuario` for UX.
-- `shipwright:security-lead` with task **A (requirements)** and the same paths. Add the security and privacy criteria it lists (or their `No aplica`) to requirements.md, record the ASVS level it proposes for the user to approve at the gate, and write `<docsDir>/security/data-inventory.md` when there is personal data.
+- `shipwright:security-lead` with task **A (requirements)** and the same paths (it also checks the risk classification). Add the security and privacy criteria it lists (or their `No aplica`) to requirements.md, record the ASVS level it proposes for the user to approve at the gate, and write `<docsDir>/security/data-inventory.md` when there is personal data.
 
 Write the analyst's and the qa-lead's replies verbatim to `<docsDir>/spec/review.md` (one section each) before anything else. Apply their findings; findings that need a decision go to the user via AskUserQuestion. Record next to each finding what was done: `corregido`, `decidido por el usuario: <decisión>` or `abierto`. Re-run step 5 after changes.
 
@@ -68,6 +69,7 @@ Present:
 - 5-line summary of the problem and the objectives
 - Counts: objectives, KRs, stories (by MoSCoW), ACs, assumptions, open questions
 - The ordered quality goals and the proposed ASVS level
+- Each story with its risk (alto/bajo) and reason, and what that means: high-risk stories get their own scenarios, threats, ADRs and heavy tests; low-risk ones get acceptance and unit tests only. The user may raise or lower any of them.
 - Everything marked `No aplica` and every open assumption
 - Paths of the artifacts
 

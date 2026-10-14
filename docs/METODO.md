@@ -1,10 +1,10 @@
 # Método Shipwright
 
-Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.13.0**.
+Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.14.0**.
 
 ## 1. Principios
 
-1. **Método completo siempre.** Todas las fases y preguntas; lo que no aplica se marca `No aplica: <motivo>`, nunca se omite en silencio.
+1. **Método completo siempre.** Todas las fases y preguntas; lo que no aplica se marca `No aplica: <motivo>`, nunca se omite en silencio. La profundidad de cada historia depende de su riesgo (§3).
 2. **Velocidad por paralelismo**, no por recortes.
 3. **Todo tiene un para qué.** Cada decisión, tarea y test cita el objetivo al que sirve (§3).
 4. **Spec antes que código.**
@@ -36,7 +36,11 @@ Misión → **O** objetivos de usuario → **KR** métricas → **QG** 3 objetiv
 
 - Cada elemento lleva `serves: <ID> — <cómo>`. Sin él, o con un ID inexistente, es **huérfano** y se rechaza.
 - El objetivo de la arquitectura es cumplir los QG en su orden con el mínimo de piezas, demostrado por escenarios medibles. Ejemplo QS: *el jurado sube un audio de 5 min con el wifi del evento → resumen en ≤ 60 s, 5 de 5 veces*.
-- `scripts/trace.mjs` lo comprueba en cada gate (`--phase intake|architect|plan|qa`): huérfanos, IDs inválidos, cobertura (todo O con KR y AC, todo QG con QS, todo AC/QS/TM con tarea, y en QA todo AC con test y todo QS/TM con evidencia). Un revisor valida además que cada justificación tenga sentido.
+- **Rigor según riesgo.** En Intake cada historia lleva `riesgo: alto — <motivo>` o `riesgo: bajo — <motivo>`. Es **alto** si toca dinero (cobros, facturación, caja, crédito), datos personales o sensibles, autenticación, permisos o aislamiento entre clientes o sedes, una integración externa, u operaciones masivas o irreversibles sobre datos (borrado, migración, respaldo, restauración). Ante la duda, alto. El usuario confirma la clasificación en el gate de Intake.
+  - Toda historia: criterios EARS, un test de aceptación por AC, tests unitarios, revisión de código y los controles base de seguridad del sistema.
+  - Solo las de riesgo alto: escenarios QS, amenazas TM y ADR propios; tipos de prueba pesados (DAST, carga, matriz completa de autorización, exploratoria, caos, recuperación); revisión de diff sensible por security-lead.
+  - Una historia de riesgo bajo que añade una dependencia o un patrón nuevo sigue necesitando ADR.
+- `scripts/trace.mjs` lo comprueba en cada gate (`--phase intake|architect|plan|qa`): huérfanos, IDs inválidos, historias sin `riesgo:` (en Intake), cobertura (todo O con KR y AC, todo QG con QS, todo AC/QS/TM con tarea, y en QA todo AC con test y todo QS/TM con evidencia). Un revisor valida además que cada justificación tenga sentido.
 
 ## 4. Fases
 

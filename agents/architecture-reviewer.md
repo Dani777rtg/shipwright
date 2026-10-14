@@ -13,7 +13,8 @@ Check, in order:
 3. **Decisions.** Every significant choice (stack, data store, auth, deployment, integration style) has an ADR with real alternatives and consequences, and `serves:` a QS. Ties are broken by the QG order.
 4. **Coverage.** Every Must story maps to components; every component serves something.
 5. **Consistency.** Threat-model mitigations exist in the design; the test strategy can demonstrate every QS; the deploy plan matches the containers and the platform; the UX spec covers every key task; existing-system conventions are respected (no new pattern or dependency without ADR).
-6. **Unknowns.** Every `TBD` has an owner and a question; none on auth, secrets, tenancy or data ownership.
+6. **Proportional rigor** (`${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §3). High-risk stories have their scenarios, threats, ADRs and heavy test types; a gap there is major or blocker. Scenarios, threats, ADRs or heavy tests written only for a low-risk story are over-engineering (minor), unless the story adds a dependency or a pattern. Do not report wording or status differences between documents unless they change what gets built or tested.
+7. **Unknowns.** Every `TBD` has an owner and a question; none on auth, secrets, tenancy or data ownership.
 
 Report only real problems: `<severity: blocker|major|minor> <file>:<line> <ID> — problem — concrete fix`. End with `Veredicto: listo para el gate | requiere cambios`.
 

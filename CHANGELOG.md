@@ -3,6 +3,15 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
+## [0.14.0] - 2026-10-14
+### Añadido
+- **Rigor según riesgo** (`docs/METODO.md` §3). Cada historia lleva `riesgo: alto|bajo — <motivo>`: es alta si toca dinero, datos personales, permisos o aislamiento, una integración externa u operaciones masivas o irreversibles sobre datos. Las de riesgo alto llevan QS, amenazas, ADR y pruebas pesadas propias; las de riesgo bajo, criterios EARS con tests de aceptación y unitarios. El usuario confirma la clasificación en el gate de Intake.
+- `trace.mjs --phase intake` rechaza historias sin `riesgo:`.
+- analyst, security-lead, qa-lead y architecture-reviewer aplican la regla; el revisor marca como sobreingeniería el rigor pesado en historias de riesgo bajo y deja de reportar diferencias de redacción entre documentos que no cambian lo que se construye o se prueba.
+- La puerta de Plan muestra la estimación separada por riesgo.
+
+Origen: primer uso real (sistema-taller, encargo octubre 2026). Para 4 funcionalidades en un sistema existente, el método produjo 82 criterios, 14 ADR, 36 amenazas y 63 tareas; nombres de archivo y un interruptor recibieron el mismo rigor que crédito y respaldo.
+
 ## [0.13.1] - 2026-10-14
 ### Corregido
 Hallazgos del primer uso real (sistema-taller, encargo octubre 2026).

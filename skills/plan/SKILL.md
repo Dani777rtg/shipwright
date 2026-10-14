@@ -38,7 +38,7 @@ From `${CLAUDE_PLUGIN_ROOT}/templates/tasks.md` (ECC `skills/blueprint` and `age
 - Check yourself: dependencies are acyclic; every task has files and a verification; no complexity > 6; every acceptance test cites an AC that exists.
 
 ### 4. Gate
-Present: number of tasks by group, the critical path and parallel groups, an estimate (sum of complexities and the critical path), acceptance tests written (visible / holdout), the test plan summary and risks. AskUserQuestion: Aprobar (Recomendado) / Pedir cambios / Volver a architect. Log `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log plan gate-approved|gate-changes|gate-back "<note>"`.
+Present: number of tasks by group, the critical path and parallel groups, an estimate (sum of complexities and the critical path, split by high- and low-risk stories), acceptance tests written (visible / holdout), the test plan summary and risks. AskUserQuestion: Aprobar (Recomendado) / Pedir cambios / Volver a architect. Log `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log plan gate-approved|gate-changes|gate-back "<note>"`.
 - Aprobar → `state.mjs set phase build`; next step `/shipwright:build`.
 - Volver a architect → approved architecture changes only through `/shipwright:change`; explain and stop.
 

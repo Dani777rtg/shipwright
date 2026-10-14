@@ -15,6 +15,7 @@ const mission = `# Misión M: demo
 const reqs = `# Requisitos
 ### US-01 Resumir audio
 serves: O-1 — es el flujo principal del objetivo
+riesgo: alto — procesa audio con datos personales
 - **AC-01.1** WHEN the user uploads audio THE SYSTEM SHALL show a summary
   serves: US-01 — criterio verificable de la historia
 `;
@@ -37,6 +38,16 @@ test('unknown ID, wrong kind and empty reason are rejected', () => {
   assert.ok(out.some((p) => p.includes('AC-01.1 cannot serve QG-1')));
   assert.ok(out.some((p) => p.includes('AC-01.1 serves needs a reason')));
   assert.ok(out.some((p) => p.includes('T001 serves unknown ID AC-09.9')));
+});
+
+test('intake: every story needs riesgo alto|bajo with a reason; later phases do not re-check', () => {
+  const missing = reqs.replace(/riesgo: alto.*\r?\n/, '');
+  assert.ok(run([['mission.md', mission], ['req.md', missing]], 'intake').some((p) => p.includes('US-01 missing "riesgo:')));
+  assert.ok(!run([['mission.md', mission], ['req.md', missing]], 'architect').some((p) => p.includes('riesgo')));
+  const bad = reqs.replace('riesgo: alto — procesa audio con datos personales', 'riesgo: medio — x');
+  assert.ok(run([['mission.md', mission], ['req.md', bad]], 'intake').some((p) => p.includes('US-01 missing "riesgo:')));
+  const low = reqs.replace('riesgo: alto — procesa audio con datos personales', 'riesgo: bajo — solo cambia un texto en pantalla');
+  assert.deepEqual(run([['mission.md', mission], ['req.md', low]], 'intake'), []);
 });
 
 test('duplicate definition is reported', () => {
