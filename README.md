@@ -31,6 +31,8 @@ Requisitos: git, Node 18+, Python 3.10+ con `pip install graphifyy`.
 /shipwright:intake
 ```
 
+Si el encargo viene en documentos (PDF, notas, transcripciones), pasa su ruta: `/shipwright:mission "C:uta\encargo.md"`. Shipwright lo lee entero y lo guarda en la carpeta de la misión.
+
 Sirve igual para crear algo **desde cero** que para cambiar un **sistema existente** (por ejemplo, "añade login con Google a nuestra app").
 
 ## Qué hace
