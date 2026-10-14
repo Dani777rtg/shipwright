@@ -3,6 +3,12 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
+## [0.12.0] - 2026-10-14
+### Añadido
+- `/shipwright:retro`: evidencia (métricas, puntuación, bugs, incidentes, cambios), análisis de qué fase debió atrapar cada defecto escapado, retrospectiva guiada, lecciones convertidas en diffs concretos al framework, aplicación con aprobación en un clon local de Shipwright con tests, evals, comparación contra el banco y nueva versión; memoria con graphify.
+- Banco de 3 misiones de referencia (`benchmarks/`): app de IA desde cero, API con datos y roles desde cero, y cambio sobre un repo existente con tests.
+- `scripts/bench.mjs`: puntúa una misión terminada y compara dos versiones (sale con error si algo empeora).
+
 ## [0.11.0] - 2026-10-14
 ### Añadido
 - `/shipwright:qa`: despliegue a staging, verificación de tests bloqueados, incorporación de los tests ocultos, todos los tipos de prueba pertinentes, informe de seguridad, verificación de documentación y de interfaz, ciclo de corrección con builders, trazabilidad `--phase qa` y veredicto SHIP / NO SHIP.

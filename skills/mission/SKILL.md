@@ -36,7 +36,7 @@ Mission brief: $ARGUMENTS
    - sobre lo existente → docs at `docs/shipwright/<mission-slug>/` (ask if the team prefers another location).
    Create the state at the project root (`.shipwright/` is written only by Shipwright scripts; the hook blocks direct edits):
    ```
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" init '{ "docsDir": "<docs path>", "phase": "mission", "startingPoint": "desde-cero|existente", "deliverable": "<type>", "language": "<lang>", "mission": "<one line>", "confidentiality": "si|parcial|local", "allowedPaths": [], "shipwright": "0.11.0" }'
+   node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" init '{ "docsDir": "<docs path>", "phase": "mission", "startingPoint": "desde-cero|existente", "deliverable": "<type>", "language": "<lang>", "mission": "<one line>", "confidentiality": "si|parcial|local", "allowedPaths": [], "shipwright": "0.12.0" }'
    ```
    Then log the start: `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log mission start`.
    Run this and every later Shipwright script from the project root (the folder that holds `.shipwright/`).

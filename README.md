@@ -4,7 +4,7 @@ Plugin de Claude Code para construir software con IA **siguiendo un método**, n
 
 > Claude Code plugin: a spec-driven method that takes a brief to production — requirements, architecture, build, QA, security and deployment — with every task traced to an objective.
 
-**Estado:** v0.11 — funcionan las fases 1 a 7 (de `mission` a `ship`), `change` y `status`; el resto de fases está diseñado y en construcción ([hoja de ruta](docs/METODO.md#hoja-de-ruta)).
+**Estado:** v0.12 — las 8 fases, `change` y `status` están implementadas; falta validarlas en misiones reales antes de la v1.0 ([hoja de ruta](docs/METODO.md#hoja-de-ruta)).
 
 ## Instalar
 

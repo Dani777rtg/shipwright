@@ -33,4 +33,4 @@ Fill the 14-point checklist of `<docsDir>/ops/deploy-plan.md` with evidence so f
 - Complete the readiness evidence (alerts fired in test, traces visible, backups and restore verified, cost alerts).
 - `graphify global add graphify-out/graph.json --as <mission-slug>` (adds the mission to the cross-project memory).
 - Show the handover document and AskUserQuestion: Entrega aceptada (Recomendado) / Falta algo. Log `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" log ship gate-approved|gate-changes "<note>"`.
-- Accepted → `state.mjs set phase retro`; next step `/shipwright:retro` (available in a later Shipwright version).
+- Accepted → `state.mjs set phase retro`; next step `/shipwright:retro`.

@@ -1,6 +1,6 @@
 # Método Shipwright
 
-Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.11.0**.
+Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.12.0**.
 
 ## 1. Principios
 
@@ -130,7 +130,7 @@ Sin permiso para enviar código: solo `graphify update .` (local). `query` busca
 1. Métricas automáticas por fase (`metrics.md`): tiempos, vueltas en gates, tests fallidos, hallazgos.
 2. Retro: qué fue lento, qué se repitió, qué pregunta faltó, y qué fase debió atrapar cada bug, vulnerabilidad o incidente escapado.
 3. Cada lección se convierte en un cambio concreto al framework (diff), que el usuario aprueba.
-4. Las skills modificadas pasan evals y la versión nueva se compara contra un banco de 3 misiones de referencia; si empeora, no se publica.
+4. Las skills modificadas pasan evals y la versión nueva se compara contra un [banco de 3 misiones de referencia](../benchmarks/) con `scripts/bench.mjs`; si empeora, no se publica.
 5. Commit + tag semver + CHANGELOG. Poda de reglas cada 5 misiones.
 
 Nada aprende ni se inyecta solo.
@@ -147,7 +147,7 @@ Nada aprende ni se inyecta solo.
 | Agentes | `agents/analyst.md`, `architecture-reviewer.md`, `builder.md`, `qa-lead.md`, `security-lead.md`, `devops-lead.md`, `docs-lead.md`, `ux-lead.md` |
 | Referencias | `reference/qa-catalog.md`, `security-baseline.md`, `deploy-catalog.md`, `docs-standard.md`, `ux-standard.md`, `git-workflow.md`, `using-ecc.md` |
 | Plantillas | `templates/` |
-| Scripts | `scripts/state.mjs` (único que escribe el estado), `trace.mjs` (trazabilidad), `lock.mjs` (huellas), `change.mjs` (abre/cierra un cambio aprobado), `install-packs.mjs` (packs del stack), `metrics.mjs`, `ecc-sync.mjs` |
+| Scripts | `scripts/state.mjs` (único que escribe el estado), `trace.mjs` (trazabilidad), `lock.mjs` (huellas), `change.mjs` (abre/cierra un cambio aprobado), `install-packs.mjs` (packs del stack), `metrics.mjs`, `bench.mjs` (puntúa misiones), `ecc-sync.mjs` |
 | Hooks | Protección de `.shipwright/`, artefactos aprobados y tests bloqueados (edición y consola), salvo archivos abiertos por un cambio aprobado; inicio de fase en métricas |
 | Tests | `node --test "scripts/**/*.test.mjs"` — CI en Windows, macOS y Linux |
 
@@ -161,7 +161,7 @@ Nada aprende ni se inyecta solo.
 | v0.8 | Documentación de los repos entregados, UX/UI, flujo git, `status` |
 | v0.9 | `architect` |
 | v0.10 | `plan` + `build` + `change` |
-| **v0.11** | `qa` + `ship` *(actual)* |
-| v0.12 | `retro`, evals de skills, banco de misiones |
+| v0.11 | `qa` + `ship` |
+| **v0.12** | `retro`, banco de misiones, puntuación y comparación de versiones *(actual)* |
 | v1.0 | Probado en ≥ 3 misiones reales |
 | v2.0 | Orquestador autónomo con Claude Agent SDK |
