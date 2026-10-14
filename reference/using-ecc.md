@@ -19,6 +19,12 @@ Shipwright ships ECC's software-development catalog unmodified in `${CLAUDE_PLUG
 
 Every ECC agent, skill or command you **Read** during a mission is logged automatically in `<docsDir>/metrics.md` (`ecc` event, once per phase) by the plugin's `ecc-used` hook; the retro uses it. Read the file with the Read tool (not `cat`) so it is recorded.
 
+## What ECC is built for
+
+ECC assumes the main Claude thread writes the code and calls specialists around it. Of its 62 agents, about 33 only review (read-only tools: code, language, database, security, tests, silent failures, comments, types), 6 plan or explore, 12 fix build errors per language, and about 11 write (TDD guide, refactor, simplifier, performance, end-to-end tests, accessibility, docs, the generator/evaluator harness). **How to build** lives in its 191 skills (patterns, testing and framework guides per stack) and 22 rule packs, plus procedures in commands (`/tdd`, `/<lang>-test`, `/build-fix`, `/feature-dev`, `/prp-implement`, `/gan-build`).
+
+So Shipwright uses ECC by role: **skills and rules make the builders better** (installed per stack, given to each builder for its files), **build resolvers fix** compile and type errors, **reviewers check** once per batch and in Verify, and the few writing agents do their specialty (end-to-end tests, performance, docs). Shipwright's own `builder` does the construction, because ECC has no general builder agent.
+
 ## Experts by phase
 
 | Phase | ECC expert | When |
@@ -27,7 +33,10 @@ Every ECC agent, skill or command you **Read** during a mission is logged automa
 | Spec | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/planner.md` | Method input for the task breakdown |
 | Spec | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/skills/api-design` | The mission adds or changes an API |
 | Spec | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/database-reviewer.md` | The schema changes |
-| Build | Installed stack rules and skills (`.claude/rules/`, `.claude/skills/`) | Always — builders follow them |
+| Build | Installed stack skills (`.claude/skills/<pattern or testing>/SKILL.md`) and rules (`.claude/rules/`) | Always — each builder gets the skills for its files |
+| Build | Installed `.claude/agents/<lang>-build-resolver.md` | A task fails on build, compile or type errors |
+| Build | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/performance-optimizer.md` | A task serves a high-risk performance criterion |
+| Spec→Build | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/skills/e2e-testing` | qa-lead writes acceptance tests for criteria seen only in the UI |
 | Build | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/skills/tdd-workflow` | Builder unsure how to test first |
 | Build | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/code-reviewer.md` + installed `.claude/agents/<lang>-reviewer.md` | Once per batch |
 | Build | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/security-reviewer.md` | Sensitive diff, run by security-lead |

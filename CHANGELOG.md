@@ -3,6 +3,15 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
+## [1.1.0] - 2026-10-14
+### Añadido
+- `scripts/session-report.mjs`: lee las transcripciones de Claude Code del proyecto (solo lectura) y mide tiempo activo e inactivo, mensajes del usuario, tiempo por tipo de subagente y tiempo de los builders por familia de herramienta (tests, typecheck, instalaciones, git). La retro lo usa como evidencia.
+
+### Cambiado
+- **ECC por rol.** ECC está pensado para que el hilo principal programe: de sus 62 agentes, unos 33 solo revisan, 12 arreglan errores de build y pocos escriben; el conocimiento de construcción está en sus 191 skills y 22 paquetes de reglas. Ahora cada builder recibe las skills del stack (patrones y testing) que corresponden a sus archivos; los errores de build, compilación o tipos van al resolvedor del lenguaje instalado en vez de repetir el builder; database-reviewer revisa las tandas que cambian el esquema y performance-optimizer las tareas de rendimiento de riesgo alto; qa-lead escribe tests end-to-end para criterios que solo se ven en la interfaz.
+
+Origen: análisis de sistema-taller — los 26 builders no leyeron ninguna de las skills de ECC instaladas (patrones de backend, Postgres, Prisma, testing de React); en Build, ECC solo se usó como revisor.
+
 ## [1.0.1] - 2026-10-14
 ### Cambiado
 - Los builders ejecutan solo los tests relacionados con su cambio (modo related/changed del runner) y los de aceptación de su tarea; la suite completa corre una vez por tanda.

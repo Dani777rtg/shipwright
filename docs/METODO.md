@@ -1,6 +1,6 @@
 # Método Shipwright
 
-Cómo Shipwright lleva un encargo hasta software funcionando, rápido y sin bajar la calidad. Versión **v1.0.1**.
+Cómo Shipwright lleva un encargo hasta software funcionando, rápido y sin bajar la calidad. Versión **v1.1.0**.
 
 ## 1. Principios
 
@@ -51,7 +51,7 @@ Cadena: **O** objetivo (con medida) → **US** historia → **AC** criterio EARS
 | `docs-lead` | Sonnet | Pasada final de documentación del producto y quick start probado |
 | `devops-lead` | Sonnet | Solo si se despliega: staging y producción |
 
-Expertos de ECC por fase: tabla en [`using-ecc`](../reference/using-ecc.md). El catálogo completo de ECC (324 piezas, sin modificar, en `vendor/ecc/`) se consulta con `scripts/ecc-find.mjs`; cada pieza leída en una misión queda registrada en `metrics.md`.
+ECC está hecho para que el hilo principal programe y llame especialistas: la mayoría de sus agentes revisan, y el conocimiento de cómo construir está en sus skills y reglas por stack. Shipwright lo usa por rol: las skills del stack van a cada builder, los resolvedores de build de cada lenguaje arreglan errores de compilación, los revisores revisan por tanda. Tabla: [`using-ecc`](../reference/using-ecc.md). El catálogo completo de ECC (324 piezas, sin modificar, en `vendor/ecc/`) se consulta con `scripts/ecc-find.mjs`; cada pieza leída en una misión queda registrada en `metrics.md`.
 
 ## 5. Estructura de una misión
 
@@ -80,7 +80,7 @@ tests/acceptance/        bloqueados (hook + huellas SHA-256); ~1 de cada 5 ocult
 
 ## 7. Banco y mejora
 
-`benchmarks/` tiene 4 misiones fijas; `scripts/bench.mjs` puntúa una misión terminada y compara versiones. Es peor una versión que tarda más, necesita más rondas de aprobación, deja problemas de trazabilidad, se pasa del presupuesto o escribe más palabras de proceso. La retro opcional convierte lecciones en cambios probados contra el banco.
+`benchmarks/` tiene 4 misiones fijas; `scripts/bench.mjs` puntúa una misión terminada y compara versiones. Es peor una versión que tarda más, necesita más rondas de aprobación, deja problemas de trazabilidad, se pasa del presupuesto o escribe más palabras de proceso. `scripts/session-report.mjs` mide desde las transcripciones de Claude Code en qué se fue el tiempo real (activo, inactivo, esperas, subagentes, tests de los builders). La retro opcional lo usa y convierte lecciones en cambios probados contra el banco.
 
 ## Hoja de ruta
 

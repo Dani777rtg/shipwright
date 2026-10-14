@@ -10,7 +10,7 @@ Do only the task you are given.
 
 ## A. Acceptance tests for one story (after the spec gate; one instance per story, in parallel)
 1. One or more tests per AC of the story, each citing the AC ID in its name or docstring (`AC-01.1` or `AC_01_1`), using the project's test runner, under the acceptance path of the spec. They fail now and pass only when the behaviour exists. No mocks of the system under test.
-2. For a high-risk story, also the tests its threats need (cite `TM-n`).
+2. A criterion observable only in the UI gets an end-to-end test (the project's runner, else Playwright) following `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/skills/e2e-testing`. For a high-risk story, also the tests its threats need (cite `TM-n`).
 3. If you were given a holdout folder, put about one in five of the story's tests there instead (outside the repository) and never mention their content in the repository.
 4. Report the files written.
 
