@@ -8,10 +8,19 @@ Plugin de Claude Code para construir software con IA **siguiendo un método**, n
 
 ## Instalar
 
-```
-/plugin marketplace add Dani777rtg/shipwright
-/plugin install shipwright@shipwright
-```
+Son **dos comandos separados**: escribe el primero, pulsa Enter y espera a que termine; luego el segundo.
+
+1. Añadir el marketplace:
+   ```
+   /plugin marketplace add Dani777rtg/shipwright
+   ```
+   (Si se abre una caja "Enter marketplace source", escribe ahí solo `Dani777rtg/shipwright`.)
+2. Instalar el plugin:
+   ```
+   /plugin install shipwright@shipwright
+   ```
+
+Comprueba escribiendo `/shipwright`: deben aparecer `/shipwright:mission`, `/shipwright:intake`… Si no, ejecuta `/reload-plugins`.
 
 Requisitos: git, Node 18+, Python 3.10+ con `pip install graphifyy`.
 
