@@ -42,7 +42,9 @@ Subagent reports and orchestrator progress notes are terse: no pleasantries, no 
 ## 8. Speed (the method's first goal after the quality floor)
 - **Parallel by default.** Independent work runs at the same time: one QA agent per story, one builder per independent task in its own worktree, reviewers side by side. Waiting in series for something that does not depend on it is a defect.
 - **Infer, don't ask.** Read the brief, the repository and its docs first; ask only what blocks, all in one batch. Everything else is an assumption with an owner and a date.
-- **Minimal context.** Give each agent only what its task needs (its task block, criteria, tests, files), never whole documents.
+- **An agent only for independence or parallelism.** Independent judgment (QA, security, review) or work that can run at the same time justifies a subagent. Knowledge does not: it goes to the agent that works as a skill or rule it reads. Every subagent pays a fixed base context on every turn and a hand-back to the orchestrator.
+- **Minimal context.** Give each agent only what its task needs (its task block, criteria, tests, files), never whole documents. Agents declare only the tools they use: unused tools cost tokens on every turn.
+- **Short hand-backs, short logs.** Reports have a line cap; commands print only the summary and the failures. Every line that reaches the orchestrator is re-read on all its later turns.
 - **Write only what someone will use.** One spec, one verification report. A document no one executes, reviews or reads before deciding is not written.
 - **Light per task, full per batch.** Each task runs only the tests related to its change (the runner's related/changed mode) and the type checker; the full suite, linters and reviews run once per batch. Parallel work gets isolated test resources (database or schema, port, temp dir) so it never collides.
 - **No idle handoffs.** Phases chain on their own; the only pauses are the two human approvals.
@@ -53,5 +55,5 @@ Subagent reports and orchestrator progress notes are terse: no pleasantries, no 
 `<docsDir>` is the `docsDir` value in `.shipwright/state.json` (`docs/` for a new project, `docs/shipwright/<mission>/` in an existing system). Process artifacts: `spec.md`, `review.md`, `verify.md`, `deploy.md` (only when deploying new infrastructure), `changes/`, `metrics.md`, `client/` — always under `<docsDir>`, never a hard-coded `docs/`. The delivered product's own documentation (README, configuration, API reference, guides) follows the repository's layout.
 
 ## 10. Models and sessions
-- Default model per role: Opus for judgment (spec-reviewer, qa-lead, security-lead), Sonnet for building, documenting, deploying and batch code review (builder, docs-lead, devops-lead), Haiku for status. Users override with `CLAUDE_CODE_SUBAGENT_MODEL` (+ `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1`).
+- Default model per role: Opus for judgment with few runs (spec-reviewer, security-lead), Sonnet for building, testing, documenting, deploying and batch review (builder, qa-lead, docs-lead, devops-lead, ECC reviewers), Haiku for status. Users override with `CLAUDE_CODE_SUBAGENT_MODEL` (+ `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1`).
 - Phases chain without stopping except at the two human gates (spec, ship). Everything lives in files and the session-start hook restores the mission, so when a conversation grows long recommend `/compact` (only the user can run it).

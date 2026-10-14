@@ -3,6 +3,19 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
+## [1.1.1] - 2026-10-14
+### Cambiado
+- **Herramientas mínimas por agente.** builder, qa-lead, security-lead, docs-lead y devops-lead declaran `tools:`. Sin esa lista heredaban todas las herramientas de la sesión (incluidos los MCP del usuario) y arrancaban con ~50k tokens de base por turno, frente a 9–21k de los agentes restringidos; en el taller fue el 58 % del contexto de los builders.
+- **Una sola revisión por tanda:** el revisor del lenguaje (o code-reviewer) con la comprobación de integridad de tests añadida. qa-lead ya no revisa diffs (era 5 veces más caro por revisión que un revisor de ECC) y pasa a Sonnet.
+- Los agentes de Shipwright ya no lanzan agentes de ECC anidados: leen su archivo y aplican su método.
+- Informes con tope de líneas y comandos con salida resumida: todo lo que llega al orquestador se relee en cada turno (~250k tokens por turno en el build del taller).
+- `install-packs.mjs` no instala las reglas de proceso de ECC (`agents`, `development-workflow`, `git-workflow`, `code-review`): se cargaban siempre y contradicen el método.
+- Principio nuevo: un agente solo por independencia o paralelismo; el conocimiento va como skill.
+
+### Añadido
+- `session-report.mjs` mide también turnos, contexto leído y base por turno de cada tipo de agente.
+- `docs/investigacion/ecc-uso.md`: estudio con datos de cómo se usaba ECC y dónde se gastaban tiempo y tokens.
+
 ## [1.1.0] - 2026-10-14
 ### Añadido
 - `scripts/session-report.mjs`: lee las transcripciones de Claude Code del proyecto (solo lectura) y mide tiempo activo e inactivo, mensajes del usuario, tiempo por tipo de subagente y tiempo de los builders por familia de herramienta (tests, typecheck, instalaciones, git). La retro lo usa como evidencia.

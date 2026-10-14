@@ -1,7 +1,7 @@
 {
   "name": "shipwright",
   "displayName": "Shipwright",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Fast, quality-first mission method for Claude Code: one approved spec, parallel multi-agent build with locked acceptance tests, independent verification, approved delivery. Built on ECC experts.",
   "author": {
     "name": "Daniel Fajardo",

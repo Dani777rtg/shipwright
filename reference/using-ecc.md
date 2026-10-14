@@ -14,6 +14,7 @@ Shipwright ships ECC's software-development catalog unmodified in `${CLAUDE_PLUG
    End your answer with: serves: <ID> — <how your output serves it>
    ```
    If the agent's frontmatter restricts `tools`, mention that restriction in the task and respect it.
+   Inside a Shipwright agent (builder, qa-lead, security-lead, docs-lead), do not spawn: read the ECC agent file and apply its method yourself. A nested agent pays its own base context and a hand-back for knowledge you can read once.
 3. **Use an ECC skill or command** (`vendor/ecc/skills/<name>/SKILL.md`, `vendor/ecc/commands/<name>.md`): read it and apply its procedure inside the current phase. Read supporting files in the skill folder only when the procedure references them.
 4. **Run an ECC workflow** (`vendor/ecc/workflows/*.workflow.js`): only through the Workflow tool, and only when the user has opted into workflows.
 
@@ -38,7 +39,7 @@ So Shipwright uses ECC by role: **skills and rules make the builders better** (i
 | Build | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/performance-optimizer.md` | A task serves a high-risk performance criterion |
 | Spec→Build | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/skills/e2e-testing` | qa-lead writes acceptance tests for criteria seen only in the UI |
 | Build | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/skills/tdd-workflow` | Builder unsure how to test first |
-| Build | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/code-reviewer.md` + installed `.claude/agents/<lang>-reviewer.md` | Once per batch |
+| Build | Installed `.claude/agents/<lang>-reviewer.md`, else `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/code-reviewer.md` — one, never both | Once per batch, with the test-integrity check appended |
 | Build | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/security-reviewer.md` | Sensitive diff, run by security-lead |
 | Build | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/doc-updater.md` | End of build, run by docs-lead |
 | Verify | `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/e2e-runner.md`, `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/a11y-architect.md` | There is a UI |

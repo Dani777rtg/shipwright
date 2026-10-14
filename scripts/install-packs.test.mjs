@@ -57,3 +57,15 @@ test('every path in reference/stack-packs.json is an available ECC manifest item
     }
   }
 });
+
+test('ECC process rules that Shipwright replaces are not installed', () => {
+  const plugin = mkdtempSync(join(tmpdir(), 'sw-plugin-'));
+  mkdirSync(join(plugin, 'vendor', 'ecc', 'rules', 'common'), { recursive: true });
+  for (const f of ['coding-style.md', 'agents.md', 'development-workflow.md', 'git-workflow.md', 'code-review.md']) writeFileSync(join(plugin, 'vendor', 'ecc', 'rules', 'common', f), f);
+  writeFileSync(join(plugin, 'vendor', 'ecc.manifest.json'), JSON.stringify({ include: [{ path: 'rules/common' }] }));
+  const root = mkdtempSync(join(tmpdir(), 'sw-proj-'));
+  install(root, ['rules/common'], plugin);
+  const dest = join(root, '.claude', 'rules', 'ecc-common');
+  assert.ok(existsSync(join(dest, 'coding-style.md')));
+  for (const f of ['agents.md', 'development-workflow.md', 'git-workflow.md', 'code-review.md']) assert.ok(!existsSync(join(dest, f)), f);
+});

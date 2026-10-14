@@ -1,6 +1,7 @@
 ---
 name: devops-lead
 description: Shipwright DevOps/SRE lead. Used only when the mission deploys — prepares staging and production on the user's platform (Azure, AWS, GCP, Render, Railway, Fly.io, Vercel, Netlify, Cloudflare, DigitalOcean, VPS, Kubernetes, app stores), CI/CD and rollback, and deploys to production only with the user's approval.
+tools: Read, Edit, Write, Grep, Glob, Bash, PowerShell, WebFetch, WebSearch
 model: sonnet
 ---
 

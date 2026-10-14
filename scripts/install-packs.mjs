@@ -15,6 +15,11 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const PLUGIN = join(dirname(fileURLToPath(import.meta.url)), '..');
 
+// ECC's always-on process rules: they tell every agent to search GitHub before coding, write PRD and architecture
+// docs, spawn ecc:* agents and review after every change. Shipwright's phases replace them, and as always-on rules
+// they would cost tokens on every turn of every agent.
+export const SKIP_RULES = new Set(['agents.md', 'development-workflow.md', 'git-workflow.md', 'code-review.md'].map((f) => `rules/common/${f}`));
+
 export function target(path) {
   const [kind, ...rest] = path.split('/');
   const name = rest.join('/');
@@ -37,7 +42,7 @@ export function install(root, paths, pluginRoot = PLUGIN) {
     else if (!existsSync(from)) errors.push(`${p}: not available in this ECC release`);
     else {
       mkdirSync(dirname(join(root, to)), { recursive: true });
-      cpSync(from, join(root, to), { recursive: true });
+      cpSync(from, join(root, to), { recursive: true, filter: (src) => !SKIP_RULES.has(src.replace(/\\/g, '/').split('/vendor/ecc/')[1]) });
       done.push(p);
     }
   }

@@ -1,6 +1,6 @@
 # Método Shipwright
 
-Cómo Shipwright lleva un encargo hasta software funcionando, rápido y sin bajar la calidad. Versión **v1.1.0**.
+Cómo Shipwright lleva un encargo hasta software funcionando, rápido y sin bajar la calidad. Versión **v1.1.1**.
 
 ## 1. Principios
 
@@ -45,13 +45,13 @@ Cadena: **O** objetivo (con medida) → **US** historia → **AC** criterio EARS
 | Agente | Modelo | Cuándo |
 |---|---|---|
 | `spec-reviewer` | Opus | Revisa la spec antes de la aprobación (solo lectura) |
-| `qa-lead` | Opus | Tests de aceptación por historia; revisión del diff de tests por tanda; verificación y veredicto |
+| `qa-lead` | Sonnet | Tests de aceptación por historia; verificación y veredicto |
 | `security-lead` | Opus | Diffs sensibles y dependencias nuevas; verificación de seguridad; endurecimiento de producción |
 | `builder` | Sonnet | Una tarea, tests primero, con contexto mínimo |
 | `docs-lead` | Sonnet | Pasada final de documentación del producto y quick start probado |
 | `devops-lead` | Sonnet | Solo si se despliega: staging y producción |
 
-ECC está hecho para que el hilo principal programe y llame especialistas: la mayoría de sus agentes revisan, y el conocimiento de cómo construir está en sus skills y reglas por stack. Shipwright lo usa por rol: las skills del stack van a cada builder, los resolvedores de build de cada lenguaje arreglan errores de compilación, los revisores revisan por tanda. Tabla: [`using-ecc`](../reference/using-ecc.md). El catálogo completo de ECC (324 piezas, sin modificar, en `vendor/ecc/`) se consulta con `scripts/ecc-find.mjs`; cada pieza leída en una misión queda registrada en `metrics.md`.
+ECC está hecho para que el hilo principal programe y llame especialistas: la mayoría de sus agentes revisan, y el conocimiento de cómo construir está en sus skills y reglas por stack. Shipwright lo usa por rol: las skills del stack van a cada builder, los resolvedores de build de cada lenguaje arreglan errores de compilación, los revisores revisan por tanda. Un agente solo existe por independencia o paralelismo; cada uno declara solo las herramientas que usa. Tabla: [`using-ecc`](../reference/using-ecc.md). Estudio con datos: [`investigacion/ecc-uso`](investigacion/ecc-uso.md). El catálogo completo de ECC (324 piezas, sin modificar, en `vendor/ecc/`) se consulta con `scripts/ecc-find.mjs`; cada pieza leída en una misión queda registrada en `metrics.md`.
 
 ## 5. Estructura de una misión
 

@@ -46,6 +46,22 @@ export function toolTimes(records) {
   return out;
 }
 
+// Context tokens read per turn (input + cache read + cache write). Claude Code writes one record per content block
+// with the same message id and usage, so each message is counted once.
+export function tokens(records) {
+  const seen = new Set();
+  let total = 0, first = null, turns = 0;
+  for (const d of records) {
+    if (d.type !== 'assistant' || !d.message?.usage || seen.has(d.message.id)) continue;
+    seen.add(d.message.id);
+    const u = d.message.usage;
+    const ctx = (u.input_tokens ?? 0) + (u.cache_read_input_tokens ?? 0) + (u.cache_creation_input_tokens ?? 0);
+    total += ctx; turns++;
+    first ??= ctx;
+  }
+  return { total, first: first ?? 0, turns };
+}
+
 export function activeIdle(stamps) {
   let active = 0, idle = 0;
   for (let i = 1; i < stamps.length; i++) {
@@ -65,7 +81,8 @@ export function analyze(dir, since = null) {
     const stamps = recs.map(time).filter(Boolean).sort((a, b) => a - b);
     if (!stamps.length) continue;
     const prompts = recs.filter((d) => d.type === 'user' && !d.isSidechain && typeof d.message?.content === 'string' && !d.message.content.startsWith('<') && !d.message.content.includes('<agent-message')).length;
-    sessions.push({ id: f.slice(0, 8), start: new Date(stamps[0]).toISOString(), ...activeIdle(stamps), prompts });
+    const tk = tokens(recs);
+    sessions.push({ id: f.slice(0, 8), start: new Date(stamps[0]).toISOString(), ...activeIdle(stamps), prompts, tokens: tk.total, turns: tk.turns });
     const sub = join(dir, f.replace(/\.jsonl$/, ''), 'subagents');
     if (!existsSync(sub)) continue;
     for (const m of readdirSync(sub).filter((n) => n.endsWith('.meta.json'))) {
@@ -74,8 +91,10 @@ export function analyze(dir, since = null) {
       const st = r.map(time).filter(Boolean);
       if (!st.length || Math.min(...st) < from) continue;
       const type = meta.agentType ?? 'unknown';
-      const a = (agents[type] ??= { count: 0, ms: 0 });
+      const a = (agents[type] ??= { count: 0, ms: 0, tokens: 0, turns: 0, firstTurn: 0 });
+      const tk = tokens(r);
       a.count++; a.ms += Math.max(...st) - Math.min(...st);
+      a.tokens += tk.total; a.turns += tk.turns; a.firstTurn += tk.first;
       if (/builder/.test(type)) for (const t of toolTimes(r)) {
         const b = (builderTools[t.family] ??= { calls: 0, ms: 0 });
         b.calls++; b.ms += t.ms;
@@ -88,11 +107,13 @@ export function analyze(dir, since = null) {
 export function render({ sessions, agents, builderTools }) {
   const active = sessions.reduce((n, s) => n + s.active, 0);
   const idle = sessions.reduce((n, s) => n + s.idle, 0);
+  const M = (n) => (n / 1e6).toFixed(1);
+  const K = (n) => Math.round(n / 1e3);
   const lines = ['# Dónde se fue el tiempo', '', `Activo: ${minutes(active)} min · inactivo (pausas > ${IDLE_MIN} min): ${minutes(idle)} min`, '',
-    '| Sesión | Inicio (UTC) | Activo (min) | Inactivo (min) | Mensajes del usuario |', '|---|---|---|---|---|',
-    ...sessions.sort((a, b) => a.start.localeCompare(b.start)).map((s) => `| ${s.id} | ${s.start.slice(0, 16)} | ${minutes(s.active)} | ${minutes(s.idle)} | ${s.prompts} |`),
-    '', '| Subagente | Veces | Minutos |', '|---|---|---|',
-    ...Object.entries(agents).sort((a, b) => b[1].ms - a[1].ms).map(([k, v]) => `| ${k} | ${v.count} | ${minutes(v.ms)} |`)];
+    '| Sesión | Inicio (UTC) | Activo (min) | Inactivo (min) | Mensajes del usuario | Turnos | Contexto leído (M tokens) |', '|---|---|---|---|---|---|---|',
+    ...sessions.sort((a, b) => a.start.localeCompare(b.start)).map((s) => `| ${s.id} | ${s.start.slice(0, 16)} | ${minutes(s.active)} | ${minutes(s.idle)} | ${s.prompts} | ${s.turns} | ${M(s.tokens)} |`),
+    '', '| Subagente | Veces | Minutos | Turnos | Contexto leído (M tokens) | Base por turno (k tokens) |', '|---|---|---|---|---|---|',
+    ...Object.entries(agents).sort((a, b) => b[1].tokens - a[1].tokens).map(([k, v]) => `| ${k} | ${v.count} | ${minutes(v.ms)} | ${v.turns} | ${M(v.tokens)} | ${K(v.firstTurn / v.count)} |`)];
   const total = Object.values(builderTools).reduce((n, v) => n + v.ms, 0);
   if (total) lines.push('', '| Builders: herramienta | Llamadas | Minutos | % del tiempo en herramientas |', '|---|---|---|---|',
     ...Object.entries(builderTools).sort((a, b) => b[1].ms - a[1].ms).map(([k, v]) => `| ${k} | ${v.calls} | ${minutes(v.ms)} | ${Math.round((100 * v.ms) / total)} % |`));

@@ -13,7 +13,7 @@ Principles: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md`. Message
 1. **Integrity.** `lock.mjs verify`; any change → S1 bug, show the user what changed and stop. Then `lock.mjs holdout <acceptance path>/holdout`.
 2. **Staging** — only when `deployTarget` is a platform: `shipwright:devops-lead` task **A**, in parallel with step 3 (step 3 starts on the local build and re-runs the smoke against staging when it is up). It asks before creating paid resources.
 3. **Verification, in parallel:**
-   - `shipwright:qa-lead` task **C** → `<docsDir>/verify.md`.
+   - `shipwright:qa-lead` task **B** → `<docsDir>/verify.md`.
    - `shipwright:security-lead` task **B**.
    - Built-in `/code-review high` on the mission diff and, with an `origin` remote, `/security-review`.
    - `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/silent-failure-hunter.md` on the mission diff (per `${CLAUDE_PLUGIN_ROOT}/reference/using-ecc.md`).

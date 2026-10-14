@@ -40,3 +40,10 @@ Formato:
 - Regla nueva: tests relacionados por tarea, suite completa una vez por tanda; recursos de test aislados por worktree.
 - Proyecto origen: sistema-taller
 - Versión: v1.0.1
+
+## L-005 — Agentes sin `tools:` pagaban ~50k tokens de base en cada turno
+- Síntoma: builders y qa-lead arrancaban con 42–50k tokens por turno; los revisores de ECC, con 20k.
+- Causa: sin `tools:` el agente hereda todas las herramientas de la sesión, incluidos los MCP del usuario.
+- Regla nueva: cada agente declara solo las herramientas que usa; un agente solo por independencia o paralelismo.
+- Proyecto origen: sistema-taller
+- Versión: v1.1.1
