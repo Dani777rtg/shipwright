@@ -16,7 +16,7 @@ Method: `${CLAUDE_PLUGIN_ROOT}/docs/METODO.md` §9. State only through `node "${
 ## Steps
 
 ### 1. Evidence
-- `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" summary` — hours and gate rounds per phase.
+- `node "${CLAUDE_PLUGIN_ROOT}/scripts/metrics.mjs" summary` — hours, gate rounds and ECC tools read (`ecc`) per phase.
 - `node "${CLAUDE_PLUGIN_ROOT}/scripts/bench.mjs" score .` — the mission's score.
 - Bugs (`<docsDir>/qa/bugs/`), security findings, production incidents, change requests (`<docsDir>/changes/`), `No aplica` items, open assumptions that turned out wrong.
 

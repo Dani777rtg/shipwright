@@ -12,8 +12,9 @@ test('log + summarize: hours until approval, gate rounds counted', () => {
   log(file, 'intake', 'gate-changes', 'faltan KR | x', at(11));
   log(file, 'intake', 'gate-approved', '', at(12));
   log(file, 'architect', 'start', '', at(12));
+  log(file, 'architect', 'ecc', 'agents/architect.md', at(12));
   const s = summarize(readFileSync(file, 'utf8'));
-  assert.deepEqual(s.intake, { hours: 2, gateRounds: 2 });
-  assert.deepEqual(s.architect, { hours: 0, gateRounds: 0 });
+  assert.deepEqual(s.intake, { hours: 2, gateRounds: 2, ecc: [] });
+  assert.deepEqual(s.architect, { hours: 0, gateRounds: 0, ecc: ['agents/architect.md'] });
   assert.throws(() => log(file, 'nope', 'start'));
 });

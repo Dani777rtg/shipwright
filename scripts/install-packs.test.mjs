@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { install, target } from './install-packs.mjs';
+import { install, target, resolveStack } from './install-packs.mjs';
+import { fileURLToPath } from 'node:url';
 
 test('target maps vendor paths into .claude/', () => {
   assert.equal(target('rules/python').replace(/\\/g, '/'), '.claude/rules/ecc-python');
@@ -31,4 +32,28 @@ test('install copies only manifest items and records them', () => {
   assert.equal(readFileSync(join(root, '.claude', 'rules', 'ecc-python', 'testing.md'), 'utf8'), 'pytest');
   assert.ok(existsSync(join(root, '.claude', 'agents', 'python-reviewer.md')));
   assert.deepEqual(JSON.parse(readFileSync(join(root, '.shipwright', 'state.json'), 'utf8')).packs, ['agents/python-reviewer.md', 'rules/python']);
+});
+
+test('resolveStack: aliases, common always, unknown reported', () => {
+  const map = { _note: 'x', typescript: ['rules/typescript'], ts: 'typescript', react: ['rules/react', 'rules/typescript'] };
+  const r = resolveStack(['TS', 'react', 'cobol'], map);
+  assert.deepEqual(r.paths, ['rules/common', 'rules/typescript', 'rules/react']);
+  assert.deepEqual(r.unknown, ['cobol']);
+  assert.ok(!r.known.includes('_note'));
+});
+
+test('every path in reference/stack-packs.json is an available ECC manifest item', () => {
+  const root = join(fileURLToPath(new URL('.', import.meta.url)), '..');
+  const map = JSON.parse(readFileSync(join(root, 'reference', 'stack-packs.json'), 'utf8'));
+  const manifest = JSON.parse(readFileSync(join(root, 'vendor', 'ecc.manifest.json'), 'utf8'));
+  const ok = new Set(manifest.include.filter((i) => !i.pending).map((i) => i.path));
+  for (const [key, v] of Object.entries(map)) {
+    if (key.startsWith('_')) continue;
+    if (typeof v === 'string') { assert.ok(Array.isArray(map[v]), `${key} aliases unknown ${v}`); continue; }
+    for (const p of v) {
+      assert.ok(ok.has(p), `${key}: ${p} not in manifest`);
+      assert.ok(target(p), `${key}: ${p} not installable`);
+      assert.ok(existsSync(join(root, 'vendor', 'ecc', p)), `${key}: ${p} missing on disk`);
+    }
+  }
 });

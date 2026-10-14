@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Mission metrics log (METODO.md §9). Appends events to <docsDir>/metrics.md and prints a per-phase summary.
 // Usage:
-//   node metrics.mjs log <phase> <event> [note]   event: start | gate-approved | gate-changes | gate-back | end
+//   node metrics.mjs log <phase> <event> [note]   event: start | gate-approved | gate-changes | gate-back | end | ecc
+//   (ecc rows are written by the ecc-used hook: one per ECC tool read in a phase, note = its vendor path)
 //   node metrics.mjs summary
 // The docs directory comes from .shipwright/state.json ({"docsDir": "docs"}) in the project root (cwd).
 import { readFileSync, writeFileSync, appendFileSync, existsSync, mkdirSync } from 'node:fs';
@@ -9,7 +10,7 @@ import { join, dirname } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 export const PHASES = ['mission', 'intake', 'architect', 'plan', 'build', 'qa', 'ship', 'retro', 'change'];
-export const EVENTS = ['start', 'gate-approved', 'gate-changes', 'gate-back', 'end'];
+export const EVENTS = ['start', 'gate-approved', 'gate-changes', 'gate-back', 'end', 'ecc'];
 const HEADER = '# Métricas de la misión\n\n<!-- Generado por Shipwright. No editar a mano. -->\n\n| Fecha (UTC) | Fase | Evento | Nota |\n|---|---|---|---|\n';
 
 export function docsDir(root = process.cwd()) {
@@ -26,12 +27,13 @@ export function log(file, phase, event, note = '', now = new Date()) {
 
 export function summarize(text) {
   const rows = text.split(/\r?\n/)
-    .map((l) => l.match(/^\| (\d{4}-[^|]+?) \| (\w+) \| ([\w-]+) \|/))
+    .map((l) => l.match(/^\| (\d{4}-[^|]+?) \| (\w+) \| ([\w-]+) \| ?(.*?) ?\|$/))
     .filter(Boolean)
-    .map(([, t, phase, event]) => ({ t: Date.parse(t), phase, event }));
+    .map(([, t, phase, event, note]) => ({ t: Date.parse(t), phase, event, note }));
   const out = {};
   for (const r of rows) {
-    const s = (out[r.phase] ??= { hours: 0, gateRounds: 0, open: null });
+    const s = (out[r.phase] ??= { hours: 0, gateRounds: 0, open: null, ecc: [] });
+    if (r.event === 'ecc') s.ecc.push(r.note);
     if (r.event === 'start' && s.open === null) s.open = r.t;
     if (r.event.startsWith('gate-')) s.gateRounds++;
     if ((r.event === 'end' || r.event === 'gate-approved') && s.open !== null) {

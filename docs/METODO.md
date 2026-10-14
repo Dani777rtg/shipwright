@@ -1,6 +1,6 @@
 # Método Shipwright
 
-Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.14.0**.
+Cómo Shipwright lleva un encargo hasta software funcionando en producción. Versión **v0.15.0**.
 
 ## 1. Principios
 
@@ -142,7 +142,7 @@ Nada aprende ni se inyecta solo.
 
 ## 10. ECC
 
-[ECC](https://github.com/affaan-m/ecc) (MIT) aporta agentes, skills y reglas por lenguaje. Su catálogo de desarrollo (324 piezas) está en `vendor/ecc/` sin modificar y **no se carga entero**: el índice `vendor/ecc.index.md` dice qué usar en cada fase y se invoca bajo demanda ([`reference/using-ecc.md`](../reference/using-ecc.md)). Se sincroniza con cada release de ECC mediante un pull request revisado por IA y aprobado por el maintainer. Excluido por seguridad: aprendizaje automático que se autoinyecta, hooks con llamadas ocultas a Claude, MCPs de patrocinadores, GateGuard. Análisis: [`investigacion/ecc.md`](investigacion/ecc.md).
+[ECC](https://github.com/affaan-m/ecc) (MIT) aporta agentes, skills y reglas por lenguaje. Su catálogo de desarrollo (324 piezas) está en `vendor/ecc/` sin modificar y **no se carga entero**: el índice `vendor/ecc.index.md` dice qué usar en cada fase y se invoca bajo demanda ([`reference/using-ecc.md`](../reference/using-ecc.md)). Búsqueda en todo el catálogo con `scripts/ecc-find.mjs`; packs del stack deterministas con `install-packs.mjs --stack` y el mapa [`reference/stack-packs.json`](../reference/stack-packs.json); cada herramienta de ECC leída en una misión queda registrada en `metrics.md` por un hook. Se sincroniza con cada release de ECC mediante un pull request revisado por IA y aprobado por el maintainer. Excluido por seguridad: aprendizaje automático que se autoinyecta, hooks con llamadas ocultas a Claude, MCPs de patrocinadores, GateGuard. Análisis: [`investigacion/ecc.md`](investigacion/ecc.md).
 
 ## 11. Piezas del plugin
 
@@ -150,10 +150,10 @@ Nada aprende ni se inyecta solo.
 |---|---|
 | Fases | `skills/<fase>/SKILL.md` |
 | Agentes | `agents/analyst.md`, `architecture-reviewer.md`, `builder.md`, `qa-lead.md`, `security-lead.md`, `devops-lead.md`, `docs-lead.md`, `ux-lead.md` |
-| Referencias | `reference/engineering-principles.md`, `companions.md`, `qa-catalog.md`, `security-baseline.md`, `deploy-catalog.md`, `docs-standard.md`, `ux-standard.md`, `git-workflow.md`, `using-ecc.md` |
+| Referencias | `reference/engineering-principles.md`, `companions.md`, `qa-catalog.md`, `security-baseline.md`, `deploy-catalog.md`, `docs-standard.md`, `ux-standard.md`, `git-workflow.md`, `using-ecc.md`, `stack-packs.json` |
 | Plantillas | `templates/` |
-| Scripts | `scripts/state.mjs` (único que escribe el estado), `trace.mjs` (trazabilidad), `lock.mjs` (huellas), `change.mjs` (abre/cierra un cambio aprobado), `install-packs.mjs` (packs del stack), `metrics.mjs`, `bench.mjs` (puntúa misiones), `ecc-sync.mjs` |
-| Hooks | Contexto de la misión al iniciar, tras `/clear` o `/compact`; protección de `.shipwright/`, artefactos aprobados y tests bloqueados (edición y consola), salvo archivos abiertos por un cambio aprobado; inicio de fase en métricas |
+| Scripts | `scripts/state.mjs` (único que escribe el estado), `trace.mjs` (trazabilidad), `lock.mjs` (huellas), `change.mjs` (abre/cierra un cambio aprobado), `install-packs.mjs` (packs del stack), `ecc-find.mjs` (busca en ECC), `metrics.mjs`, `bench.mjs` (puntúa misiones), `ecc-sync.mjs` |
+| Hooks | Contexto de la misión al iniciar, tras `/clear` o `/compact`; protección de `.shipwright/`, artefactos aprobados y tests bloqueados (edición y consola), salvo archivos abiertos por un cambio aprobado; inicio de fase y herramientas de ECC usadas en métricas |
 | Tests | `node --test "scripts/**/*.test.mjs"` — CI en Windows, macOS y Linux |
 
 ## Hoja de ruta

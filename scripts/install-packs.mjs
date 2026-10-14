@@ -4,7 +4,11 @@
 //   skills/<x>       → .claude/skills/<x>/
 //   agents/<x>.md    → .claude/agents/<x>.md
 // Only paths listed in vendor/ecc.manifest.json "include" are accepted. Records them in .shipwright/state.json "packs".
-// Usage (from the project root): node install-packs.mjs <manifest path>...   e.g. rules/python skills/fastapi-patterns
+// Usage (from the project root):
+//   node install-packs.mjs --stack <keyword>... [--dry-run]   e.g. --stack typescript react postgresql web
+//   node install-packs.mjs <manifest path>...                 extra packs beyond the stack map
+// --stack resolves keywords through reference/stack-packs.json (always adding rules/common), so the same stack
+// always installs the same packs.
 import { readFileSync, writeFileSync, existsSync, cpSync, mkdirSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -46,8 +50,27 @@ export function install(root, paths, pluginRoot = PLUGIN) {
   return { done, errors };
 }
 
-function main(paths) {
-  if (!paths.length) { console.error('usage: install-packs.mjs <manifest path>...'); return 2; }
+export function resolveStack(keys, map = JSON.parse(readFileSync(join(PLUGIN, 'reference', 'stack-packs.json'), 'utf8'))) {
+  const paths = new Set(['rules/common']);
+  const unknown = [];
+  for (const raw of keys) {
+    let entry = map[raw.toLowerCase()];
+    if (typeof entry === 'string') entry = map[entry];
+    if (Array.isArray(entry)) entry.forEach((p) => paths.add(p));
+    else unknown.push(raw);
+  }
+  return { paths: [...paths], unknown, known: Object.keys(map).filter((k) => !k.startsWith('_')) };
+}
+
+function main(args) {
+  let paths = args.filter((a) => a !== '--dry-run');
+  if (paths[0] === '--stack') {
+    const { paths: resolved, unknown, known } = resolveStack(paths.slice(1));
+    if (unknown.length) { console.error(`unknown stack keyword(s): ${unknown.join(', ')}\nknown: ${known.join(', ')}`); return 1; }
+    paths = resolved;
+  }
+  if (!paths.length) { console.error('usage: install-packs.mjs --stack <keyword>... [--dry-run] | <manifest path>...'); return 2; }
+  if (args.includes('--dry-run')) { paths.forEach((p) => console.log(p)); return 0; }
   const { done, errors } = install(process.cwd(), paths);
   for (const d of done) console.log(`installed ${d} → ${target(d)}`);
   for (const e of errors) console.error(`error: ${e}`);

@@ -60,7 +60,7 @@ AskUserQuestion: Aprobar (Recomendado) / Pedir cambios / Volver a intake. Log wi
 - Volver a intake → approved requirements change only through `/shipwright:change`; explain and stop.
 - Aprobar →
   1. Set `status: approved` in ARCHITECTURE.md, threat-model.md, test-strategy.md, deploy-plan.md and ux-spec.md, and `status: accepted` in each ADR.
-  2. Stack packs: search `${CLAUDE_PLUGIN_ROOT}/vendor/ecc.index.md` under `## stack` (and `## ai` for AI missions) for the chosen languages and frameworks — rules (`rules/<lang>`, `rules/web` for web UIs, `rules/common`), framework skills, testing skills and language reviewer agents. Show the list, then run `node "${CLAUDE_PLUGIN_ROOT}/scripts/install-packs.mjs" <paths...>` from the project root.
+  2. Stack packs: pick the stack keywords of the approved architecture from `${CLAUDE_PLUGIN_ROOT}/reference/stack-packs.json` (language, framework, data stores, `web` when there is a web UI, `docker`/`kubernetes` when deployed that way). Show the list from `node "${CLAUDE_PLUGIN_ROOT}/scripts/install-packs.mjs" --stack <keywords> --dry-run`, then run it without `--dry-run` from the project root. A keyword missing from the map: say so, find packs with `ecc-find.mjs` and install them by path, and propose adding the keyword to the map in the retro. For AI missions also look at `ecc-find.mjs <words> --phase ai`.
   3. `node "${CLAUDE_PLUGIN_ROOT}/scripts/state.mjs" set phase plan` and tell the user the next step is `/shipwright:plan`.
 
 ## Session

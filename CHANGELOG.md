@@ -3,7 +3,13 @@
 Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado: semver (ver `docs/METODO.md` §9).
 Cada entrada originada por una retro cita el proyecto de origen.
 
-## [0.14.0] - 2026-10-14
+## [0.15.0] - 2026-10-14
+### Añadido
+- **Registro de uso de ECC.** Hook `PostToolUse` (`scripts/hooks/ecc-used.mjs`): cada agente, skill o comando de ECC leído durante una misión queda en `metrics.md` como evento `ecc`, una vez por fase. `metrics.mjs summary` lo lista por fase y la retro lo usa.
+- **Packs del stack deterministas.** `reference/stack-packs.json` mapea palabras clave de stack (con alias) a reglas, skills y revisores de ECC; `install-packs.mjs --stack <palabras> [--dry-run]` los resuelve y añade siempre `rules/common`. El mismo stack instala siempre los mismos packs. Un test comprueba que cada ruta del mapa existe en el manifest y en disco.
+- **Búsqueda en todo el catálogo.** `scripts/ecc-find.mjs <palabras> --phase <fase>` busca en las 324 piezas; las de la fase actual salen primero, pero las de otras fases ya no quedan ocultas.
+
+ - 2026-10-14
 ### Añadido
 - **Rigor según riesgo** (`docs/METODO.md` §3). Cada historia lleva `riesgo: alto|bajo — <motivo>`: es alta si toca dinero, datos personales, permisos o aislamiento, una integración externa u operaciones masivas o irreversibles sobre datos. Las de riesgo alto llevan QS, amenazas, ADR y pruebas pesadas propias; las de riesgo bajo, criterios EARS con tests de aceptación y unitarios. El usuario confirma la clasificación en el gate de Intake.
 - `trace.mjs --phase intake` rechaza historias sin `riesgo:`.

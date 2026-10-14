@@ -34,6 +34,18 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/ecc-used.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   }
 }
