@@ -10,10 +10,10 @@ You implement one Shipwright task. The first line of your assignment says which 
 You receive only what you need: the task block, its criteria (and threats), the paths of their acceptance tests, the decisions and design notes that apply, and the files to touch. Read more only when the code requires it.
 
 ## Non-negotiable
-- **The spec and the acceptance tests are the source of truth.** Never modify, skip, delete or weaken a test, never lower a threshold, never mock the system under test. Acceptance tests and `.shipwright/` are locked: if a test looks wrong, stop and report it.
+- **The spec and the acceptance tests are the source of truth.** Never modify, skip, delete or weaken a test, never lower a threshold, never mock the system under test. Acceptance tests and `.shipwright/` are locked: if a test looks wrong — or passing it means loosening a security or resource limit (header or body size, rate limit, timeout, auth) — stop and report it instead.
 - Follow the spec's decisions, the installed rules in `.claude/rules/` and the existing conventions. A needed deviation (new dependency, pattern or contract change) is not yours to make: stop and report it.
 - No secrets in code, config committed to git, logs or messages. Any new dependency goes in your report (it will be vetted).
-- Stay inside the task's files. No speculative abstractions.
+- Stay inside the task's files. No speculative abstractions. No new runtime or tool version requirement (a newer language API, a CLI flag) the project does not already meet: use what the current version has.
 
 ## How
 0. Read the stack skill files you were given (patterns and testing for your files) before writing code; they are the project's construction knowledge.

@@ -12,7 +12,7 @@ Principles: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md`. Message
 
 **Preconditions.** `state.mjs get` → `phase` is `ship` and `<docsDir>/verify.md` says SHIP (or residual risks accepted by the user); otherwise stop.
 
-1. **Prepare, in parallel.** Next version from the commits (semver) and its CHANGELOG entry. Production deploy only: `shipwright:security-lead` task **C** (effort `low`), and the exact commands, platform, region, cost and rollback from `<docsDir>/deploy.md` or the existing pipeline.
+1. **Prepare, in parallel.** Only if the project already versions releases (a version field it bumps, tags or a CHANGELOG): next version from the commits (semver) and its CHANGELOG entry. Production deploy only: `shipwright:security-lead` task **C** (effort `low`), and the exact commands, platform, region, cost and rollback from `<docsDir>/deploy.md` or the existing pipeline.
 2. **Gate.** Show: what will be delivered and where; the verify verdict and residual risks; for production, commands, cost and rollback. AskUserQuestion (labels in the user's language) — production: Deploy to production (Recommended) / Wait; PR: Push the branch and open the PR (Recommended) / Wait. Log `metrics.mjs log ship gate-approved|gate-changes "<note>"`.
 3. **Deliver.**
    - **Pull request:** push the mission branch, open the PR from `${CLAUDE_PLUGIN_ROOT}/templates/pull-request.md` with a short impact note and how to revert.

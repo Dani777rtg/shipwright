@@ -3,6 +3,18 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: semver (see `docs/METHOD.md`).
 Every entry that comes from a retro cites its origin project.
 
+## [1.4.1] - 2026-10-16
+Origin: benchmark 04 run headless on 1.4.0 (direct ECC route vs full Shipwright).
+### Fixed
+- **Direct route had no safety net:** it shipped a filter where a single `GET //` crashed the server (uncaught `new URL` throw). After the tests it now does one pass over its own diff for malformed input that can throw uncaught and for changed behaviour on inputs the brief did not mention.
+- **Batch reviewer missed the same crash** in the full run: it now asks whether malformed input reaches new code that throws uncaught (blocking) and whether existing inputs behave differently.
+- **Over-documentation on existing systems:** a 10-line change got a new README, a new CHANGELOG and a version bump. docs-lead now only updates documents that exist; ship bumps the version only when the project already versions releases.
+- **README forced on a repo without one:** the spec said "no README, document it in the PR", yet docs-lead created one to prove a quick start. docs-lead now runs only from scratch or when the change affects documents that exist, and proves a quick start only when a README has one.
+- **ECC packs committed into the product:** ~830 lines of `.claude/rules` and skills landed in the mission's first commit. `install-packs.mjs` now lists them in `.git/info/exclude` (local, `.gitignore` untouched).
+- **Invented limit test loosened a server limit:** a locked acceptance test sent a 100 KB query the spec never asked for, and the builder raised Node's `maxHeaderSize` from 16 KB to 128 KB on every route to pass it. qa-lead writes no size, load, timeout or limit tests the spec does not ask for; a builder stops and reports when passing a test means loosening a security or resource limit.
+- **Acceptance tests outside the test command:** they went to `tests/acceptance/` while `npm test` runs `test/*.test.mjs`, so CI would skip them. The acceptance path is now a folder the project's test command already runs.
+- **Silent runtime upgrade:** the builder required Node 22 (`URL.parse`, test glob). Builders no longer add runtime or tool version requirements the project does not meet.
+
 ## [1.4.0] - 2026-10-16
 ### Changed
 - **Feedback reaches GitHub, privately:** `feedback.mjs save` also opens an issue in `Dani777rtg/shipwright-feedback` (or `$SHIPWRIGHT_FEEDBACK_REPO`), only after gh confirms the repo is private; any gh failure keeps the local copy. `feedback.mjs inbox` lists open issues too.

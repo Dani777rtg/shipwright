@@ -34,6 +34,20 @@ test('install copies only manifest items and records them', () => {
   assert.deepEqual(JSON.parse(readFileSync(join(root, '.shipwright', 'state.json'), 'utf8')).packs, ['agents/python-reviewer.md', 'rules/python']);
 });
 
+test('installed packs are git-excluded once, without touching .gitignore', () => {
+  const plugin = mkdtempSync(join(tmpdir(), 'sw-plugin-'));
+  mkdirSync(join(plugin, 'vendor', 'ecc', 'rules', 'python'), { recursive: true });
+  writeFileSync(join(plugin, 'vendor', 'ecc', 'rules', 'python', 'testing.md'), 'pytest');
+  writeFileSync(join(plugin, 'vendor', 'ecc.manifest.json'), JSON.stringify({ include: [{ path: 'rules/python' }] }));
+  const root = mkdtempSync(join(tmpdir(), 'sw-proj-'));
+  mkdirSync(join(root, '.git', 'info'), { recursive: true });
+  writeFileSync(join(root, '.git', 'info', 'exclude'), '# git default');
+  install(root, ['rules/python'], plugin);
+  install(root, ['rules/python'], plugin);
+  assert.equal(readFileSync(join(root, '.git', 'info', 'exclude'), 'utf8'), '# git default\n/.claude/rules/ecc-python\n');
+  assert.ok(!existsSync(join(root, '.gitignore')));
+});
+
 test('resolveStack: aliases, common always, unknown reported', () => {
   const map = { _note: 'x', typescript: ['rules/typescript'], ts: 'typescript', react: ['rules/react', 'rules/typescript'] };
   const r = resolveStack(['TS', 'react', 'cobol'], map);

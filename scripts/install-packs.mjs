@@ -9,7 +9,7 @@
 //   node install-packs.mjs <manifest path>...                 extra packs beyond the stack map
 // --stack resolves keywords through reference/stack-packs.json (always adding rules/common), so the same stack
 // always installs the same packs.
-import { readFileSync, writeFileSync, existsSync, cpSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, cpSync, mkdirSync, appendFileSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -45,6 +45,13 @@ export function install(root, paths, pluginRoot = PLUGIN) {
       cpSync(from, join(root, to), { recursive: true, filter: (src) => !SKIP_RULES.has(src.replace(/\\/g, '/').split('/vendor/ecc/')[1]) });
       done.push(p);
     }
+  }
+  // Packs are Shipwright's tooling, not the product: keep them out of the project's commits without touching its .gitignore.
+  const exclude = join(root, '.git', 'info', 'exclude');
+  if (done.length && existsSync(join(root, '.git'))) {
+    const have = existsSync(exclude) ? readFileSync(exclude, 'utf8') : '';
+    const add = done.map((p) => '/' + target(p).replace(/\\/g, '/')).filter((l) => !have.split(/\r?\n/).includes(l));
+    if (add.length) { mkdirSync(dirname(exclude), { recursive: true }); appendFileSync(exclude, (have && !have.endsWith('\n') ? '\n' : '') + add.join('\n') + '\n'); }
   }
   const statePath = join(root, '.shipwright', 'state.json');
   if (done.length && existsSync(statePath)) {

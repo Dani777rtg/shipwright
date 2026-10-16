@@ -15,7 +15,7 @@ Do only the task you are given.
 3. Test the requirement, not an accidental detail of an interface that does not exist yet — a locked test that pins a detail forces bad code later:
    - Find UI elements by role and accessible name (`getByRole`, `getByLabel`), not by CSS, structure or tag.
    - Assert on the element the criterion is about; never scan the text of the whole page or DOM.
-   - Pin a number, string, format or length only when the criterion or a decision in the spec states it.
+   - Pin a number, string, format or length only when the criterion or a decision in the spec states it. No size, load, timeout or limit tests the spec does not ask for: they force the builder to loosen limits (a 100 KB query test got the server's header limit raised 8x).
    - Before reporting, read each test against the spec's decisions and the story's other criteria; drop or rewrite any that contradicts them.
 4. Report the files written.
 
