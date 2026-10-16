@@ -64,7 +64,8 @@ test('budget per story, waivable with a written reason', () => {
 });
 
 test('duplicate definition is reported; No aplica waives coverage', () => {
-  assert.ok(run([['spec.md', spec], ['dup.md', '- O-1: otra vez\n']]).some((p) => p.includes('O-1 defined twice')));
+  assert.ok(run([['spec.md', spec + '- O-1: otra vez\n']]).some((p) => p.includes('O-1 defined twice')));
+  assert.deepEqual(run([['spec.md', spec], ['evidence/run.md', '# T001: salida del test\n']]), []); // only spec.md defines
   const na = spec.replace('- TM-1: el audio de otro usuario se filtra — serves: US-01', '- TM-1: x — serves: US-01 — Riesgo aceptado: demo sin datos reales')
     .replace('serves: AC-01.1, TM-1', 'serves: AC-01.1');
   assert.deepEqual(run([['spec.md', na]]), []);

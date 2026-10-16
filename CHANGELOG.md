@@ -3,6 +3,17 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: semver (see `docs/METHOD.md`).
 Every entry that comes from a retro cites its origin project.
 
+## [1.2.1] - 2026-10-16
+Origin: feedback from a mission run on 0.13.1 (sistema-taller); only the points still open in 1.2.0.
+### Changed
+- **Build:** human steps (a person who reviews, approvals, credentials) are asked for at the start of the build, in parallel with the builders. A builder in a worktree starts with `git reset --hard <mission branch>`. The task gate compares the builder's `git show --stat HEAD` with the task's files.
+- **Builder:** commit messages with repeated `-m`, never a heredoc (fails silently on Windows); the report includes `git show --stat HEAD`.
+- **QA lead:** acceptance tests find UI elements by role and accessible name, never scan the whole DOM text, pin numbers or formats only when the spec states them, and are checked against the spec's decisions before reporting.
+- **Change:** impact lists every locked test that cites an affected ID, not only new ones; a minor mode (one-line delta, one question, no subagents) for wording or non-behavioural test lines.
+- **Spec:** `.gitattributes` with `* text=auto eol=lf` from scratch; every cost cap or quota says where its counter lives, whether a cold start resets it and the worst case at maximum scale; the approved `spec.md` joins `lockedPaths`, so `lock.mjs verify` also catches edits that bypass the hook.
+### Fixed
+- `trace.mjs`: only `spec.md` defines items; a heading like `# T056:` in an evidence file is no longer a second definition.
+
 ## [1.2.0] - 2026-10-14
 ### Changed
 - **One goal:** a problem comes in, ECC's experts say how to solve it (architecture, development, QA), agents build it in parallel, brief checks, it ships. The spec phase now consults ECC explicitly — `architect` (plus `api-design` and `database-reviewer` when relevant), the stack skills, `tdd-workflow` and `e2e-testing`, `planner` — and records it in a new **Expert input** section.

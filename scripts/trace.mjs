@@ -3,7 +3,7 @@
 // Usage: node trace.mjs [docsDir=docs] [--phase spec|verify] [--tests <dir>]...
 // Exit 0 = ok, 1 = problems (printed), 2 = usage error.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { join, relative, basename } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const ID = String.raw`(?:O-\d+|US-\d+|AC-\d+\.\d+|TM-\d+|T\d{3,})`;
@@ -43,8 +43,10 @@ export function parse(files) {
   const errors = [];
   for (const { path, text } of files) {
     let current = null;
+    // Only spec.md defines items; other documents (verify.md, evidence) only cite them.
+    const defines = basename(path) === 'spec.md';
     text.split(/\r?\n/).forEach((line, i) => {
-      const m = line.match(DEF_RE);
+      const m = defines && line.match(DEF_RE);
       if (m) {
         const id = m[1];
         if (items.has(id)) {

@@ -22,7 +22,7 @@ If `.shipwright/state.json` exists with `phase` other than `spec`, point to the 
 Show what you inferred, with evidence (file names): deliverable, data class and law, platform, language, notable facts. Then **one** AskUserQuestion call (≤ 4 questions, recommended option first): confirm the inferences plus only what blocks the design — usually the deadline. Everything else becomes an assumption with an owner and a date.
 
 ## 3. State and folder
-- From scratch → docs in `docs/`; `git init -b main` if needed, `.gitignore` with `.env*`. Existing → `docs/shipwright/<mission-slug>/`.
+- From scratch → docs in `docs/`; `git init -b main` if needed, `.gitignore` with `.env*`, `.gitattributes` with `* text=auto eol=lf` (mixed line endings break merges on Windows). Existing → `docs/shipwright/<mission-slug>/`.
 - `state.mjs init '{"docsDir":"<path>","phase":"spec","startingPoint":"scratch|existing","deliverable":"<type>","language":"<lang>","mission":"<one line>","deadline":"<ISO date>","deployTarget":"<platform|none>","confidentiality":"yes|partial|local","allowedPaths":[]}'`, then `metrics.mjs log spec start`.
 - Copy the referenced client files into `<docsDir>/client/` (keep names; never move the originals).
 
@@ -33,7 +33,7 @@ Read the expert files yourself and apply them — no subagents for knowledge:
 - **QA:** `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/skills/tdd-workflow`; `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/skills/e2e-testing` when there is a UI; pertinent test types from `${CLAUDE_PLUGIN_ROOT}/reference/qa-catalog.md`.
 - **Plan:** `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/planner.md` for the task breakdown.
 
-Write the spec from `${CLAUDE_PLUGIN_ROOT}/templates/spec.md`, recording in **Expert input** one line per area. Rules: `risk: high|low` per story (`docs/METHOD.md` §3) decides rigor — threats and heavy tests only for high; the security baseline items that apply to the data class become ACs or one `Not applicable` line; only decisions that change something; tasks are vertical slices, 1–3 per story, `[P]` when files are disjoint, from scratch starting with a walking skeleton. Prototype only if the user asks.
+Write the spec from `${CLAUDE_PLUGIN_ROOT}/templates/spec.md`, recording in **Expert input** one line per area. Rules: `risk: high|low` per story (`docs/METHOD.md` §3) decides rigor — threats and heavy tests only for high; the security baseline items that apply to the data class become ACs or one `Not applicable` line; only decisions that change something; every cost cap or quota (API spend, rate limit) says where its counter lives (per instance or shared), whether a restart or cold start resets it and the worst case at maximum scale; tasks are vertical slices, 1–3 per story, `[P]` when files are disjoint, from scratch starting with a walking skeleton. Prototype only if the user asks.
 
 `trace.mjs <docsDir>` until OK (an overrun needs a `Budget exceeded: <KIND> — <reason>` line).
 
@@ -46,5 +46,5 @@ No blocker `open`. Show: the mission in 2 lines; stories with their risk; expert
 On approval, without stopping:
 1. `status: approved` in spec.md (from now on it changes only through `/shipwright:change`).
 2. `install-packs.mjs --stack <keywords>`.
-3. Acceptance tests: create `~/.shipwright/holdout/<mission-slug>/`, then spawn **one `shipwright:qa-lead` per story, in parallel** (effort `low`), task **A**, with the spec path, the story ID, the acceptance path and the holdout folder. Then `state.mjs add lockedPaths "<acceptance path>/**"`, `state.mjs set holdoutDir "<folder>"`, `lock.mjs record`.
+3. Acceptance tests: create `~/.shipwright/holdout/<mission-slug>/`, then spawn **one `shipwright:qa-lead` per story, in parallel** (effort `low`), task **A**, with the spec path, the story ID, the acceptance path and the holdout folder. Then `state.mjs add lockedPaths "<acceptance path>/**"`, `state.mjs add lockedPaths "<docsDir>/spec.md"` (so `lock.mjs verify` also catches edits to the approved spec that bypass the hook), `state.mjs set holdoutDir "<folder>"`, `lock.mjs record`.
 4. `state.mjs set phase build`, one line to the user, then read `${CLAUDE_PLUGIN_ROOT}/skills/build/SKILL.md` and follow it.
