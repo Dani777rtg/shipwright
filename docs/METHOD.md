@@ -29,6 +29,7 @@ ECC holds the expertise: its skills and rules say how to build well for each sta
 | 4 | **Ship** | `/shipwright:ship` | PR, production deploy with canary and rollback, or a document | **Approves delivery** |
 | — | Change | `/shipwright:change` | Delta with impact and approval on the spec or locked tests | Approves |
 | — | Status | `/shipwright:status` | Phase, pace, estimated finish against the deadline, risks | — |
+| — | Feedback | `/shipwright:feedback` | Any time and at the end of ship: a short report of what was slow, over-engineered or broken, saved to the local inbox `~/.claude/shipwright/feedback/` that the Shipwright repo console lists on startup | Answers one question |
 | — | Retro | `/shipwright:retro` | Optional: lessons → tested framework changes | Approves |
 
 Phases chain on their own: approving the spec starts Build, Build hands over to Verify, and SHIP leads to the delivery approval. Commands are for resuming.
@@ -86,7 +87,7 @@ tests/acceptance/        locked (hook + SHA-256 fingerprints); ~1 in 5 hidden un
 
 ## 7. Measuring and improving
 
-`benchmarks/` holds 4 fixed missions; `scripts/bench.mjs` scores a finished mission and compares versions — slower, more approval rounds, trace problems, budget overruns or more process words make a version worse. `scripts/session-report.mjs` reads the Claude Code transcripts and measures where time and tokens really went. The optional retro turns lessons into changes tested against the benchmark.
+`benchmarks/` holds 4 fixed missions; `scripts/bench.mjs` scores a finished mission and compares versions — slower, more approval rounds, trace problems, budget overruns or more process words make a version worse. `scripts/session-report.mjs` reads the Claude Code transcripts and measures where time and tokens really went. `scripts/feedback.mjs` collects the feedback reports from every mission console. The optional retro turns lessons into changes tested against the benchmark.
 
 ## Roadmap
 

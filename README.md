@@ -4,6 +4,17 @@ A Claude Code plugin that takes a problem to working software **fast and done ri
 
 **Status:** v1.2 — 4 phases, 2 approvals. The 8-phase version remains available at tag `v0.16.0`.
 
+## When to use it
+
+| Use Shipwright | Use ECC directly (just ask Claude) |
+|---|---|
+| A product or feature with several user stories (roughly 2–12) | A bug fix, a few-line change, a rename, copy or style edits |
+| Work with a deadline or a client who must approve what gets built | A throwaway prototype, a spike, an experiment |
+| Code that must be proven to work: money, auth, personal data, production deploys | Questions about code, refactors with no behaviour change |
+| Several pieces that can be built in parallel | One small story with no real risk |
+
+Rule of thumb: if you could describe the whole change in one sentence and review it in one sitting, Shipwright is overkill. `/shipwright:spec` checks this first and offers to do small tasks directly.
+
 ## How it works
 
 **Problem → ask ECC's experts (architecture, development, QA) → build in parallel → brief checks → ship.**
@@ -15,7 +26,7 @@ A Claude Code plugin that takes a problem to working software **fast and done ri
 | 3. Verify | Hidden tests, full suite, pertinent test types, a short security pass → SHIP / NO SHIP | Only if something fails |
 | 4. Ship | PR, deploy with canary and rollback, or a document | **Approve** |
 
-Phases chain on their own. `/shipwright:status` shows progress and whether the deadline holds; `/shipwright:change` changes what was approved, with impact and approval; `/shipwright:retro` (optional) improves the framework with what was learned.
+Phases chain on their own. `/shipwright:status` shows progress and whether the deadline holds; `/shipwright:change` changes what was approved, with impact and approval; `/shipwright:feedback` (any time, and automatically at the end of ship) leaves a short report — what was slow, over-engineered or broken — in `~/.claude/shipwright/feedback/`, a local inbox the console working on this repo shows on startup; `/shipwright:retro` (optional) improves the framework with what was learned.
 
 Not traded for speed: acceptance tests written by an independent agent that builders cannot touch, tests first, everything green before integrating, a security check of sensitive code, your approval of the spec and of production. ECC's skills make the code better; the locked tests prove it works.
 

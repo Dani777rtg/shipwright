@@ -18,4 +18,4 @@ Principles: `${CLAUDE_PLUGIN_ROOT}/reference/engineering-principles.md`. Message
    - **Pull request:** push the mission branch, open the PR from `${CLAUDE_PLUGIN_ROOT}/templates/pull-request.md` with a short impact note and how to revert.
    - **Production:** tag `vX.Y.Z`, `shipwright:devops-lead` task **B** (effort `low`) (deploy, smoke, canary ≥ 15 min). On regression it rolls back; then file the bug and return to the fix loop of `/shipwright:verify`.
    - **Document or demo:** deliver it.
-4. **Close.** `state.mjs set phase done` and `metrics.mjs log ship end`. Tell the user what was delivered, where, and that `/shipwright:retro` is optional (it turns lessons into framework improvements).
+4. **Close.** `state.mjs set phase done` and `metrics.mjs log ship end`. Run `/shipwright:feedback` (its one question included). Tell the user what was delivered, where, and that `/shipwright:retro` is optional (it turns lessons into framework improvements).

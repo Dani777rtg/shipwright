@@ -3,6 +3,12 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: semver (see `docs/METHOD.md`).
 Every entry that comes from a retro cites its origin project.
 
+## [1.3.0] - 2026-10-16
+### Added
+- **`/shipwright:feedback`:** at any phase, and on its own when ship closes, a mission console writes a short report (what was slow, over-engineered or broken, with the session-report numbers and the user's words) to the local inbox `~/.claude/shipwright/feedback/` through `scripts/feedback.mjs`. The Shipwright repo's `.claude/settings.json` lists pending reports at startup. Local only: reports can hold client details and the repo is public.
+- **Fit check:** `/shipwright:spec` starts by asking whether the task needs Shipwright at all; bug fixes, few-line changes, spikes and questions are offered to be done directly with ECC.
+- **README:** "When to use it" table — Shipwright versus ECC directly.
+
 ## [1.2.1] - 2026-10-16
 Origin: feedback from a mission run on 0.13.1 (sistema-taller); only the points still open in 1.2.0.
 ### Changed
