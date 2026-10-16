@@ -4,9 +4,7 @@
 // Usage (from the project root):
 //   node lock.mjs record   — hash every file matching state.lockedPaths into .shipwright/locks.json
 //   node lock.mjs verify   — exit 1 listing changed, missing or new files under the locked paths
-//   node lock.mjs holdout <dest>  — QA phase: copy the hidden holdout tests (state.holdoutDir) into <dest>
-//                                   (inside a locked path) and add their fingerprints
-import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, cpSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join, relative } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -49,29 +47,6 @@ export function verify(root, patterns, recorded) {
   return problems;
 }
 
-// Copies holdout tests into the repository and fingerprints them; refuses to overwrite existing files.
-export function importHoldout(root, patterns, holdoutDir, dest, recorded) {
-  if (!holdoutDir || !existsSync(holdoutDir)) throw new Error('no holdout folder (state.holdoutDir)');
-  if (!lockedBy(dest.replace(/\\/g, '/') + '/x', patterns)) throw new Error(`${dest} is not inside a locked path`);
-  const files = [];
-  const walk = (d) => {
-    for (const name of readdirSync(d)) {
-      const p = join(d, name);
-      if (statSync(p).isDirectory()) walk(p);
-      else files.push(relative(holdoutDir, p));
-    }
-  };
-  walk(holdoutDir);
-  for (const f of files) if (existsSync(join(root, dest, f))) throw new Error(`refusing to overwrite ${join(dest, f)}`);
-  mkdirSync(join(root, dest), { recursive: true });
-  cpSync(holdoutDir, join(root, dest), { recursive: true });
-  const added = Object.fromEntries(files.map((f) => {
-    const rel = join(dest, f).replace(/\\/g, '/');
-    return [rel, hash(join(root, rel))];
-  }));
-  return { ...recorded, ...added };
-}
-
 function main([cmd, arg]) {
   const root = process.cwd();
   const statePath = join(root, '.shipwright', 'state.json');
@@ -92,16 +67,7 @@ function main([cmd, arg]) {
     for (const p of problems) console.log(`  - ${p}`);
     return 1;
   }
-  if (cmd === 'holdout') {
-    if (!arg) { console.error('usage: lock.mjs holdout <dest>'); return 2; }
-    const state = JSON.parse(readFileSync(statePath, 'utf8'));
-    const recorded = existsSync(locksPath) ? JSON.parse(readFileSync(locksPath, 'utf8')) : {};
-    const locks = importHoldout(root, patterns, state.holdoutDir, arg, recorded);
-    writeFileSync(locksPath, JSON.stringify(locks, null, 2) + '\n');
-    console.log(`Imported ${Object.keys(locks).length - Object.keys(recorded).length} holdout file(s) into ${arg}.`);
-    return 0;
-  }
-  console.error('usage: lock.mjs record|verify|holdout <dest>');
+  console.error('usage: lock.mjs record|verify');
   return 2;
 }
 

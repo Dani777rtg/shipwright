@@ -23,10 +23,10 @@ Rule of thumb: if you could describe the whole change in one sentence and review
 |---|---|---|
 | 1. Spec | Reads the brief and your code, asks only what blocks, consults ECC's experts, writes one spec with stories, verifiable criteria, risk and tasks | **Approve** |
 | 2. Build | One QA agent per story writes the locked acceptance tests; builders work in parallel with your stack's ECC skills, tests first; one review per batch; pace against your deadline; product docs with a proven quick start | — |
-| 3. Verify | Hidden tests, full suite, pertinent test types, a short security pass → SHIP / NO SHIP | Only if something fails |
+| 3. Verify | Locked tests, full suite, pertinent test types, a security pass when risk is high → SHIP / NO SHIP | Only if something fails |
 | 4. Ship | PR, deploy with canary and rollback, or a document | **Approve** |
 
-Phases chain on their own. `/shipwright:status` shows progress and whether the deadline holds; `/shipwright:change` changes what was approved, with impact and approval; `/shipwright:feedback` (any time, and automatically at the end of ship) leaves a short report — what was slow, over-engineered or broken — in `~/.claude/shipwright/feedback/`, a local inbox the console working on this repo shows on startup; `/shipwright:retro` (optional) improves the framework with what was learned.
+Phases chain on their own. `/shipwright:status` shows progress and whether the deadline holds; `/shipwright:change` changes what was approved, with impact and approval; `/shipwright:feedback` (any time, and automatically at the end of ship) leaves a short report — what was slow, over-engineered or broken — as an issue in the maintainer's private repo `shipwright-feedback` (set `SHIPWRIGHT_FEEDBACK_REPO` to use your own) plus a local copy in `~/.claude/shipwright/feedback/`; the console working on this repo lists both on startup; `/shipwright:retro` (optional) improves the framework with what was learned.
 
 Not traded for speed: acceptance tests written by an independent agent that builders cannot touch, tests first, everything green before integrating, a security check of sensitive code, your approval of the spec and of production. ECC's skills make the code better; the locked tests prove it works.
 

@@ -19,4 +19,4 @@ Feedback is about **Shipwright**, not the user's product. Report in English (the
    - **Over-engineering:** steps, documents, agents or questions that did not change the result.
    - **Broke:** errors and wrong instructions, with the exact text and the Shipwright file involved.
    - **User said:** verbatim.
-4. `node "${CLAUDE_PLUGIN_ROOT}/scripts/feedback.mjs" save <file>` and tell the user, in one line, that the Shipwright console will see it next time it opens. Never publish it anywhere else: it may hold client details.
+4. `node "${CLAUDE_PLUGIN_ROOT}/scripts/feedback.mjs" save <file>`: it keeps a local copy and opens an issue in the maintainer's **private** feedback repo (only if gh confirms it is private). Tell the user in one line where it went. Never post it anywhere else: it may hold client details.

@@ -3,6 +3,16 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: semver (see `docs/METHOD.md`).
 Every entry that comes from a retro cites its origin project.
 
+## [1.4.0] - 2026-10-16
+### Changed
+- **Feedback reaches GitHub, privately:** `feedback.mjs save` also opens an issue in `Dani777rtg/shipwright-feedback` (or `$SHIPWRIGHT_FEEDBACK_REPO`), only after gh confirms the repo is private; any gh failure keeps the local copy. `feedback.mjs inbox` lists open issues too.
+- **Spec review only when it pays:** `spec-reviewer` runs when a story is `risk: high` or there are more than 4 stories.
+- **Verify security pass only when it pays:** `security-lead` task B runs when a story is `risk: high` or the mission deploys; otherwise the build's sensitive-diff checks stand.
+### Removed
+- **Holdout tests** (`lock.mjs holdout`, `holdoutDir`): hiding a fifth of the acceptance tests from builders only moved failures to verify, where they cost a fix loop. Locked tests, the hook, fingerprints and the batch test-integrity review already stop builders from gaming tests. A mission started with a holdout folder: copy its tests into the acceptance path and run `lock.mjs record` before verify.
+- `/simplify` at the end of build: every batch is already reviewed.
+- `reference/companions.md`: no skill or agent read it.
+
 ## [1.3.0] - 2026-10-16
 ### Added
 - **`/shipwright:feedback`:** at any phase, and on its own when ship closes, a mission console writes a short report (what was slow, over-engineered or broken, with the session-report numbers and the user's words) to the local inbox `~/.claude/shipwright/feedback/` through `scripts/feedback.mjs`. The Shipwright repo's `.claude/settings.json` lists pending reports at startup. Local only: reports can hold client details and the repo is public.

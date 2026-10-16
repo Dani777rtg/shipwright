@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { save, inbox, done } from './feedback.mjs';
+import { save, inbox, done, openIssue } from './feedback.mjs';
 
 test('save, inbox, done', () => {
   process.env.SHIPWRIGHT_FEEDBACK_DIR = mkdtempSync(join(tmpdir(), 'sw-inbox-'));
@@ -18,4 +18,15 @@ test('save, inbox, done', () => {
   assert.deepEqual(inbox(), [out]);
   done(out);
   assert.deepEqual(inbox(), []);
+});
+
+test('issue only into a private repo; any gh failure keeps it local', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'sw-'));
+  writeFileSync(join(dir, 'r.md'), '<!-- h -->\n# QA too slow\nbody');
+  const calls = [];
+  const fake = (priv) => (args) => { calls.push(args[0]); if (args[0] === 'repo') return priv; return 'https://github.com/x/y/issues/1'; };
+  assert.equal(openIssue(join(dir, 'r.md'), fake('true')), 'https://github.com/x/y/issues/1');
+  assert.ok(calls.includes('issue'));
+  assert.equal(openIssue(join(dir, 'r.md'), fake('false')), null);
+  assert.equal(openIssue(join(dir, 'r.md'), () => { throw new Error('gh not found'); }), null);
 });

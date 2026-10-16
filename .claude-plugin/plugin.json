@@ -1,7 +1,7 @@
 {
   "name": "shipwright",
   "displayName": "Shipwright",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Problem -> ECC's experts (architecture, development, QA) -> parallel multi-agent build with locked acceptance tests -> brief checks -> approved delivery.",
   "author": {
     "name": "Daniel Fajardo",

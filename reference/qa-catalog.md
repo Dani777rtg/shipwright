@@ -66,10 +66,9 @@ Stacks: JS = JavaScript/TypeScript · Py = Python · JVM = Java/Kotlin · Go · 
 
 **Test integrity (AI agents must not weaken tests)**
 1. Right after the spec gate, one QA agent per story writes its acceptance tests from the EARS criteria, in parallel. Their paths go in `lockedPaths` (`.shipwright/state.json`); the hook blocks edits and `node scripts/lock.mjs record` stores their hashes.
-2. Holdout: a subset of acceptance tests is kept outside the repository (`~/.shipwright/holdout/<mission>/`) until Verify, so the builder cannot tailor code to them.
-3. Builder prompts state: the specification and the acceptance tests are the source of truth; never modify, skip or delete a test to make it pass.
-4. Each batch's test diff is reviewed by qa-lead: no deleted assertions, no `skip`/`only`/`xfail`, no changed expected values without a justification.
-5. Coverage and mutation score never decrease.
+2. Builder prompts state: the specification and the acceptance tests are the source of truth; never modify, skip or delete a test to make it pass.
+3. Each batch's test diff is reviewed by qa-lead: no deleted assertions, no `skip`/`only`/`xfail`, no changed expected values without a justification.
+4. Coverage and mutation score never decrease.
 6. Verify starts with `node scripts/lock.mjs verify`; any tampering is a blocker.
 
 **Flaky tests**: fails then passes on retry = flaky. Quarantine outside the gate but keep running and reporting it; owner and deadline (7 days *(guide)*), then fix, rewrite or delete. Zero flaky tests in the acceptance suite. Retries only for E2E, at most 2.

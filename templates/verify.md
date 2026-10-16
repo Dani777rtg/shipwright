@@ -9,7 +9,6 @@
 ## Integrity
 
 - `lock.mjs verify`: <intact / changed: detail>
-- Hidden tests imported: <n> — <result>
 - `trace.mjs --phase verify`: <OK / problems>
 
 ## Results

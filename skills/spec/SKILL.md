@@ -40,7 +40,7 @@ Write the spec from `${CLAUDE_PLUGIN_ROOT}/templates/spec.md`, recording in **Ex
 
 `trace.mjs <docsDir>` until OK (an overrun needs a `Budget exceeded: <KIND> — <reason>` line).
 
-## 5. Brief review
+## 5. Brief review — only when a story is `risk: high` or there are more than 4 stories
 `shipwright:spec-reviewer` (effort `medium`), in the foreground. Write its reply verbatim to `<docsDir>/review.md`, fix the blockers and majors, and mark each finding `fixed`, `decided by the user: …` or `open`.
 
 ## 6. Gate — the user approves spec and plan together
@@ -49,5 +49,5 @@ No blocker `open`. Show: the mission in 2 lines; stories with their risk; expert
 On approval, without stopping:
 1. `status: approved` in spec.md (from now on it changes only through `/shipwright:change`).
 2. `install-packs.mjs --stack <keywords>`.
-3. Acceptance tests: create `~/.shipwright/holdout/<mission-slug>/`, then spawn **one `shipwright:qa-lead` per story, in parallel** (effort `low`), task **A**, with the spec path, the story ID, the acceptance path and the holdout folder. Then `state.mjs add lockedPaths "<acceptance path>/**"`, `state.mjs add lockedPaths "<docsDir>/spec.md"` (so `lock.mjs verify` also catches edits to the approved spec that bypass the hook), `state.mjs set holdoutDir "<folder>"`, `lock.mjs record`.
+3. Acceptance tests: spawn **one `shipwright:qa-lead` per story, in parallel** (effort `low`), task **A**, with the spec path, the story ID, and the acceptance path. Then `state.mjs add lockedPaths "<acceptance path>/**"`, `state.mjs add lockedPaths "<docsDir>/spec.md"` (so `lock.mjs verify` also catches edits to the approved spec that bypass the hook), `lock.mjs record`.
 4. `state.mjs set phase build`, one line to the user, then read `${CLAUDE_PLUGIN_ROOT}/skills/build/SKILL.md` and follow it.

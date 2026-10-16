@@ -31,5 +31,5 @@ Parallel builders must not share mutable test resources. If the project's tests 
 6. **Deviation.** A builder reports that a task needs a different contract, dependency, decision, criterion or acceptance test → pause that task and propose `/shipwright:change`; other tasks continue.
 
 ## End
-1. `shipwright:docs-lead` (effort `low`; product docs + quick start proven on a clean clone), in parallel with the built-in `/simplify` on the mission diff (it never touches locked tests). Re-run the full suite, lint, types and `lock.mjs verify`.
+1. `shipwright:docs-lead` (effort `low`; product docs + quick start proven on a clean clone). Re-run the full suite, lint, types and `lock.mjs verify`.
 2. `metrics.mjs log build end`, `state.mjs set phase verify`, one line to the user, then read `${CLAUDE_PLUGIN_ROOT}/skills/verify/SKILL.md` and follow it. If the conversation is long, suggest `/compact` first — the session hook restores the mission.

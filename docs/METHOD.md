@@ -25,11 +25,11 @@ ECC holds the expertise: its skills and rules say how to build well for each sta
 |---|---|---|---|---|
 | 1 | **Spec** | `/shipwright:spec "<brief>"` | Reads the brief and the system; one batch of questions; consults ECC's experts (architect, stack skills, TDD and e2e, planner); writes `spec.md`; brief review; **approval**; stack packs installed; one qa-lead per story writes the acceptance tests in parallel; they are locked | **Approves spec and plan** |
 | 2 | **Build** | `/shipwright:build` | Batches of ready tasks, each in its worktree with a builder that reads the stack skills for its files; related tests and type check per task; build errors go to the language's build resolver; one ECC reviewer per batch; pace against the deadline; final docs pass with a proven quick start | — |
-| 3 | **Verify** | `/shipwright:verify` | Fingerprints, hidden tests, full suite, pertinent test types, brief security pass; parallel fixes; **SHIP / NO SHIP** | Only on NO SHIP |
+| 3 | **Verify** | `/shipwright:verify` | Fingerprints, full suite, pertinent test types, security pass when risk is high or it deploys; parallel fixes; **SHIP / NO SHIP** | Only on NO SHIP |
 | 4 | **Ship** | `/shipwright:ship` | PR, production deploy with canary and rollback, or a document | **Approves delivery** |
 | — | Change | `/shipwright:change` | Delta with impact and approval on the spec or locked tests | Approves |
 | — | Status | `/shipwright:status` | Phase, pace, estimated finish against the deadline, risks | — |
-| — | Feedback | `/shipwright:feedback` | Any time and at the end of ship: a short report of what was slow, over-engineered or broken, saved to the local inbox `~/.claude/shipwright/feedback/` that the Shipwright repo console lists on startup | Answers one question |
+| — | Feedback | `/shipwright:feedback` | Any time and at the end of ship: a short report of what was slow, over-engineered or broken, sent as an issue to a private feedback repo and kept in `~/.claude/shipwright/feedback/`; the Shipwright repo console lists both on startup | Answers one question |
 | — | Retro | `/shipwright:retro` | Optional: lessons → tested framework changes | Approves |
 
 Phases chain on their own: approving the spec starts Build, Build hands over to Verify, and SHIP leads to the delivery approval. Commands are for resuming.
@@ -50,7 +50,7 @@ Chain: **O** objective (with a measure) → **US** story → **AC** EARS criteri
 
 | Agent | Model · effort | When |
 |---|---|---|
-| `spec-reviewer` | Opus · medium | Brief review of the spec before approval (read-only, blockers and majors only) |
+| `spec-reviewer` | Opus · medium | Brief review of the spec before approval, only with a high-risk story or more than 4 stories (read-only, blockers and majors only) |
 | `qa-lead` | Sonnet · low | Acceptance tests per story; verification and verdict |
 | `security-lead` | Sonnet · low | Short checks of sensitive diffs and new dependencies; scans and threat evidence; production hardening |
 | `builder` | Sonnet · low | One task, tests first, minimal context, the stack skills for its files |

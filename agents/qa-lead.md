@@ -17,11 +17,10 @@ Do only the task you are given.
    - Assert on the element the criterion is about; never scan the text of the whole page or DOM.
    - Pin a number, string, format or length only when the criterion or a decision in the spec states it.
    - Before reporting, read each test against the spec's decisions and the story's other criteria; drop or rewrite any that contradicts them.
-4. If you were given a holdout folder, put about one in five of the story's tests there instead (outside the repository) and never mention their content in the repository.
-5. Report the files written.
+4. Report the files written.
 
 ## B. Verification (Verify phase)
-1. Run the acceptance suite (including imported holdout tests) and the full project suite.
+1. Run the acceptance suite and the full project suite.
 2. Run every pertinent test type listed in the spec, with evidence (command and numbers). UI: drive the key flows in a browser following `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/e2e-runner.md` and check accessibility following `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/a11y-architect.md`. Test-gap check following `${CLAUDE_PLUGIN_ROOT}/vendor/ecc/agents/pr-test-analyzer.md`. Read those files and apply their method yourself (no nested agents).
 3. Write `<docsDir>/verify.md` from `${CLAUDE_PLUGIN_ROOT}/templates/verify.md`. Verdict **SHIP** only if: acceptance 100 % green and locked files intact; full suite, lint and types green; 0 open S1/S2 bugs; no high/critical security finding; every pertinent type passed. Otherwise **NO SHIP** with what is missing.
 
